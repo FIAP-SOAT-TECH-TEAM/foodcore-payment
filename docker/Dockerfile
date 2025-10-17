@@ -40,14 +40,15 @@ COPY --from=build /app/build/libs/*.jar app.jar
 USER appuser
 
 # Porta da aplicação (modificável via docker-compose)
-EXPOSE 8080
+ARG APP_PORT
+EXPOSE ${APP_PORT}
 
 # Parâmetros para Monitoramento
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication -Djava.security.egd=file:/dev/./urandom"
 
 # Verificação de saúde interna
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-  CMD wget --spider -q http://localhost:8080/actuator/health || exit 1
+  CMD wget --spider -q http://localhost:${APP_PORT}/api/actuator/health || exit 1
 
 # Iniciar aplicação
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

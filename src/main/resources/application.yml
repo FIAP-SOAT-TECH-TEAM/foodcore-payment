@@ -1,6 +1,6 @@
 spring:
   application:
-    name: foodcore-api
+    name: foodcore-payment
 
   # Perfil padrão (development)
   profiles:
@@ -103,20 +103,3 @@ mercado-pago:
   user-id: ${MERCADO_PAGO_USER_ID}
   pos-id: ${MERCADO_PAGO_POS_ID}
   notification-url: ${MERCADO_PAGO_NOTIFICATION_URL}
-
-# Azure Storage Configuration
-azure:
-  storage:
-    connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
-    container-name: ${AZURE_STORAGE_CONTAINER_NAME}
-
-# Microsserviços
-catalog:
-  service:
-    name: ${CATALOG_MS_SERVICE_NAME}
-    url: http://${CATALOG_MS_HOSTNAME}:${server.port}${server.servlet.context-path}
-
-payment:
-  service:
-    name: ${PAYMENT_MS_SERVICE_NAME}
-    url: http://${PAYMENT_MS_HOSTNAME}:${server.port}${server.servlet.context-path}

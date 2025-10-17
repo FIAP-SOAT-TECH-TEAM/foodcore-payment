@@ -1,11 +1,13 @@
 services:
   # Aplicação principal
-  app:
+  payment-ms:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    image: foodcoreapi-monolito-cleanarch:latest
-    container_name: foodcore-api
+      args:
+        APP_PORT: ${SERVER_PORT}
+    image: foodcore-payment-ms:latest
+    container_name: foodcore-payment-ms
     ports:
       - "80:${SERVER_PORT}"
     env_file:
@@ -31,9 +33,9 @@ services:
           memory: 1G
 
   # Banco de dados PostgreSQL
-  db:
+  payment-ms-db:
     image: postgres:16-alpine
-    container_name: foodcore-db
+    container_name: foodcore-payment-ms-db
     ports:
       - "${DB_PORT}:${DB_PORT}"
     env_file:
@@ -60,45 +62,9 @@ services:
     networks:
       - fastfood-network
 
-  # Ferramenta para gerenciar banco de dados
-  adminer:
-    image: adminer:latest
-    container_name: foodcore-adminer
-    ports:
-      - "8081:8080"
-    depends_on:
-      - db
-    networks:
-      - fastfood-network
-    restart: unless-stopped
-
-  # RabbitMQ com management UI
-  rabbitmq:
-    image: rabbitmq:3.13-management
-    container_name: foodcore-rabbitmq
-    ports:
-      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"             # Porta AMQP
-      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}" # Painel de administração
-    env_file:
-      - .env
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: [ "CMD", "rabbitmqctl", "status" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - fastfood-network
-    restart: unless-stopped
-
 networks:
   fastfood-network:
     driver: bridge
 
 volumes:
-  postgres_data:
-  rabbitmq_data:
+  payment_ms_postgres_data:
