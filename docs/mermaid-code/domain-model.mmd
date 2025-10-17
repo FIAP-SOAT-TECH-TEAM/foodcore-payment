@@ -1,0 +1,120 @@
+---
+config:
+  theme: dark
+  look: neo
+---
+classDiagram
+    class Order {
+        -Long id
+        -Long userId
+        -String orderNumber
+        -OrderStatus status
+        -BigDecimal totalAmount
+        -List~OrderItem~ items
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +addItem(OrderItem)
+        +removeItem(OrderItem)
+        +calculateTotalAmount()
+        +updateStatus(OrderStatus)
+    }
+
+    class OrderItem {
+        -Long id
+        -Product product
+        -Integer quantity
+        -BigDecimal unitPrice
+        -BigDecimal subtotal
+        -String observations
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +calculateSubtotal()
+    }
+
+    class Catalog {
+        -Long id
+        -String name
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Category {
+        -Long id
+        -Catalog catalog
+        -String name
+        -String description
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Product {
+        -Long id
+        -Category category
+        -String name
+        -String description
+        -BigDecimal price
+        -String imageUrl
+        -Integer displayOrder
+        -Boolean active
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Stock {
+        -Long id
+        -Product product
+        -Integer quantity
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class Payment {
+        -Long id
+        -Long userId
+        -Order order
+        -PaymentType paymentType
+        -LocalDateTime expiresIn
+        -PaymentStatus status
+        -LocalDateTime paidAt
+        -String tid
+        -BigDecimal amount
+        -String qrCode
+        -String observations
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        RECEIVED
+        APPROVED
+        PREPARING
+        READY
+        COMPLETED
+        CANCELLED
+    }
+
+    class PaymentStatus {
+        <<enumeration>>
+        PENDING
+        PAID
+        CANCELLED
+    }
+
+    class PaymentType {
+        <<enumeration>>
+        PIX
+        CREDIT_CARD
+        DEBIT
+    }
+
+    Order "1" *-- "many" OrderItem
+    OrderItem "many" -- "1" Product
+    Catalog "1" *-- "many" Category
+    Category "1" *-- "many" Product
+    Product "1" *-- "1" Stock
+    Order "1" *-- "many" Payment
+    Payment "1" -- "1" Order

@@ -1,0 +1,19 @@
+graph TD
+    subgraph "Monolito Modular"
+        USER[Módulo Usuário]
+        ORDER[Módulo Pedido]
+        CATÁLOGO[Módulo Catálago]
+        PAYMENT[Módulo Pagamento]
+        SHARED[Componentes Compartilhados]
+
+        USER --> CATÁLOGO
+        USER --> ORDER
+        ORDER --> CATÁLOGO
+        ORDER --> PAYMENT
+        PAYMENT --> ORDER
+
+        SHARED --> ORDER
+        SHARED --> USER
+        SHARED --> CATÁLOGO
+        SHARED --> PAYMENT
+    end

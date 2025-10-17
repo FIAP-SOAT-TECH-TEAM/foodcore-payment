@@ -1,0 +1,110 @@
+erDiagram
+    USERS ||--o{ ORDERS : places
+    USERS ||--o{ PAYMENTS : makes
+    ROLES ||--o{ USERS : places
+    ORDERS ||--o{ ORDER_ITEMS : contains
+    PRODUCTS ||--o{ ORDER_ITEMS : includes
+    PRODUCTS ||--|| STOCK : stored_in
+    CATALOG ||--o{ CATEGORIES : has
+    CATEGORIES ||--o{ PRODUCTS : categorizes
+    ORDERS ||--o{ PAYMENTS : has
+
+    USERS {
+        id BIGINT PK
+        name VARCHAR(200)
+        username VARCHAR(200)
+        email VARCHAR(200)
+        password VARCHAR(200)
+        document VARCHAR(11)
+        active BOOLEAN
+        guest BOOLEAN
+        role_id BIGINT FK
+        last_login TIMESTAMP
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    ROLES {
+        id BIGINT PK
+        name VARCHAR(200)
+        description VARCHAR(200)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    ORDERS {
+        id BIGINT PK
+        user_id BIGINT FK
+        order_number VARCHAR(200)
+        status VARCHAR(200)
+        amount DECIMAL(10_2)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    ORDER_ITEMS {
+        id BIGINT PK
+        order_id BIGINT FK
+        product_id BIGINT FK
+        name VARCHAR(200)
+        quantity INT
+        unit_price DECIMAL(10_2)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    CATALOG{
+        id BIGINT PK
+        name VARCHAR(200)
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    CATEGORIES{
+        id BIGINT PK
+        catalog_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    PRODUCTS {
+        id BIGINT PK
+        catagory_id BIGINT FK
+        name VARCHAR(200)
+        description VARCHAR(300)
+        price DECIMAL(10_2)
+        image_url VARCHAR(300)
+        display_order INT
+        active BOOLEAN
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    STOCK {
+        id BIGINT PK
+        product_id BIGINT FK
+        quantity INT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }
+
+    PAYMENTS {
+        id BIGINT PK
+        user_id BIGINT FK
+        order_id BIGINT FK
+        payment_type VARCHAR(100)
+        expires_in TIMESTAMP
+        status VARCHAR(100)
+        paid_at TIMESTAMP
+        tid VARCHAR(300)
+        amount DECIMAL(10_2)
+        tid qr_code(300)
+        observations TEXT
+        created_at TIMESTAMP
+        updated_at TIMESTAMP
+    }

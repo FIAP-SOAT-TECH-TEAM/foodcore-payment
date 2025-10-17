@@ -1,0 +1,313 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.liquibase.gradle' version '2.2.0'
+	id 'jacoco'
+	id 'org.sonarqube' version '4.4.1.3373'
+	id 'com.diffplug.spotless' version '6.25.0'
+	id "org.springdoc.openapi-gradle-plugin" version "1.9.0"
+}
+
+group = 'com.soat.fiap'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	liquibaseRuntime {
+		extendsFrom implementation
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('mapstructVersion', "1.5.5.Final")
+	set('lombokVersion', "1.18.28")
+	set('postgresVersion', "42.6.0")
+	set('springdocVersion', "2.8.4")
+	set('jjwtVersion', "0.11.5")
+	set('picoli', "4.7.5")
+	set('springCloudVersion', "2024.0.0")
+	set('retrofit', "3.0.0")
+	set('converterGson', "3.0.0")
+	set('azureBlobSdk', "12.25.0")
+}
+
+dependencies {
+
+	// Spring Boot
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+	// Spring Cloud
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-discoveryclient'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// Micrometer
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	// Liquibase para migrações de banco de dados
+	implementation 'org.liquibase:liquibase-core'
+
+	// PostgreSQL driver
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// Lombok e MapStruct
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	// SpringDoc (Swagger/OpenAPI)
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:${springdocVersion}"
+
+	// JWT
+	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
+	// Testes
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// A Task generateOpenApiDocs é executada com Profile de teste, e precisa que a aplicação esteja em execução.
+	// Portanto, deixei como implementation para que seja incluída no classpath durante a execução.
+	// https://github.com/springdoc/springdoc-openapi-gradle-plugin
+	implementation 'com.h2database:h2'
+
+	// Liquibase runtime dependencies
+	liquibaseRuntime 'org.liquibase:liquibase-core'
+	liquibaseRuntime 'org.postgresql:postgresql'
+	liquibaseRuntime "info.picocli:picocli:${picoli}"
+
+	// Retrofit
+	implementation "com.squareup.retrofit2:retrofit:${retrofit}"
+	implementation "com.squareup.retrofit2:converter-gson:${converterGson}"
+
+	// Azure Storage Blob
+	implementation("com.azure:azure-storage-blob:${azureBlobSdk}")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+// Integrar Spotless no build process - funciona automaticamente para todos
+tasks.named('compileJava') {
+	dependsOn 'spotlessCheck'
+}
+
+tasks.named('build') {
+	dependsOn 'spotlessCheck'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+				// Application main class
+				'**/FoodCoreApiApplication.class',
+				// Configuration classes
+				'**/config/**',
+				'**/*Config.class',
+				'**/*Configuration.class',
+				'**/*Properties.class',
+				// DTOs and Request/Response classes
+				'**/dto/**',
+				'**/request/**',
+				'**/response/**',
+				// MapStruct generated mappers
+				'**/mapper/**/*Impl.class',
+				'**/mapper/**/*MapperImpl*.class',
+				// Infrastructure adapters (controllers, repositories, etc.)
+				'**/infrastructure/in/web/api/controller/**',
+				'**/infrastructure/in/web/api/auth/**',
+				'**/infrastructure/in/web/api/exceptions/**',
+				'**/infrastructure/in/event/listener/**',
+				'**/infrastructure/in/schedulers/**',
+				'**/infrastructure/out/persistence/**/*Repository*.class',
+				'**/infrastructure/out/persistence/**/*DataSource*.class',
+				'**/infrastructure/out/persistence/**/*Entity*.class',
+				'**/infrastructure/out/persistence/**/*Converter*.class',
+				'**/infrastructure/out/mercadopago/client/**',
+				'**/infrastructure/out/mercadopago/entity/**',
+				'**/infrastructure/out/mercadopago/config/**',
+				'**/infrastructure/out/mercadopago/deserializers/**',
+				'**/infrastructure/out/mercadopago/exceptions/**',
+				'**/infrastructure/out/mercadopago/mapper/**',
+				'**/infrastructure/out/event/publisher/**',
+				'**/infrastructure/out/persistence/azureblobstorage/**',
+				// Interface adapters (controllers, presenters, gateways)
+				'**/interfaceadapters/controller/web/api/**',
+				'**/interfaceadapters/presenter/web/api/**',
+				'**/interfaceadapters/gateways/**',
+				// Common infrastructure
+				'**/infrastructure/common/source/**',
+				'**/infrastructure/common/mapper/**',
+				// Package info files
+				'**/package-info.class'
+			])
+		}))
+	}
+}
+
+// Configuração do Liquibase para usar o arquivo de changelog
+liquibase {
+	activities {
+		main {
+			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
+			url 'jdbc:postgresql://localhost:', System.getenv('DB_PORT') ?: '5432', '/fastfood'
+			username 'postgres'
+			password 'postgres'
+		}
+	}
+	runList = 'main'
+}
+
+// Tarefa para copiar o driver PostgreSQL para uso em testes externos
+task extractDependencies(type: Copy) {
+	from configurations.runtimeClasspath
+	include '**/postgresql*.jar'
+	into "${buildDir}/dependencies"
+	rename { filename -> 'postgresql.jar' }
+}
+
+// Adicionar a extração de dependências ao build
+tasks.named('build') {
+	dependsOn extractDependencies
+}
+
+// Configuração do SonarQube
+sonar {
+	properties {
+		property 'sonar.projectKey', 'com.soat.fiap.foodcore-api'
+		property 'sonar.projectName', 'Food Core API'
+		property 'sonar.sources', 'src/main/java'
+		property 'sonar.tests', 'src/test/java'
+		property 'sonar.java.binaries', 'build/classes/java/main'
+		property 'sonar.java.test.binaries', 'build/classes/java/test'
+		property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+		property 'sonar.exclusions', [
+			// Application main class
+			'**/FoodCoreApiApplication.java',
+			// Configuration classes
+			'**/config/**',
+			'**/*Config.java',
+			'**/*Configuration.java',
+			'**/*Properties.java',
+			// DTOs and Request/Response classes
+			'**/dto/**',
+			'**/request/**',
+			'**/response/**',
+			// MapStruct generated mappers
+			'**/mapper/**/*Impl.java',
+			'**/mapper/**/*MapperImpl*.java',
+			// Infrastructure adapters (controllers, repositories, etc.)
+			'**/infrastructure/in/web/api/controller/**',
+			'**/infrastructure/in/web/api/auth/**',
+			'**/infrastructure/in/web/api/exceptions/**',
+			'**/infrastructure/in/event/listener/**',
+			'**/infrastructure/in/schedulers/**',
+			'**/infrastructure/out/persistence/**/*Repository*.java',
+			'**/infrastructure/out/persistence/**/*DataSource*.java',
+			'**/infrastructure/out/persistence/**/*Entity*.java',
+			'**/infrastructure/out/persistence/**/*Converter*.java',
+			'**/infrastructure/out/mercadopago/client/**',
+			'**/infrastructure/out/mercadopago/entity/**',
+			'**/infrastructure/out/mercadopago/config/**',
+			'**/infrastructure/out/mercadopago/deserializers/**',
+			'**/infrastructure/out/mercadopago/exceptions/**',
+			'**/infrastructure/out/mercadopago/mapper/**',
+			'**/infrastructure/out/event/publisher/**',
+			'**/infrastructure/out/persistence/azureblobstorage/**',
+			// Interface adapters (controllers, presenters, gateways)
+			'**/interfaceadapters/controller/web/api/**',
+			'**/interfaceadapters/presenter/web/api/**',
+			'**/interfaceadapters/gateways/**',
+			// Common infrastructure
+			'**/infrastructure/common/source/**',
+			'**/infrastructure/common/mapper/**',
+			// Package info files
+			'**/package-info.java'
+		].join(',')
+		property 'sonar.test.exclusions', '**/fixtures/**'
+	}
+}
+
+// Configuração do Spotless para formatação de código
+spotless {
+	java {
+		// Usa o Eclipse formatter com configurações customizadas
+		eclipse().configFile('spotless-formatter.xml')
+
+		// Remove imports não utilizados
+		removeUnusedImports()
+
+		// Organiza imports de acordo com o padrão do IntelliJ
+		importOrder('java', 'javax', 'org', 'com', '')
+
+		// Remove espaços em branco no final das linhas
+		trimTrailingWhitespace()
+
+		// Garante que arquivos terminem com nova linha
+		endWithNewline()
+
+		// Aplica formatação apenas nos arquivos Java do src
+		target 'src/**/*.java'
+
+		// Ignora arquivos gerados
+		targetExclude '**/generated/**', '**/build/**'
+
+		// Configurações específicas do IntelliJ
+		formatAnnotations()
+	}
+
+	// Formatação para arquivos Gradle
+	groovyGradle {
+		target '*.gradle'
+		greclipse()
+	}
+}
+
+// Gerar swagger.json
+openApi {
+	apiDocsUrl.set("http://localhost:8085/api/v3/api-docs")
+	outputDir.set(file("$buildDir/openapi"))
+	outputFileName.set("swagger.json")
+
+	customBootRun {
+		args.set([
+			"--spring.profiles.active=test"
+		])
+	}
+}

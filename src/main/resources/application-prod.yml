@@ -1,0 +1,55 @@
+# Configuração do JPA para produção
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        ddl-auto: validate
+        format_sql: false
+
+  # SpringDoc
+  springdoc:
+    api-docs:
+      enabled: true
+    swagger-ui:
+      enabled: true
+
+  # Liquibase (contexto exclusivo de produção)
+  liquibase:
+    contexts: prod
+
+  # Configurações do servidor
+  server:
+    tomcat:
+      max-threads: 200
+      min-spare-threads: 20
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/plain
+      min-response-size: 2048
+
+management:
+  # Actuator (endpoints restritos)
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        show-details: when_authorized
+  # Tracing Distribuído
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}/api/v2/spans
+
+# Logging (níveis reduzidos)
+logging:
+  level:
+    root: WARN
+    com.fastfood: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
