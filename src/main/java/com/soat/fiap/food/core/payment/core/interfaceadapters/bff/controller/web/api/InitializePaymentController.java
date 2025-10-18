@@ -3,13 +3,13 @@ package com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.we
 import com.soat.fiap.food.core.payment.core.application.inputs.mappers.OrderCreatedMapper;
 import com.soat.fiap.food.core.payment.core.application.usecases.InitializePaymentUseCase;
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentInitializationErrorEventUseCase;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.AcquirerGateway;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
+import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.EventPublisherGateway;
-import com.soat.fiap.food.core.payment.shared.infrastructure.common.source.EventPublisherSource;
 
 import lombok.extern.slf4j.Slf4j;
 

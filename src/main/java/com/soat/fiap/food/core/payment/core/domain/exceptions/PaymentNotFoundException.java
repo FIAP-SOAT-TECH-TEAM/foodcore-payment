@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.payment.core.domain.exceptions;
 
-import com.soat.fiap.food.core.payment.shared.core.domain.exceptions.ResourceNotFoundException;
+import com.soat.fiap.food.core.shared.core.domain.exceptions.ResourceNotFoundException;
 
 /**
  * Exceção lançada quando um pagamento não é encontrado

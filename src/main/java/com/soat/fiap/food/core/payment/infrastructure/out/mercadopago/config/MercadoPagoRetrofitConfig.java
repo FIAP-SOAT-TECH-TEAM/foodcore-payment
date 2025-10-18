@@ -2,7 +2,6 @@ package com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.config;
 
 import java.time.OffsetDateTime;
 
-import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.deserializers.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.client.MercadoPagoClient;
-import com.soat.fiap.food.core.payment.payment.infrastructure.out.mercadopago.deserializers.*;
+import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.deserializers.*;
 import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderNotificationStatus;
 import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.entity.order.MercadoPagoOrderStatus;
 

@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.payment.core.domain.exceptions;
 
-import com.soat.fiap.food.core.payment.shared.core.domain.exceptions.BusinessException;
+import com.soat.fiap.food.core.shared.core.domain.exceptions.BusinessException;
 
 /**
  * Exceção lançada quando uma regra de negócio é violada na entidade pedido

@@ -4,11 +4,11 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.InitializePaymentController;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+import com.soat.fiap.food.core.payment.infrastructure.common.event.rabbitmq.config.RabbitMqQueueConfig;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
+import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
-import com.soat.fiap.food.core.payment.shared.infrastructure.common.source.EventPublisherSource;
-import com.soat.fiap.food.core.payment.shared.infrastructure.out.event.publisher.rabbitmq.config.RabbitMqQueueConfig;
 
 import lombok.extern.slf4j.Slf4j;
 

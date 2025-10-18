@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.payment.core.application.usecases;
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.AccessManagerGateway;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AccessManagerGateway;
 
 import lombok.extern.slf4j.Slf4j;
 

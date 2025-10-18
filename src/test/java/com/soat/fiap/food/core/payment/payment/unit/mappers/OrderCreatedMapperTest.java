@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.soat.fiap.food.core.payment.order.core.domain.events.OrderCreatedEvent;
-import com.soat.fiap.food.core.payment.order.core.domain.events.OrderItemCreatedEvent;
 import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
 import com.soat.fiap.food.core.payment.core.application.inputs.mappers.OrderCreatedMapper;
+import com.soat.fiap.food.core.payment.order.core.domain.events.OrderCreatedEvent;
+import com.soat.fiap.food.core.payment.order.core.domain.events.OrderItemCreatedEvent;
 
 @DisplayName("OrderCreatedMapper - Testes Unitários")
 class OrderCreatedMapperTest {

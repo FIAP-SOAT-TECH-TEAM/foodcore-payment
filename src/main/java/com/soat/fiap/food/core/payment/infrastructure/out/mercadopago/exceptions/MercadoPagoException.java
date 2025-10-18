@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.exceptions;
 
-import com.soat.fiap.food.core.payment.shared.infrastructure.out.exceptions.APIException;
+import com.soat.fiap.food.core.shared.infrastructure.out.exceptions.APIException;
 
 /**
  * Exceção lançada quando existe um erro de retorno da API do Mercado Pago

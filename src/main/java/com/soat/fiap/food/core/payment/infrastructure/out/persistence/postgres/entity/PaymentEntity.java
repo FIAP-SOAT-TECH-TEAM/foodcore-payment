@@ -11,7 +11,7 @@ import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.converter.QrCodeConverter;
-import com.soat.fiap.food.core.payment.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.shared.core.domain.vo.AuditInfo;
 
 import jakarta.persistence.*;
 import lombok.Getter;

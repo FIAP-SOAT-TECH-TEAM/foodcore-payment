@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.payment.core.application.usecases;
 
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
 
 import lombok.extern.slf4j.Slf4j;
 

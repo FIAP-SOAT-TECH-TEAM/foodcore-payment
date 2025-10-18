@@ -11,8 +11,8 @@ import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.entity.PaymentEntity;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.mapper.shared.QrCodeMapper;
-import com.soat.fiap.food.core.payment.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
-import com.soat.fiap.food.core.payment.shared.infrastructure.common.mapper.DoIgnore;
+import com.soat.fiap.food.core.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
+import com.soat.fiap.food.core.shared.infrastructure.common.mapper.DoIgnore;
 
 /**
  * Mapper que converte entre a entidade de domínio Payment e a entidade JPA

@@ -1,7 +1,7 @@
 package com.soat.fiap.food.core.payment.core.application.usecases;
 
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentInitializationErrorEvent;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.EventPublisherGateway;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
 
 /**
  * Caso de uso: publicar evento de erro na inicialização do pagamento.

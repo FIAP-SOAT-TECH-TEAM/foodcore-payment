@@ -8,8 +8,8 @@ import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentException;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
-import com.soat.fiap.food.core.payment.shared.core.domain.exceptions.BusinessException;
-import com.soat.fiap.food.core.payment.shared.core.domain.vo.AuditInfo;
+import com.soat.fiap.food.core.shared.core.domain.exceptions.BusinessException;
+import com.soat.fiap.food.core.shared.core.domain.vo.AuditInfo;
 
 import lombok.Data;
 

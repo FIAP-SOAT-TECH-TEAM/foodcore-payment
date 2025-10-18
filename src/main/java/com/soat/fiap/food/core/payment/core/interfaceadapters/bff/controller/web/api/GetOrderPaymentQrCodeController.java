@@ -5,8 +5,8 @@ import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.presenter.web.
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.AccessManagerGateway;
-import com.soat.fiap.food.core.payment.shared.infrastructure.common.source.AccessManagerSource;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AccessManagerGateway;
+import com.soat.fiap.food.core.shared.infrastructure.common.source.AccessManagerSource;
 
 /**
  * Controller: Obter QR Code de pagamento de um pedido.

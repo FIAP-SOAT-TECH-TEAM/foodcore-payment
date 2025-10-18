@@ -3,8 +3,8 @@ package com.soat.fiap.food.core.payment.core.application.inputs.mappers;
 import java.util.List;
 
 import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.dto.events.OrderCreatedEventDto;
-import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.OrderCreatedEventDto;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.OrderItemCreatedEventDto;
 
 /**
  * Classe utilitária responsável por mapear {@link OrderCreatedEventDto} para o
