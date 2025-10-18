@@ -46,13 +46,6 @@ CREATE TABLE IF NOT EXISTS payments
   observations TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  CONSTRAINT fk_payment_order FOREIGN KEY
-(
-  order_id
-) REFERENCES orders
-(
-  id
-),
   CONSTRAINT chk_paid_at_if_approved CHECK
 (
   status
