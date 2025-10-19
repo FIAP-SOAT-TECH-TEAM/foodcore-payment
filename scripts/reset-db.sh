@@ -22,18 +22,18 @@ if [ "$FORCE_RESET" != "true" ]; then
 fi
 
 # Verificar se o banco de dados está em execução
-DB_CONTAINER=$(docker ps -q -f "name=food-core-db")
+DB_CONTAINER=$(docker ps -q -f "name=foodcore-payment-ms-db")
 if [ -z "$DB_CONTAINER" ]; then
   echo "-> O banco de dados não está em execução. Iniciando..."
   cd "$PROJECT_ROOT/docker"
-  docker-compose up -d db
+  docker-compose up -d payment-ms-db
   sleep 10
-  DB_CONTAINER=$(docker ps -q -f "name=food-core-db")
+  DB_CONTAINER=$(docker ps -q -f "name=foodcore-payment-ms-db")
 fi
 
 echo "-> Dropando e recriando o banco de dados..."
-docker exec $DB_CONTAINER psql -U postgres -c "DROP DATABASE IF EXISTS fastfood;"
-docker exec $DB_CONTAINER psql -U postgres -c "CREATE DATABASE fastfood;"
+docker exec $DB_CONTAINER psql -U postgres -c "DROP DATABASE IF EXISTS payment;"
+docker exec $DB_CONTAINER psql -U postgres -c "CREATE DATABASE payment;"
 
 # Aplicar migrações usando o script existente
 echo "-> Aplicando migrações..."
@@ -43,12 +43,12 @@ if [ $? -eq 0 ]; then
   echo "===== Banco de dados resetado com sucesso! ====="
   echo "Todas as tabelas foram recriadas e os dados iniciais foram inseridos."
   echo ""
-  echo "Para acessar o banco via Adminer: http://localhost:8081"
+  echo "Para acessar o banco via Adminer: http://localhost:8083"
   echo "  Sistema: PostgreSQL"
   echo "  Servidor: $DB_HOST"
   echo "  Usuário: postgres"
   echo "  Senha: postgres"
-  echo "  Banco de dados: fastfood"
+  echo "  Banco de dados: payment"
 else
   echo "ERRO: Falha ao aplicar migrações após o reset."
   echo "Verifique os logs para mais detalhes."

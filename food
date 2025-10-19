@@ -8,24 +8,23 @@ SCRIPTS_DIR="$SCRIPT_DIR/scripts"
 
 # Função de ajuda
 show_help() {
-  echo "Food Core API - CLI"
+  echo "Food Core API (Payment) - CLI"
   echo
   echo "Uso: ./food [comando] [opções]"
   echo
   echo "Comandos disponíveis:"
-  echo "  start:app      Inicia a aplicação"
-  echo "  stop:app       Para a aplicação"
-  echo "  restart:app    Reinicia a aplicação"
   echo "  db:up          Aplica migrações no banco"
   echo "  db:reset       Reseta o banco de dados"
+  echo "  start:infra    Inicia apenas a infraestrutura (banco)"
+  echo "  stop:infra     Para apenas a infraestrutura"
+  echo "  restart:all    Reinicia todos os serviços da infraestrutura"
   echo "  help           Exibe esta ajuda"
   echo
   echo "Opções:"
-  echo "  --build, -b    Reconstrói as imagens antes de iniciar"
   echo "  --force, -f    Força execução sem confirmação"
   echo
   echo "Exemplo:"
-  echo "  ./food start:app --build"
+  echo "  ./food start:infra --force"
 }
 
 # Verifica se Docker está ativo
@@ -47,16 +46,11 @@ if [ $# -eq 0 ]; then
 fi
 
 # Processar opções
-BUILD_FLAG=""
 FORCE_FLAG=""
 COMMAND=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --build|-b)
-      BUILD_FLAG="--build"
-      shift
-      ;;
     --force|-f)
       FORCE_FLAG="--force"
       shift
@@ -70,21 +64,6 @@ done
 
 # Executar comandos
 case "$COMMAND" in
-  start:app)
-    echo "Iniciando a aplicação..."
-    "$SCRIPTS_DIR/app-up.sh" $BUILD_FLAG
-    ;;
-
-  stop:app)
-    echo "Parando a aplicação..."
-    "$SCRIPTS_DIR/app-down.sh"
-    ;;
-
-  restart:app)
-    echo "Reiniciando a aplicação..."
-    "$SCRIPTS_DIR/app-restart.sh" $BUILD_FLAG
-    ;;
-
   db:up)
     echo "Aplicando migrações..."
     "$SCRIPTS_DIR/apply-migrations.sh"
@@ -100,6 +79,26 @@ case "$COMMAND" in
     fi
     echo "Resetando o banco de dados..."
     "$SCRIPTS_DIR/reset-db.sh"
+    ;;
+
+  start:infra)
+    echo "Iniciando a infraestrutura..."
+    "$SCRIPTS_DIR/infra-up.sh" $FORCE_FLAG
+    # Verificar se a rede fastfood-network existe, se não, criar
+    if ! docker network ls | grep -q fastfood-network; then
+      echo "Criando rede compartilhada fastfood-network..."
+      docker network create fastfood-network
+    fi
+    ;;
+
+  stop:infra)
+    echo "Parando a infraestrutura..."
+    "$SCRIPTS_DIR/infra-down.sh"
+    ;;
+
+  restart:all)
+    echo "Reiniciando a infraestrutura..."
+    "$SCRIPTS_DIR/infra-restart.sh" $FORCE_FLAG
     ;;
 
   help)

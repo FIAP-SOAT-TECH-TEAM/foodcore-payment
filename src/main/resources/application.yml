@@ -55,10 +55,15 @@ spring:
       max-file-size: 10MB
       max-request-size: 15MB
 
-# Tracing Distribuído
 management:
+  # Tracing Distribuído
   tracing:
-    enabled: false
+    enabled: true
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}/api/v2/spans
 
 # Configurações de logging
 logging:

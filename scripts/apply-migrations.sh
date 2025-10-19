@@ -15,15 +15,15 @@ if ! docker info >/dev/null 2>&1; then
 fi
 
 # Verificar se o banco de dados está rodando
-DB_CONTAINER=$(docker ps -q -f "name=food-core-db")
+DB_CONTAINER=$(docker ps -q -f "name=foodcore-payment-ms-db")
 if [ -z "$DB_CONTAINER" ]; then
     echo "AVISO: Container do banco de dados não encontrado. Iniciando..."
     cd "$PROJECT_ROOT/docker"
-    docker-compose up -d db
+    docker-compose up -d payment-ms-db
     sleep 10  # Aguardar banco inicializar
-    DB_CONTAINER=$(docker ps -q -f "name=food-core-db")
+    DB_CONTAINER=$(docker ps -q -f "name=foodcore-payment-ms-db")
     if [ -z "$DB_CONTAINER" ]; then
-        echo "ERRO: Falha ao iniciar o banco de dados. Verifique os logs: docker-compose logs db"
+        echo "ERRO: Falha ao iniciar o banco de dados. Verifique os logs: docker-compose logs payment-ms-db"
         exit 1
     fi
     cd "$PROJECT_ROOT"
@@ -46,7 +46,7 @@ docker run --rm \
   liquibase/liquibase:4.25.1 \
   --driver=org.postgresql.Driver \
   --classpath=/liquibase/changelog:/liquibase/lib/postgresql.jar \
-  --url="jdbc:postgresql://$DB_HOST:5432/fastfood" \
+  --url="jdbc:postgresql://$DB_HOST:5433/payment" \
   --username=postgres \
   --password=postgres \
   --changeLogFile=db/changelog/db.changelog-master.yaml \
@@ -66,7 +66,7 @@ docker run --rm \
   liquibase/liquibase:4.25.1 \
   --driver=org.postgresql.Driver \
   --classpath=/liquibase/changelog:/liquibase/lib/postgresql.jar \
-  --url="jdbc:postgresql://$DB_HOST:5432/fastfood" \
+  --url="jdbc:postgresql://$DB_HOST:5433/payment" \
   --username=postgres \
   --password=postgres \
   --changeLogFile=db/changelog/db.changelog-master.yaml \
@@ -75,9 +75,9 @@ docker run --rm \
 echo "===== Migrações aplicadas com sucesso! ====="
 echo "Banco de dados atualizado com todas as migrações."
 echo ""
-echo "Para acessar o banco via Adminer: http://localhost:8081"
+echo "Para acessar o banco via Adminer: http://localhost:8083"
 echo "  Sistema: PostgreSQL"
 echo "  Servidor: $DB_HOST"
 echo "  Usuário: postgres"
 echo "  Senha: postgres"
-echo "  Banco de dados: fastfood"
+echo "  Banco de dados: payment"
