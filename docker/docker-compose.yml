@@ -35,7 +35,7 @@ services:
     image: postgres:16-alpine
     container_name: foodcore-payment-ms-db
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT}:5432"
     env_file:
       - .env
     volumes:
