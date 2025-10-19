@@ -39,7 +39,7 @@ services:
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - payment_ms_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       interval: 5s
