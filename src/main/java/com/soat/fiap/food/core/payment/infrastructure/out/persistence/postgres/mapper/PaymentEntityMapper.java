@@ -34,16 +34,6 @@ public interface PaymentEntityMapper {
 	PaymentDTO toDTO(PaymentEntity entity);
 
 	@DoIgnore
-	default Payment toDomain(PaymentEntity entity) {
-		return toDomain(entity, new CycleAvoidingMappingContext());
-	}
-
-	@DoIgnore
-	default List<Payment> toDomainList(List<PaymentEntity> entities) {
-		return toDomainList(entities, new CycleAvoidingMappingContext());
-	}
-
-	@DoIgnore
 	default PaymentEntity toEntity(PaymentDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());
 	}

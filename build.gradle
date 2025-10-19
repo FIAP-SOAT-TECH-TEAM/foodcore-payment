@@ -65,7 +65,6 @@ dependencies {
 
 	// Spring Cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-discoveryclient'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	// Micrometer
 	implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -81,7 +80,7 @@ dependencies {
 	// Lombok e MapStruct
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
 	// SpringDoc (Swagger/OpenAPI)
