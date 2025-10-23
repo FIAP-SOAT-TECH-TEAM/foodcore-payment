@@ -58,4 +58,14 @@ public class RabbitMqQueueConfig {
 	public Queue paymentInitializationErrorQueue() {
 		return new Queue(PAYMENT_INITIALIZATION_ERROR_QUEUE, true);
 	}
+
+	/**
+	 * Declara a fila de pedidos criados no módulo de pagamento no RabbitMQ.
+	 *
+	 * @return objeto Queue configurado como durável para eventos de pedido criado.
+	 */
+	@Bean
+	public Queue orderPaymentCreatedQueue() {
+		return new Queue(ORDER_PAYMENT_CREATED_QUEUE, true);
+	}
 }
