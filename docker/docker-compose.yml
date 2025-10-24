@@ -30,33 +30,23 @@ services:
           cpus: '1.0'
           memory: 1G
 
-  # Banco de dados PostgreSQL
+  # Banco de dados MongoDB
   payment-ms-db:
-    image: postgres:16-alpine
+    image: mongo:7.0
     container_name: foodcore-payment-ms-db
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_PORT}:27017"
     env_file:
       - .env
     volumes:
-      - payment_ms_postgres_data:/var/lib/postgresql/data
+      - payment_ms_mongo_data:/data/db
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
-      interval: 5s
+      test: [ "CMD", "mongo", "--quiet", "--eval", "db.adminCommand('ping').ok" ]
+      interval: 10s
       timeout: 5s
       retries: 10
       start_period: 30s
-    command: >
-      -c shared_buffers=256MB
-      -c max_connections=200
-      -c effective_cache_size=512MB
-      -c maintenance_work_mem=64MB
-      -c random_page_cost=1.1
-      -c effective_io_concurrency=200
-      -c work_mem=4MB
-      -c min_wal_size=1GB
-      -c max_wal_size=4GB
-      -c wal_level=logical
+    command: [ "--bind_ip_all" ]
     networks:
       - fastfood-network
 
@@ -65,4 +55,4 @@ networks:
     driver: bridge
 
 volumes:
-  payment_ms_postgres_data:
+  payment_ms_mongo_data:
