@@ -30,23 +30,26 @@ services:
           cpus: '1.0'
           memory: 1G
 
-  # Banco de dados MongoDB
+  # Banco de dados PostgreSQL
   payment-ms-db:
-    image: mongo:7.0
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
     container_name: foodcore-payment-ms-db
-    ports:
-      - "${DB_PORT}:27017"
+    restart: unless-stopped
+    mem_limit: 3g
+    cpu_count: 2
     env_file:
       - .env
+    ports:
+      - "${DB_PORT}:8081" # Data Explorer UI
+      - "10251-10255:10251-10255"
     volumes:
-      - payment_ms_mongo_data:/data/db
+      - payment_ms_cosmosdb_data:/data
     healthcheck:
-      test: [ "CMD", "mongo", "--quiet", "--eval", "db.adminCommand('ping').ok" ]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD-SHELL", "curl -f https://localhost:${DB_PORT}/_explorer/emulator.pem --insecure || exit 1"]
+      interval: 30s
+      timeout: 10s
       retries: 10
-      start_period: 30s
-    command: [ "--bind_ip_all" ]
+      start_period: 40s
     networks:
       - fastfood-network
 
@@ -55,4 +58,4 @@ networks:
     driver: bridge
 
 volumes:
-  payment_ms_mongo_data:
+  payment_ms_cosmosdb_data:
