@@ -30,6 +30,8 @@ docker-compose stop payment-ms-db
 STILL_RUNNING=$(docker ps --filter "name=foodcore-payment-ms-db" --format "{{.Names}}")
 if [ -z "$STILL_RUNNING" ]; then
   echo "===== Banco de dados parado com sucesso! ====="
+  echo ""
+  echo "Remova o certificado do Cosmos DB Emulator do Truststore (Powershell - Administrador): keytool -delete -alias FoodcorePaymentCosmosEmulator -cacerts -storepass changeit"
 else
-  echo "ERRO: Não foi possível parar o contêiner do banco."
+  echo "ERRO: Não foi possível parar o contêiner do banco. Certificado não será removido."
 fi

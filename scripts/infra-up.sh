@@ -6,13 +6,12 @@ PROJECT_ROOT=$(dirname "$SCRIPT_DIR")
 echo "===== Iniciando banco de dados ====="
 
 # Verificar se o Docker está rodando
-docker info &>/dev/null
-if [ $? -ne 0 ]; then
+if ! docker info &>/dev/null; then
   echo "ERRO: O Docker não está rodando."
   exit 1
 fi
 
-cd "$PROJECT_ROOT/docker"
+cd "$PROJECT_ROOT/docker" || exit 1
 
 # Verificar se já existe container do banco rodando
 RUNNING_DB=$(docker ps --filter "name=foodcore-payment-ms-db" --format "{{.Names}}")
@@ -21,7 +20,7 @@ if [ -n "$RUNNING_DB" ]; then
   echo "AVISO: O container do banco já está em execução: $RUNNING_DB"
 
   if [ "$1" != "--force" ]; then
-    read -p "Deseja reiniciar o container do banco? (s/n): " resposta
+    read -r -p "Deseja reiniciar o container do banco? (s/n): " resposta
     if [[ ! "$resposta" =~ ^[Ss]$ ]]; then
       echo "Operação cancelada."
       exit 0
@@ -32,29 +31,38 @@ if [ -n "$RUNNING_DB" ]; then
   docker-compose stop payment-ms-db
 fi
 
-# Iniciar o PostgreSQL
-echo "-> Iniciando PostgreSQL..."
+# Iniciar o Cosmos DB Emulator
+echo "-> Iniciando Cosmos DB Emulator..."
 docker-compose up -d payment-ms-db
 
-# Verificar se o PostgreSQL está pronto
-echo "-> Verificando status do PostgreSQL..."
-MAX_RETRIES=30
+# Verificar se o Cosmos DB Emulator está pronto
+echo "-> Verificando status do Cosmos DB Emulator..."
+MAX_RETRIES=60
 RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if docker-compose exec payment-ms-db pg_isready -q; then
-        echo "-> PostgreSQL está pronto!"
+    # Verifica se a porta do Data Explorer está respondendo
+    if curl -k -f https://localhost:8079/_explorer/emulator.pem &> /dev/null; then
+        echo "-> Cosmos DB Emulator está pronto!"
+        echo ""
+        echo "====== Instruções para configuração do certificado (Powershell - Administrador) ======"
+        echo "-> Baixe o certificado;"
+        echo "-> Importe o certificado para o Truststore da JVM;"
+        echo "-> Exclua o arquivo de certificado baixado."
+        echo ""
+        echo "Comando: curl --insecure https://localhost:8079/_explorer/emulator.pem > ~/foodcore_payment_az_cosmos_emulator.crt && keytool -importcert -file foodcore_payment_az_cosmos_emulator.crt -alias FoodcorePaymentCosmosEmulator -cacerts -storepass changeit --noprompt && rm foodcore_payment_az_cosmos_emulator.crt"
+        echo ""
         break
     fi
 
     RETRY_COUNT=$((RETRY_COUNT+1))
-    echo "Aguardando PostgreSQL inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
+    echo "Aguardando Cosmos DB inicializar... ($RETRY_COUNT/$MAX_RETRIES)"
     sleep 2
 done
 
 if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-    echo "AVISO: Tempo limite excedido aguardando o PostgreSQL inicializar"
+    echo "AVISO: Tempo limite excedido aguardando o Cosmos DB inicializar. Verifique a situação manualmente."
 fi
 
 echo "===== Banco de dados iniciado com sucesso! ====="
-echo "Acesso: localhost:5433 (usuário: postgres)"
+echo "Acesso: localhost:8079 (Azure CosmosDB Emulator Data Explorer)"

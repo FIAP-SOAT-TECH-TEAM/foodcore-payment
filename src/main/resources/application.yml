@@ -7,37 +7,13 @@ spring:
     active: local
 
   # Configurações de banco de dados
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-
-  # Spring Modulith
-  autoconfigure:
-    exclude:
-      - org.springframework.modulith.events.jdbc.JdbcEventPublicationAutoConfiguration
-
-  # JPA / Hibernate
-  jpa:
-    hibernate:
-      ddl-auto: none
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
-          format_sql: true
-          jdbc:
-            time_zone: UTC
-      show-sql: false
-
-  # Liquibase
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-    contexts: prod # Contexto padrão é prod (será sobrescrito em local)
+  cloud:
+    azure:
+      cosmos:
+        endpoint: ${SPRING_AZURE_COSMOS_ENDPOINT}
+        database: ${SPRING_AZURE_COSMOS_DATABASE}
+        key: ${SPRING_AZURE_COSMOS_KEY}
+        populate-query-metrics: true
 
   # SpringDoc
   springdoc:

@@ -41,7 +41,7 @@ public class PaymentGateway {
 	 * @return Optional contendo o pagamento ou vazio se não encontrado
 	 */
 	public Optional<Payment> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return paymentDataSource.findTopByOrderIdOrderByIdDesc(orderId).map(PaymentDTOMapper::toDomain);
+		return paymentDataSource.findLatestByOrderId(orderId).map(PaymentDTOMapper::toDomain);
 	}
 
 	/**

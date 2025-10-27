@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.mapper;
+package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.mapstruct.ReportingPolicy;
 
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.PaymentDTO;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.entity.PaymentEntity;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.mapper.shared.QrCodeMapper;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper.shared.QrCodeMapper;
 import com.soat.fiap.food.core.shared.infrastructure.common.mapper.CycleAvoidingMappingContext;
 import com.soat.fiap.food.core.shared.infrastructure.common.mapper.DoIgnore;
 

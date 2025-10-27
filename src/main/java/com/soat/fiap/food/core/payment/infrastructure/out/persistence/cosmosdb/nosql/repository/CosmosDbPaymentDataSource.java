@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.repository;
+package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,19 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.entity.PaymentEntity;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.mapper.PaymentEntityMapper;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper.PaymentEntityMapper;
 
 /**
  * Implementação concreta: DataSource para persistência do agregado Pagamento.
  */
 @Component
-public class PostgresPaymentDataSource implements PaymentDataSource {
+public class CosmosDbPaymentDataSource implements PaymentDataSource {
 
-	private final SpringDataPaymentRepository repository;
+	private final CosmosDbPaymentRepository repository;
 	private final PaymentEntityMapper mapper;
 
-	public PostgresPaymentDataSource(SpringDataPaymentRepository repository, PaymentEntityMapper mapper) {
+	public CosmosDbPaymentDataSource(CosmosDbPaymentRepository repository, PaymentEntityMapper mapper) {
 		this.repository = repository;
 		this.mapper = mapper;
 	}
@@ -34,19 +34,13 @@ public class PostgresPaymentDataSource implements PaymentDataSource {
 	}
 
 	@Override @Transactional(readOnly = true)
-	public Optional<PaymentDTO> findTopByOrderIdOrderByIdDesc(Long orderId) {
-		return repository.findTopByOrderIdOrderByIdDesc(orderId).map(mapper::toDTO);
-	}
-
-	@Override @Transactional(readOnly = true)
-	public boolean existsByOrderId(Long orderId) {
-		return repository.existsByOrderId(orderId);
+	public Optional<PaymentDTO> findLatestByOrderId(Long orderId) {
+		return repository.findLatestByOrderId(orderId).map(mapper::toDTO);
 	}
 
 	@Override @Transactional(readOnly = true)
 	public List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
 		var paymentEntities = repository.findExpiredPaymentsWithoutApprovedOrCancelled(now);
-
 		return paymentEntities.stream().map(mapper::toDTO).toList();
 	}
 }

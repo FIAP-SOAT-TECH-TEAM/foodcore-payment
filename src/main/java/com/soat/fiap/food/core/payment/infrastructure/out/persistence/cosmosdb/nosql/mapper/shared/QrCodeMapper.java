@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.payment.infrastructure.out.persistence.postgres.mapper.shared;
+package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper.shared;
 
 import org.mapstruct.Mapper;
 

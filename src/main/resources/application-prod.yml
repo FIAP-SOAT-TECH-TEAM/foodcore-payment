@@ -1,11 +1,10 @@
-# Configuração do JPA para produção
 spring:
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        ddl-auto: validate
-        format_sql: false
+
+  # Configurações de banco de dados
+  cloud:
+    azure:
+      cosmos:
+        populate-query-metrics: false
 
   # SpringDoc
   springdoc:
@@ -13,10 +12,6 @@ spring:
       enabled: true
     swagger-ui:
       enabled: true
-
-  # Liquibase (contexto exclusivo de produção)
-  liquibase:
-    contexts: prod
 
   # Configurações do servidor
   server:

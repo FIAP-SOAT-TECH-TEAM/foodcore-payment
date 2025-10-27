@@ -43,13 +43,12 @@ services:
       - "${DB_PORT}:8081" # Data Explorer UI
       - "10251-10255:10251-10255"
     volumes:
-      - payment_ms_cosmosdb_data:/data
+      - payment_ms_cosmosdb_data:/tmp/cosmos/appdata # https://stackoverflow.com/questions/72466963/cosmosdb-emulator-linux-image-mount-volume
     healthcheck:
-      test: ["CMD-SHELL", "curl -f https://localhost:${DB_PORT}/_explorer/emulator.pem --insecure || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 40s
+      test: ["CMD-SHELL", "curl -k -f https://localhost:8081/_explorer/emulator.pem"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
     networks:
       - fastfood-network
 

@@ -27,7 +27,7 @@ public interface PaymentDataSource {
 	 *            ID do pedido
 	 * @return Pagamento encontrado ou vazio
 	 */
-	Optional<PaymentDTO> findTopByOrderIdOrderByIdDesc(Long orderId);
+	Optional<PaymentDTO> findLatestByOrderId(Long orderId);
 
 	/**
 	 * Busca pagamentos não aprovados expirados
@@ -37,9 +37,4 @@ public interface PaymentDataSource {
 	 * @return Lista de pagamento expirados
 	 */
 	List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now);
-
-	/**
-	 * Verifica se já existe um pagamento para o pedido
-	 */
-	boolean existsByOrderId(Long orderId);
 }

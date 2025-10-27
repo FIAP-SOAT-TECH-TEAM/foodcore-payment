@@ -13,8 +13,6 @@ show_help() {
   echo "Uso: ./food [comando] [opções]"
   echo
   echo "Comandos disponíveis:"
-  echo "  db:up          Aplica migrações no banco"
-  echo "  db:reset       Reseta o banco de dados"
   echo "  start:infra    Inicia apenas a infraestrutura (banco)"
   echo "  stop:infra     Para apenas a infraestrutura"
   echo "  restart:all    Reinicia todos os serviços da infraestrutura"
@@ -64,23 +62,6 @@ done
 
 # Executar comandos
 case "$COMMAND" in
-  db:up)
-    echo "Aplicando migrações..."
-    "$SCRIPTS_DIR/apply-migrations.sh"
-    ;;
-
-  db:reset)
-    if [ "$FORCE_FLAG" != "--force" ]; then
-      read -p "ATENÇÃO: Isso irá resetar o banco de dados. Tem certeza? (s/n): " resp
-      if [[ ! "$resp" =~ ^[Ss]$ ]]; then
-        echo "Operação cancelada."
-        exit 0
-      fi
-    fi
-    echo "Resetando o banco de dados..."
-    "$SCRIPTS_DIR/reset-db.sh"
-    ;;
-
   start:infra)
     echo "Iniciando a infraestrutura..."
     "$SCRIPTS_DIR/infra-up.sh" $FORCE_FLAG
