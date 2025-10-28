@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class PaymentResponse {
 
 	@Schema(description = "ID do pagamento", example = "1")
-	private Long id;
+	private UUID id;
 
 	@Schema(description = "ID do pedido associado", example = "1001")
 	private Long orderId;

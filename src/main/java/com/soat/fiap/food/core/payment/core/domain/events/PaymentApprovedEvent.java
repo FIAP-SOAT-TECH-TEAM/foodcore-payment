@@ -2,6 +2,7 @@ package com.soat.fiap.food.core.payment.core.domain.events;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter @AllArgsConstructor
 public class PaymentApprovedEvent {
-	private final Long paymentId;
+	private final UUID paymentId;
 	private final Long orderId;
 	private final BigDecimal amount;
 	private final String paymentMethod;
@@ -30,7 +31,7 @@ public class PaymentApprovedEvent {
 	 *            Método de pagamento
 	 * @return Nova instância do evento
 	 */
-	public static PaymentApprovedEvent of(Long paymentId, Long orderId, BigDecimal amount, String paymentMethod) {
+	public static PaymentApprovedEvent of(UUID paymentId, Long orderId, BigDecimal amount, String paymentMethod) {
 		return new PaymentApprovedEvent(paymentId, orderId, amount, paymentMethod, LocalDateTime.now());
 	}
 }

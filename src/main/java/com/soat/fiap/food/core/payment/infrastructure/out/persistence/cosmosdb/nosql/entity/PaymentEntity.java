@@ -6,9 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
-import com.azure.spring.data.cosmos.core.mapping.Container;
-import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
-import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
+import com.azure.spring.data.cosmos.core.mapping.*;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
@@ -21,10 +19,11 @@ import lombok.Setter;
  * Entidade para pagamento armazenada no Azure Cosmos DB
  */
 @Getter @Setter @Container(containerName = "payments")
+@CosmosUniqueKeyPolicy(uniqueKeys = {@CosmosUniqueKey(paths = {"/tid"})})
 public class PaymentEntity {
 
 	@Id @GeneratedValue
-	private Long id;
+	private String id;
 
 	@PartitionKey
 	private String userId;
@@ -50,5 +49,5 @@ public class PaymentEntity {
 	private AuditInfo auditInfo = new AuditInfo();
 
 	@Version
-	private String eTag;
+	private String _etag;
 }

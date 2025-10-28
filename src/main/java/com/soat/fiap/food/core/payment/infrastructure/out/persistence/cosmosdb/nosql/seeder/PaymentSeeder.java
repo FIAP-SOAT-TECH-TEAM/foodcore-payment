@@ -44,6 +44,10 @@ public class PaymentSeeder {
 	@PostConstruct
 	public void seed() {
 
+		if (repository.count() > 0) {
+			return;
+		}
+
 		// Pagamento 1 - Cartão de Crédito
 		PaymentEntity payment1 = new PaymentEntity();
 		payment1.setUserId("asdas2332");

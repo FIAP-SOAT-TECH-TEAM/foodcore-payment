@@ -10,9 +10,10 @@ spring:
   cloud:
     azure:
       cosmos:
-        endpoint: ${SPRING_AZURE_COSMOS_ENDPOINT}
+        endpoint: ${SPRING_AZURE_COSMOS_URI}
         database: ${SPRING_AZURE_COSMOS_DATABASE}
         key: ${SPRING_AZURE_COSMOS_KEY}
+        connection-mode: direct
         populate-query-metrics: true
 
   # SpringDoc

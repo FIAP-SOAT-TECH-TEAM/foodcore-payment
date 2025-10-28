@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.payment.core.domain.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentException;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
@@ -18,7 +19,7 @@ import lombok.Data;
  */
 @Data
 public class Payment {
-	private Long id;
+	private UUID id;
 	private String userId;
 	private Long orderId;
 	private PaymentMethod type;

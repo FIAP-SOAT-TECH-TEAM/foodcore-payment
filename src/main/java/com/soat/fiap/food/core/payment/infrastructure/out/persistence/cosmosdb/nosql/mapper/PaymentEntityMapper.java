@@ -1,13 +1,10 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper;
 
-import java.util.List;
-
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper.shared.QrCodeMapper;
@@ -20,15 +17,8 @@ import com.soat.fiap.food.core.shared.infrastructure.common.mapper.DoIgnore;
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = QrCodeMapper.class)
 public interface PaymentEntityMapper {
-
-	Payment toDomain(PaymentEntity entity, @Context CycleAvoidingMappingContext context);
-
-	List<Payment> toDomainList(List<PaymentEntity> entities, @Context CycleAvoidingMappingContext context);
-
 	PaymentEntity toEntity(PaymentDTO domain, @Context CycleAvoidingMappingContext context);
 
-	// @Mapping(target = "qrCode", source = "qrCode", qualifiedByName =
-	// "mapQrCodeToString")
 	@Mapping(target = "createdAt", source = "auditInfo.createdAt")
 	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")
 	PaymentDTO toDTO(PaymentEntity entity);

@@ -1,6 +1,7 @@
 package com.soat.fiap.food.core.payment.core.domain.events;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Getter;
  */
 @Getter @AllArgsConstructor
 public class PaymentExpiredEvent {
-	private final Long paymentId;
+	private final UUID paymentId;
 	private final Long orderId;
 	private final LocalDateTime expiredIn;
 }

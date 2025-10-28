@@ -37,7 +37,7 @@ docker-compose up -d payment-ms-db
 
 # Verificar se o Cosmos DB Emulator está pronto
 echo "-> Verificando status do Cosmos DB Emulator..."
-MAX_RETRIES=60
+MAX_RETRIES=120
 RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
@@ -51,6 +51,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
         echo "-> Exclua o arquivo de certificado baixado."
         echo ""
         echo "Comando: curl --insecure https://localhost:8079/_explorer/emulator.pem > ~/foodcore_payment_az_cosmos_emulator.crt && keytool -importcert -file foodcore_payment_az_cosmos_emulator.crt -alias FoodcorePaymentCosmosEmulator -cacerts -storepass changeit --noprompt && rm foodcore_payment_az_cosmos_emulator.crt"
+        echo "Observação: lembre-se de declarar a variável JAVA_HOME no seu ambiente, e acrescentar a pasta JAVA_HOME/bin ao PATH."
         echo ""
         break
     fi
@@ -65,4 +66,4 @@ if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
 fi
 
 echo "===== Banco de dados iniciado com sucesso! ====="
-echo "Acesso: localhost:8079 (Azure CosmosDB Emulator Data Explorer)"
+echo "Acesso: https://localhost:8079/_explorer/index.html (Azure CosmosDB Emulator Data Explorer)"
