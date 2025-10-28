@@ -35,12 +35,12 @@ public class CosmosDbPaymentDataSource implements PaymentDataSource {
 
 	@Override @Transactional(readOnly = true)
 	public Optional<PaymentDTO> findLatestByOrderId(Long orderId) {
-		return repository.findLatestByOrderId(orderId).map(mapper::toDTO);
+		return repository.findTopByOrderIdOrderByAuditInfoCreatedAtDesc(orderId).map(mapper::toDTO);
 	}
 
 	@Override @Transactional(readOnly = true)
 	public List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
-		var paymentEntities = repository.findExpiredPaymentsWithoutApprovedOrCancelled(now);
+		var paymentEntities = repository.getExpiredPaymentsWithoutApprovedOrCancelled(now);
 		return paymentEntities.stream().map(mapper::toDTO).toList();
 	}
 }

@@ -20,8 +20,7 @@ public interface CosmosDbPaymentRepository extends CosmosRepository<PaymentEntit
 	/**
 	 * Busca o último pagamento inserido para um determinado pedido
 	 */
-	@Query("SELECT * FROM c WHERE c.orderId = @orderId ORDER BY c._ts DESC OFFSET 0 LIMIT 1")
-	Optional<PaymentEntity> findLatestByOrderId(@Param("orderId") Long orderId);
+	Optional<PaymentEntity> findTopByOrderIdOrderByAuditInfoCreatedAtDesc(Long orderId);
 
 	/**
 	 * Busca pagamentos não aprovados e expirados
@@ -31,5 +30,5 @@ public interface CosmosDbPaymentRepository extends CosmosRepository<PaymentEntit
 			WHERE c.expiresIn < @now
 			AND NOT (c.status IN ('APPROVED', 'CANCELLED'))
 			""")
-	List<PaymentEntity> findExpiredPaymentsWithoutApprovedOrCancelled(@Param("now") LocalDateTime now);
+	List<PaymentEntity> getExpiredPaymentsWithoutApprovedOrCancelled(@Param("now") LocalDateTime now);
 }

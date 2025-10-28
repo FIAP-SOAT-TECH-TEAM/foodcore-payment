@@ -28,7 +28,7 @@ public class PaymentEntity {
 	@PartitionKey
 	private String userId;
 
-	private Integer orderId;
+	private Long orderId;
 
 	private PaymentMethod type;
 

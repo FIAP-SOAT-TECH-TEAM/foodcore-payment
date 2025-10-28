@@ -51,7 +51,7 @@ public class PaymentSeeder {
 		// Pagamento 1 - Cartão de Crédito
 		PaymentEntity payment1 = new PaymentEntity();
 		payment1.setUserId("asdas2332");
-		payment1.setOrderId(1);
+		payment1.setOrderId(1L);
 		payment1.setType(PaymentMethod.CREDIT_CARD);
 		payment1.setExpiresIn(LocalDateTime.now().plusDays(30));
 		payment1.setStatus(PaymentStatus.APPROVED);
@@ -66,7 +66,7 @@ public class PaymentSeeder {
 		// Pagamento 2 - Débito
 		PaymentEntity payment2 = new PaymentEntity();
 		payment2.setUserId("asd34515232");
-		payment2.setOrderId(2);
+		payment2.setOrderId(2L);
 		payment2.setType(PaymentMethod.DEBIT_CARD);
 		payment2.setExpiresIn(LocalDateTime.now());
 		payment2.setStatus(PaymentStatus.APPROVED);
@@ -81,7 +81,7 @@ public class PaymentSeeder {
 		// Pagamento 3 - PIX Pendente
 		PaymentEntity payment3 = new PaymentEntity();
 		payment3.setUserId("asd34515232");
-		payment3.setOrderId(3);
+		payment3.setOrderId(3L);
 		payment3.setType(null);
 		payment3.setExpiresIn(LocalDateTime.now().plusHours(1));
 		payment3.setStatus(PaymentStatus.PENDING);
@@ -96,7 +96,7 @@ public class PaymentSeeder {
 		// Pagamento 4 - PIX Pendente
 		PaymentEntity payment4 = new PaymentEntity();
 		payment4.setUserId("asd34515232");
-		payment4.setOrderId(4);
+		payment4.setOrderId(4L);
 		payment4.setType(null);
 		payment4.setExpiresIn(LocalDateTime.now().plusHours(1));
 		payment4.setStatus(PaymentStatus.PENDING);
