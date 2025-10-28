@@ -32,6 +32,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 15MB
 
+azsvcbus:
+  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING}
+
 management:
   # Tracing Distribuído
   tracing:
@@ -62,21 +65,6 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-
-rabbitmq:
-  host: ${SPRING_RABBITMQ_HOST}
-  port: ${SPRING_RABBITMQ_PORT}
-  username: ${SPRING_RABBITMQ_USERNAME}
-  password: ${SPRING_RABBITMQ_PASSWORD}
-  virtual-host: /
-  publisher-confirm-type: correlated
-  template:
-    mandatory: true
-  listener:
-    simple:
-      acknowledge-mode: auto
-      concurrency: 1
-      max-concurrency: 5
 
 # Mercado Pago Configuration
 mercado-pago:

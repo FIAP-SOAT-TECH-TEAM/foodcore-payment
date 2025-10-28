@@ -36,8 +36,8 @@ ext {
 	set('springCloudVersion', "2024.0.0")
 	set('retrofit', "3.0.0")
 	set('converterGson', "3.0.0")
-	set('azureStarterDataCosmos', "6.0.0")
 	set('foodcoreShared', "0.0.1")
+	set('azureSpringCloudVersion', "6.0.0")
 }
 
 dependencies {
@@ -48,10 +48,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 	// Azure
-	implementation "com.azure.spring:spring-cloud-azure-starter-data-cosmos:${azureStarterDataCosmos}"
+	implementation 'com.azure.spring:spring-cloud-azure-starter-data-cosmos'
+	implementation 'com.azure.spring:spring-cloud-azure-starter-servicebus'
 
 	// Spring Cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-discoveryclient'
@@ -83,6 +83,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${azureSpringCloudVersion}"
 	}
 }
 
