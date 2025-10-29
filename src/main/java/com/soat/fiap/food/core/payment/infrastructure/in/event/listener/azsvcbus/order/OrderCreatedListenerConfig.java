@@ -18,22 +18,22 @@ import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataS
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Listener para eventos de pedido criado no módulo de pagamentos via Azure
- * Service Bus.
+ * Listener responsável por processar eventos relacionados a pedidos criados no
+ * módulo de Pagamentos via Azure Service Bus.
+ *
  * <p>
- * Este listener consome mensagens do tópico
- * {@link ServiceBusConfig#ORDER_CREATED_TOPIC} e subscription
- * {@link ServiceBusConfig#PAYMENT_ORDER_CREATED_TOPIC_SUBSCRIPTION},
- * processando eventos {@link OrderCreatedEventDto}, iniciando o pagamento do
- * pedido e publicando eventos relacionados.
+ * Este listener recebe eventos e executa o tratamento necessário, incluindo a
+ * inicialização de pagamentos e a publicação de eventos relacionados.
+ * </p>
  */
 @Configuration @Slf4j
-public class OrderCreatedListener {
+public class OrderCreatedListenerConfig {
 
 	private final Gson gson = new Gson();
 
 	/**
-	 * Construtor do listener de eventos de pedidos.
+	 * Cria o processador responsável por consumir mensagens de criação de pedido
+	 * para o módulo de Pagamentos.
 	 *
 	 * @param paymentDataSource
 	 *            Fonte de dados de pagamentos
@@ -42,7 +42,8 @@ public class OrderCreatedListener {
 	 * @param eventPublisherSource
 	 *            Publicador de eventos
 	 * @param connectionString
-	 *            Connection string do Azure Service Bus
+	 *            String de conexão do Azure Service Bus
+	 * @return Cliente processador configurado
 	 */
 	@Bean
 	public ServiceBusProcessorClient paymentOrderCreatedTopicServiceBusProcessorClient(
@@ -60,12 +61,12 @@ public class OrderCreatedListener {
 							OrderCreatedEventDto.class);
 					handle(event, paymentDataSource, acquirerSource, eventPublisherSource);
 				})
-				.processError(context -> log.error("Erro no listener de pedido criado", context.getException()))
+				.processError(context -> log.error("Erro ao processar evento de pedido criado", context.getException()))
 				.buildProcessorClient();
 	}
 
 	/**
-	 * Processa o evento de pedido criado.
+	 * Executa o tratamento do evento recebido.
 	 *
 	 * @param event
 	 *            Evento de pedido criado
@@ -79,10 +80,10 @@ public class OrderCreatedListener {
 	private void handle(OrderCreatedEventDto event, PaymentDataSource paymentDataSource, AcquirerSource acquirerSource,
 			EventPublisherSource eventPublisherSource) {
 
-		log.info("Recebido evento de pedido criado: {} com valor total: {}", event.getId(), event.getTotalAmount());
+		log.info("Evento de pedido criado recebido: {}", event.getId());
 
 		InitializePaymentController.initializePayment(event, paymentDataSource, acquirerSource, eventPublisherSource);
 
-		log.info("Pagamento iniciado para o pedido: {}", event.getId());
+		log.info("Processamento de pagamento concluído para o pedido: {}", event.getId());
 	}
 }

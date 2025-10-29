@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
+import com.nimbusds.jose.shaded.gson.Gson;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
@@ -28,6 +29,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	private final ServiceBusSenderClient paymentApprovedSender;
 	private final ServiceBusSenderClient paymentExpiredSender;
 	private final ServiceBusSenderClient paymentInitializationErrorSender;
+	private final Gson gson = new Gson();
 
 	/**
 	 * Construtor que inicializa os clients do Azure Service Bus usando a connection
@@ -64,7 +66,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	@Override
 	public void publishPaymentApprovedEvent(PaymentApprovedEventDto event) {
 		try {
-			paymentApprovedSender.sendMessage(new ServiceBusMessage(event.toString()));
+			paymentApprovedSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
 			log.info("Evento de pagamento aprovado publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de pagamento aprovado", ex);
@@ -81,7 +83,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	@Override
 	public void publishPaymentExpiredEvent(PaymentExpiredEventDto event) {
 		try {
-			paymentExpiredSender.sendMessage(new ServiceBusMessage(event.toString()));
+			paymentExpiredSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
 			log.info("Evento de pagamento expirado publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de pagamento expirado", ex);
@@ -98,7 +100,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	@Override
 	public void publishPaymentInitializationErrorEvent(PaymentInitializationErrorEventDto event) {
 		try {
-			paymentInitializationErrorSender.sendMessage(new ServiceBusMessage(event.toString()));
+			paymentInitializationErrorSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
 			log.info("Evento de erro na inicialização do pagamento publicado com sucesso: {}", event);
 		} catch (Exception ex) {
 			log.error("Erro ao publicar evento de inicialização de pagamento", ex);

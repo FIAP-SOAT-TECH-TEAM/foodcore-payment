@@ -19,7 +19,6 @@ import lombok.Setter;
  * Entidade para pagamento armazenada no Azure Cosmos DB
  */
 @Getter @Setter @Container(containerName = "payments")
-@CosmosUniqueKeyPolicy(uniqueKeys = {@CosmosUniqueKey(paths = {"/tid"})})
 public class PaymentEntity {
 
 	@Id @GeneratedValue
@@ -47,7 +46,4 @@ public class PaymentEntity {
 	private String observations;
 
 	private AuditInfo auditInfo = new AuditInfo();
-
-	@Version
-	private String _etag;
 }

@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
-import com.soat.fiap.food.core.payment.infrastructure.in.event.listener.azsvcbus.order.OrderCreatedListener;
+import com.soat.fiap.food.core.payment.infrastructure.in.event.listener.azsvcbus.order.OrderCreatedListenerConfig;
 import com.soat.fiap.food.core.payment.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.payment.shared.infrastructure.common.source.EventPublisherSource;
 
@@ -37,7 +37,7 @@ class OrderEventListenerTest {
 		event.setUserId("as23as3");
 		event.setTotalAmount(BigDecimal.valueOf(29.99));
 
-		var listener = new OrderCreatedListener(paymentDataSource, acquirerSource, eventPublisherSource);
+		var listener = new OrderCreatedListenerConfig(paymentDataSource, acquirerSource, eventPublisherSource);
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> listener.handleOrderCreatedEvent(event));
@@ -52,7 +52,7 @@ class OrderEventListenerTest {
 		event.setUserId("as53as3");
 		event.setTotalAmount(BigDecimal.valueOf(199.99));
 
-		var listener = new OrderCreatedListener(paymentDataSource, acquirerSource, eventPublisherSource);
+		var listener = new OrderCreatedListenerConfig(paymentDataSource, acquirerSource, eventPublisherSource);
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> listener.handleOrderCreatedEvent(event));
@@ -67,7 +67,7 @@ class OrderEventListenerTest {
 		event.setUserId(null);
 		event.setTotalAmount(BigDecimal.valueOf(49.99));
 
-		var listener = new OrderCreatedListener(paymentDataSource, acquirerSource, eventPublisherSource);
+		var listener = new OrderCreatedListenerConfig(paymentDataSource, acquirerSource, eventPublisherSource);
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> listener.handleOrderCreatedEvent(event));
@@ -82,7 +82,7 @@ class OrderEventListenerTest {
 		event.setUserId("1s23as3");
 		event.setTotalAmount(BigDecimal.valueOf(0.01));
 
-		var listener = new OrderCreatedListener(paymentDataSource, acquirerSource, eventPublisherSource);
+		var listener = new OrderCreatedListenerConfig(paymentDataSource, acquirerSource, eventPublisherSource);
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> listener.handleOrderCreatedEvent(event));
@@ -97,7 +97,7 @@ class OrderEventListenerTest {
 		event.setUserId("8s23as3");
 		event.setTotalAmount(BigDecimal.valueOf(75.50));
 
-		var listener = new OrderCreatedListener(paymentDataSource, acquirerSource, eventPublisherSource);
+		var listener = new OrderCreatedListenerConfig(paymentDataSource, acquirerSource, eventPublisherSource);
 
 		// Act & Assert
 		assertThatNoException().isThrownBy(() -> listener.handleOrderCreatedEvent(event));
