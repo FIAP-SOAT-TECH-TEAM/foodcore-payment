@@ -1,7 +1,8 @@
 package com.soat.fiap.food.core.payment.infrastructure.in.event.listener.azsvcbus.order;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * processando eventos {@link OrderCreatedEventDto}, iniciando o pagamento do
  * pedido e publicando eventos relacionados.
  */
-@Component @Slf4j
+@Configuration @Slf4j
 public class OrderCreatedListener {
 
 	private final Gson gson = new Gson();
@@ -43,11 +44,13 @@ public class OrderCreatedListener {
 	 * @param connectionString
 	 *            Connection string do Azure Service Bus
 	 */
-	public OrderCreatedListener(PaymentDataSource paymentDataSource, AcquirerSource acquirerSource,
+	@Bean
+	public ServiceBusProcessorClient paymentOrderCreatedTopicServiceBusProcessorClient(
+			PaymentDataSource paymentDataSource, AcquirerSource acquirerSource,
 			EventPublisherSource eventPublisherSource,
 			@Value("${azsvcbus.connection-string}") String connectionString) {
 
-		try (ServiceBusProcessorClient processor = new ServiceBusClientBuilder().connectionString(connectionString)
+		return new ServiceBusClientBuilder().connectionString(connectionString)
 				.processor()
 				.topicName(ServiceBusConfig.ORDER_CREATED_TOPIC)
 				.subscriptionName(ServiceBusConfig.PAYMENT_ORDER_CREATED_TOPIC_SUBSCRIPTION)
@@ -58,12 +61,7 @@ public class OrderCreatedListener {
 					handle(event, paymentDataSource, acquirerSource, eventPublisherSource);
 				})
 				.processError(context -> log.error("Erro no listener de pedido criado", context.getException()))
-				.buildProcessorClient()) {
-
-			processor.start();
-		} catch (Exception e) {
-			log.error("Falha ao iniciar OrderCreatedListener", e);
-		}
+				.buildProcessorClient();
 	}
 
 	/**
