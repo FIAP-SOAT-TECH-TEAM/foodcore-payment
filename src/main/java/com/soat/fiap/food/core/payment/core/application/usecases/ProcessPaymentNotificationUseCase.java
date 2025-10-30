@@ -1,6 +1,9 @@
 package com.soat.fiap.food.core.payment.core.application.usecases;
 
+import java.util.Objects;
+
 import com.soat.fiap.food.core.payment.core.application.inputs.AcquirerNotificationInput;
+import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentAlreadyProcessedException;
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
@@ -27,7 +30,7 @@ public class ProcessPaymentNotificationUseCase {
 	 * @return Objeto {@link Payment} atualizado com os dados da notificação
 	 */
 	public static Payment processPaymentNotification(AcquirerNotificationInput acquirerNotificationInput,
-			AcquirerGateway acquirerGateway, PaymentGateway paymentGateway) {
+			AcquirerGateway acquirerGateway, PaymentGateway paymentGateway) throws PaymentAlreadyProcessedException {
 
 		var acquirerPaymentDto = acquirerGateway.getAcquirerPayments(acquirerNotificationInput.dataId());
 		var payment = paymentGateway.findTopByOrderIdOrderByIdDesc(acquirerPaymentDto.externalReference());
@@ -36,9 +39,9 @@ public class ProcessPaymentNotificationUseCase {
 			log.warn("Pagamento não foi encontrado a partir da external_reference! {}",
 					acquirerPaymentDto.externalReference());
 			throw new PaymentNotFoundException("Pagamento", acquirerPaymentDto.externalReference());
-		} else if (payment.get().getStatus() == PaymentStatus.APPROVED) {
-			log.info("Pagamento já aprovado {}!", acquirerPaymentDto.externalReference());
-			return payment.get();
+		} else if (Objects.equals(payment.get().getTid(), acquirerPaymentDto.tid())) {
+			log.warn("Pagamento já processado. Referência Externa: {}!", acquirerPaymentDto.externalReference());
+			throw new PaymentAlreadyProcessedException("Pagamento já processado");
 		}
 		// Indica que se trata de uma segunda tentativa de pagamento
 		else if (payment.get().getStatus() != PaymentStatus.PENDING) {

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
 
 import com.azure.spring.data.cosmos.core.mapping.*;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;

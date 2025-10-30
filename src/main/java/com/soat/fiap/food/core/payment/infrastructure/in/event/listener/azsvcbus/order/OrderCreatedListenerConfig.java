@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.google.gson.Gson;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.InitializePaymentController;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.OrderCreatedEventDto;
 import com.soat.fiap.food.core.payment.infrastructure.common.event.azsvcbus.config.ServiceBusConfig;
@@ -15,6 +15,7 @@ import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSour
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
  * inicialização de pagamentos e a publicação de eventos relacionados.
  * </p>
  */
-@Configuration @Slf4j
+@Configuration @Slf4j @RequiredArgsConstructor
 public class OrderCreatedListenerConfig {
 
-	private final Gson gson = new Gson();
+	private final Gson gson;
 
 	/**
 	 * Cria o processador responsável por consumir mensagens de criação de pedido

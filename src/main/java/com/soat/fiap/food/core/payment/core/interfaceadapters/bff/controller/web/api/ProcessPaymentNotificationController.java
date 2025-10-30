@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.we
 import com.soat.fiap.food.core.payment.core.application.inputs.mappers.AcquirerNotificationMapper;
 import com.soat.fiap.food.core.payment.core.application.usecases.ProcessPaymentNotificationUseCase;
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentApprovedEventUseCase;
+import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentAlreadyProcessedException;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.AcquirerGateway;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
@@ -41,15 +42,19 @@ public class ProcessPaymentNotificationController {
 		var paymentGateway = new PaymentGateway(paymentDataSource);
 		var eventPublisherGateway = new EventPublisherGateway(eventPublisherSource);
 
-		var payment = ProcessPaymentNotificationUseCase.processPaymentNotification(acquirerNotificationInput,
-				acquirerGateway, paymentGateway);
+		try {
+			var payment = ProcessPaymentNotificationUseCase.processPaymentNotification(acquirerNotificationInput,
+					acquirerGateway, paymentGateway);
 
-		var savedPayment = paymentGateway.save(payment);
+			var savedPayment = paymentGateway.save(payment);
 
-		if (payment.getStatus() == PaymentStatus.APPROVED) {
-			PublishPaymentApprovedEventUseCase.publishPaymentApprovedEvent(savedPayment, eventPublisherGateway);
-			log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.getId(),
-					payment.getOrderId());
+			if (payment.getStatus() == PaymentStatus.APPROVED) {
+				PublishPaymentApprovedEventUseCase.publishPaymentApprovedEvent(savedPayment, eventPublisherGateway);
+				log.info("Evento de pagamento aprovado publicado! PaymentId: {}, OrderId: {}!", payment.getId(),
+						payment.getOrderId());
+			}
+		} catch (PaymentAlreadyProcessedException exception) {
+			log.warn(exception.getMessage());
 		}
 	}
 }

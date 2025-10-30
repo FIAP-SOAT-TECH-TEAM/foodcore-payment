@@ -17,7 +17,8 @@ import com.soat.fiap.food.core.shared.infrastructure.common.mapper.DoIgnore;
  */
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = QrCodeMapper.class)
 public interface PaymentEntityMapper {
-	PaymentEntity toEntity(PaymentDTO domain, @Context CycleAvoidingMappingContext context);
+	@Mapping(target = "auditInfo", expression = "java(com.soat.fiap.food.core.shared.infrastructure.common.mapper.AuditInfoMapper.buildAuditInfo(dto.createdAt(), dto.updatedAt()))")
+	PaymentEntity toEntity(PaymentDTO dto, @Context CycleAvoidingMappingContext context);
 
 	@Mapping(target = "createdAt", source = "auditInfo.createdAt")
 	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")

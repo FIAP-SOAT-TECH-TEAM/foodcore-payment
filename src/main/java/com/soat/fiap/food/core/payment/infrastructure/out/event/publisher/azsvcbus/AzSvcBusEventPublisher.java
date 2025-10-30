@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.google.gson.Gson;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
@@ -29,7 +29,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	private final ServiceBusSenderClient paymentApprovedSender;
 	private final ServiceBusSenderClient paymentExpiredSender;
 	private final ServiceBusSenderClient paymentInitializationErrorSender;
-	private final Gson gson = new Gson();
+	private final Gson gson;
 
 	/**
 	 * Construtor que inicializa os clients do Azure Service Bus usando a connection
@@ -38,7 +38,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	 * @param connectionString
 	 *            Connection string do Azure Service Bus, lida do application.yaml
 	 */
-	public AzSvcBusEventPublisher(@Value("${azsvcbus.connection-string}") String connectionString) {
+	public AzSvcBusEventPublisher(@Value("${azsvcbus.connection-string}") String connectionString, Gson gson) {
 
 		this.paymentApprovedSender = new ServiceBusClientBuilder().connectionString(connectionString)
 				.sender()
@@ -54,6 +54,8 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 				.sender()
 				.queueName(ServiceBusConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
 				.buildClient();
+
+		this.gson = gson;
 	}
 
 	/**
