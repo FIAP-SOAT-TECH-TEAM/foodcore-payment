@@ -2,10 +2,8 @@ package com.soat.fiap.food.core.payment.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentExpiredEvent;
-import com.soat.fiap.food.core.payment.core.domain.events.PaymentInitializationErrorEvent;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentApprovedEventMapper;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentExpiredEventMapper;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentInitializationErrorEventMapper;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 
 /**
@@ -45,18 +43,5 @@ public class EventPublisherGateway {
 		var eventDto = PaymentExpiredEventMapper.toDto(event);
 
 		eventPublisherSource.publishPaymentExpiredEvent(eventDto);
-	}
-
-	/**
-	 * Publica um evento de erro na inicialização do pagamento.
-	 *
-	 * @param event
-	 *            Evento contendo informações do erro ocorrido durante a
-	 *            inicialização do pagamento.
-	 */
-	public void publishPaymentInitializationErrorEvent(PaymentInitializationErrorEvent event) {
-		var eventDto = PaymentInitializationErrorEventMapper.toDto(event);
-
-		eventPublisherSource.publishPaymentInitializationErrorEvent(eventDto);
 	}
 }

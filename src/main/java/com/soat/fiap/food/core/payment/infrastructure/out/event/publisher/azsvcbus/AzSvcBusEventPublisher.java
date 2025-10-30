@@ -9,7 +9,6 @@ import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import com.google.gson.Gson;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentApprovedEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentExpiredEventDto;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentInitializationErrorEventDto;
 import com.soat.fiap.food.core.payment.infrastructure.common.event.azsvcbus.config.ServiceBusConfig;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 
@@ -28,7 +27,6 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 
 	private final ServiceBusSenderClient paymentApprovedSender;
 	private final ServiceBusSenderClient paymentExpiredSender;
-	private final ServiceBusSenderClient paymentInitializationErrorSender;
 	private final Gson gson;
 
 	/**
@@ -48,11 +46,6 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 		this.paymentExpiredSender = new ServiceBusClientBuilder().connectionString(connectionString)
 				.sender()
 				.queueName(ServiceBusConfig.PAYMENT_EXPIRED_QUEUE)
-				.buildClient();
-
-		this.paymentInitializationErrorSender = new ServiceBusClientBuilder().connectionString(connectionString)
-				.sender()
-				.queueName(ServiceBusConfig.PAYMENT_INITIALIZATION_ERROR_QUEUE)
 				.buildClient();
 
 		this.gson = gson;
@@ -93,23 +86,6 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	}
 
 	/**
-	 * Publica um evento de erro na inicialização do pagamento na fila
-	 * correspondente do Azure Service Bus.
-	 *
-	 * @param event
-	 *            Evento de erro de inicialização de pagamento
-	 */
-	@Override
-	public void publishPaymentInitializationErrorEvent(PaymentInitializationErrorEventDto event) {
-		try {
-			paymentInitializationErrorSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
-			log.info("Evento de erro na inicialização do pagamento publicado com sucesso: {}", event);
-		} catch (Exception ex) {
-			log.error("Erro ao publicar evento de inicialização de pagamento", ex);
-		}
-	}
-
-	/**
 	 * Fecha todos os clients do Azure Service Bus ao destruir o bean.
 	 */
 	@PreDestroy
@@ -119,7 +95,5 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 			paymentApprovedSender.close();
 		if (paymentExpiredSender != null)
 			paymentExpiredSender.close();
-		if (paymentInitializationErrorSender != null)
-			paymentInitializationErrorSender.close();
 	}
 }

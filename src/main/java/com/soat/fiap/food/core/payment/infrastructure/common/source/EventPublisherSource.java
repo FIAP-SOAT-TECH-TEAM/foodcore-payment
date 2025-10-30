@@ -28,13 +28,4 @@ public interface EventPublisherSource {
 	 */
 	void publishPaymentExpiredEvent(PaymentExpiredEventDto paymentExpiredEventDton);
 
-	/**
-	 * Publica um evento de erro na inicialização do pagamento.
-	 *
-	 * @param paymentInitializationErrorEventDto
-	 *            evento contendo informações do erro ocorrido durante a
-	 *            inicialização do pagamento.
-	 */
-	void publishPaymentInitializationErrorEvent(PaymentInitializationErrorEventDto paymentInitializationErrorEventDto);
-
 }

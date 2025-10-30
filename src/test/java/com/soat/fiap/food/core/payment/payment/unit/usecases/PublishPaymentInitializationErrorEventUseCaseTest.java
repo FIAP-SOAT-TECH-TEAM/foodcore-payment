@@ -10,8 +10,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentInitializationErrorEventUseCase;
-import com.soat.fiap.food.core.payment.core.domain.events.PaymentInitializationErrorEvent;
 import com.soat.fiap.food.core.payment.shared.core.interfaceadapters.gateways.EventPublisherGateway;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("PublishPaymentInitializationErrorEventUseCase - Testes Unitários")
