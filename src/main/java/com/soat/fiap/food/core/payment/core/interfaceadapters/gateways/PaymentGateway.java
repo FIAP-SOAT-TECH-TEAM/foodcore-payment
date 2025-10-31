@@ -58,4 +58,18 @@ public class PaymentGateway {
 				.toList();
 	}
 
+	/**
+	 * Busca todos os pagamentos de um pedido.
+	 *
+	 * @param orderId
+	 *            Id do pedido
+	 * @return Lista de pagamentos do pedido
+	 */
+	public List<Payment> findByOrderId(Long orderId) {
+		return paymentDataSource.findByOrderId(orderId)
+				.stream()
+				.map(PaymentDTOMapper::toDomain)
+				.toList();
+	}
+
 }

@@ -22,6 +22,8 @@ public interface CosmosDbPaymentRepository extends CosmosRepository<PaymentEntit
 	 */
 	Optional<PaymentEntity> findTopByOrderIdOrderByAuditInfoCreatedAtDesc(Long orderId);
 
+	List<PaymentEntity> findByOrderId(Long orderId);
+
 	/**
 	 * Busca pagamentos não aprovados e expirados
 	 */

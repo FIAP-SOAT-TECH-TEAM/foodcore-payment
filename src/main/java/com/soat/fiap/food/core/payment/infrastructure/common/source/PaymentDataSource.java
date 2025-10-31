@@ -37,4 +37,13 @@ public interface PaymentDataSource {
 	 * @return Lista de pagamento expirados
 	 */
 	List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now);
+
+	/**
+	 * Busca todos os pagamentos de um pedido
+	 *
+	 * @param orderId
+	 *            ID do pedido
+	 * @return Lista dos pagamentos de um pedido
+	 */
+	List<PaymentDTO> findByOrderId(Long orderId);
 }

@@ -17,6 +17,7 @@ import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataS
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Listener responsável por processar eventos relacionados a pedidos criados no
@@ -27,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * inicialização de pagamentos e a publicação de eventos relacionados.
  * </p>
  */
-@Configuration @Slf4j @RequiredArgsConstructor
+@Configuration @Slf4j @RequiredArgsConstructor @Transactional
 public class OrderCreatedListenerConfig {
 
 	private final Gson gson;

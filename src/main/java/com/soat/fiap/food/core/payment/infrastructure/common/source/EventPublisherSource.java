@@ -23,9 +23,17 @@ public interface EventPublisherSource {
 	/**
 	 * Publica um evento de pagamento expirado.
 	 *
-	 * @param paymentExpiredEventDton
+	 * @param paymentExpiredEventDto
 	 *            evento contendo informações do pagamento expirado.
 	 */
-	void publishPaymentExpiredEvent(PaymentExpiredEventDto paymentExpiredEventDton);
+	void publishPaymentExpiredEvent(PaymentExpiredEventDto paymentExpiredEventDto);
+
+	/**
+	 * Publica um evento de pagamento estornado.
+	 *
+	 * @param paymentExpiredEventDto
+	 *            evento contendo informações do pagamento estornado.
+	 */
+	void publishPaymentReversalEvent(PaymentReversalEventDto paymentExpiredEventDto);
 
 }

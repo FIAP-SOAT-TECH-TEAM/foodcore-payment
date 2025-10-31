@@ -1,5 +1,6 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.event.publisher.azsvcbus;
 
+import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.PaymentReversalEventDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 
 	private final ServiceBusSenderClient paymentApprovedSender;
 	private final ServiceBusSenderClient paymentExpiredSender;
+	private final ServiceBusSenderClient paymentReversalSender;
 	private final Gson gson;
 
 	/**
@@ -46,6 +48,11 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 		this.paymentExpiredSender = new ServiceBusClientBuilder().connectionString(connectionString)
 				.sender()
 				.queueName(ServiceBusConfig.PAYMENT_EXPIRED_QUEUE)
+				.buildClient();
+
+		this.paymentReversalSender = new ServiceBusClientBuilder().connectionString(connectionString)
+				.sender()
+				.queueName(ServiceBusConfig.PAYMENT_REVERSAL_QUEUE)
 				.buildClient();
 
 		this.gson = gson;
@@ -86,6 +93,23 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 	}
 
 	/**
+	 * Publica um evento de pagamento estornado na fila correspondente do Azure
+	 * Service Bus.
+	 *
+	 * @param event
+	 *            Evento de pagamento estornado
+	 */
+	@Override
+	public void publishPaymentReversalEvent(PaymentReversalEventDto event) {
+		try {
+			paymentReversalSender.sendMessage(new ServiceBusMessage(gson.toJson(event)));
+			log.info("Evento de pagamento estornado publicado com sucesso: {}", event);
+		} catch (Exception ex) {
+			log.error("Erro ao publicar evento de pagamento estornado", ex);
+		}
+	}
+
+	/**
 	 * Fecha todos os clients do Azure Service Bus ao destruir o bean.
 	 */
 	@PreDestroy
@@ -95,5 +119,7 @@ public class AzSvcBusEventPublisher implements EventPublisherSource {
 			paymentApprovedSender.close();
 		if (paymentExpiredSender != null)
 			paymentExpiredSender.close();
+		if (paymentReversalSender != null)
+			paymentReversalSender.close();
 	}
 }
