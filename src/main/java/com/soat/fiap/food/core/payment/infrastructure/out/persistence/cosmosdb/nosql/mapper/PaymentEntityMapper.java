@@ -1,5 +1,7 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,8 +26,17 @@ public interface PaymentEntityMapper {
 	@Mapping(target = "updatedAt", source = "auditInfo.updatedAt")
 	PaymentDTO toDTO(PaymentEntity entity);
 
+	List<PaymentEntity> toEntity(List<PaymentDTO> dtoList, @Context CycleAvoidingMappingContext context);
+
+	List<PaymentDTO> toDTO(List<PaymentEntity> entityList);
+
 	@DoIgnore
 	default PaymentEntity toEntity(PaymentDTO dto) {
 		return toEntity(dto, new CycleAvoidingMappingContext());
+	}
+
+	@DoIgnore
+	default List<PaymentEntity> toEntity(List<PaymentDTO> dtoList) {
+		return toEntity(dtoList, new CycleAvoidingMappingContext());
 	}
 }

@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.payment.core.interfaceadapters.gateways;
 
 import java.time.LocalDateTime;
 
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 
@@ -30,7 +30,7 @@ public class AcquirerGateway {
 	 *            Data de expiração do qrCode.
 	 * @return o QR Code gerado.
 	 */
-	public String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn) {
+	public String generateQrCode(StockDebitInput input, LocalDateTime expireIn) {
 		return acquirerSource.generateQrCode(input, expireIn);
 	}
 

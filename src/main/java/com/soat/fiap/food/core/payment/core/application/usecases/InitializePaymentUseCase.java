@@ -1,6 +1,6 @@
 package com.soat.fiap.food.core.payment.core.application.usecases;
 
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.AcquirerGateway;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
@@ -17,27 +17,26 @@ public class InitializePaymentUseCase {
 	 * Inicializa o pagamento para um pedido, gerando um QR Code via adquirente.
 	 * Caso já exista pagamento para o pedido, retorna o existente.
 	 *
-	 * @param orderCreatedInput
-	 *            dados do pedido criado
+	 * @param stockDebitInput
+	 *            dados do débito de estoque
 	 * @param paymentGateway
 	 *            gateway para persistência e consulta de pagamentos
 	 * @param acquirerGateway
 	 *            gateway para comunicação com o adquirente
 	 * @return Pagamento inicializado ou existente
 	 */
-	public static Payment initializePayment(OrderCreatedInput orderCreatedInput, PaymentGateway paymentGateway,
+	public static Payment initializePayment(StockDebitInput stockDebitInput, PaymentGateway paymentGateway,
 			AcquirerGateway acquirerGateway) {
-		var existingPayment = paymentGateway.findTopByOrderIdOrderByIdDesc(orderCreatedInput.orderId());
+		var existingPayment = paymentGateway.findTopByOrderIdOrderByIdDesc(stockDebitInput.orderId());
 
 		if (existingPayment.isPresent()) {
-			log.info("Pagamento já inicializado para o pedido {}", orderCreatedInput.orderId());
+			log.info("Pagamento já inicializado para o pedido {}", stockDebitInput.orderId());
 			return existingPayment.get();
 		}
 
-		var payment = new Payment(orderCreatedInput.userId(), orderCreatedInput.orderId(),
-				orderCreatedInput.totalAmount());
+		var payment = new Payment(stockDebitInput.userId(), stockDebitInput.orderId(), stockDebitInput.totalAmount());
 
-		var qrCode = acquirerGateway.generateQrCode(orderCreatedInput, payment.getExpiresIn());
+		var qrCode = acquirerGateway.generateQrCode(stockDebitInput, payment.getExpiresIn());
 
 		payment.setQrCode(qrCode);
 

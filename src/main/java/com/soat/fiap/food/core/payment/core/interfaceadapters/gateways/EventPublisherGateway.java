@@ -2,10 +2,8 @@ package com.soat.fiap.food.core.payment.core.interfaceadapters.gateways;
 
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentApprovedEvent;
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentExpiredEvent;
-import com.soat.fiap.food.core.payment.core.domain.events.PaymentReversalEvent;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentApprovedEventMapper;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentExpiredEventMapper;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentReversalEventMapper;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 
 /**
@@ -45,16 +43,5 @@ public class EventPublisherGateway {
 		var eventDto = PaymentExpiredEventMapper.toDto(event);
 
 		eventPublisherSource.publishPaymentExpiredEvent(eventDto);
-	}
-
-	/**
-	 * Publica um evento de pagamento estornado.
-	 *
-	 * @param event
-	 *            Evento contendo informações do pagamento estornado.
-	 */
-	public void publishPaymentReversalEvent(PaymentReversalEvent event) {
-		var eventDto = PaymentReversalEventMapper.toDto(event);
-		eventPublisherSource.publishPaymentReversalEvent(eventDto);
 	}
 }

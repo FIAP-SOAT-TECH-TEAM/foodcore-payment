@@ -11,20 +11,20 @@ import lombok.RequiredArgsConstructor;
  * Inicializa os processadores de eventos do módulo de Pagamentos.
  *
  * <p>
- * Este componente garante que o listener de pedidos criados seja iniciado
- * automaticamente após o carregamento do contexto da aplicação.
+ * Este componente garante que os listeners sejam iniciados automaticamente após
+ * o carregamento do contexto da aplicação.
  * </p>
  */
 @RequiredArgsConstructor @Component
 public class OrderListener {
 
-	private final ServiceBusProcessorClient paymentOrderCreatedTopicServiceBusProcessorClient;
+	private final ServiceBusProcessorClient paymentOrderCanceledTopicServiceBusProcessorClient;
 
 	/**
 	 * Inicia o processador configurado após a injeção de dependências.
 	 */
 	@PostConstruct
 	public void run() {
-		paymentOrderCreatedTopicServiceBusProcessorClient.start();
+		paymentOrderCanceledTopicServiceBusProcessorClient.start();
 	}
 }

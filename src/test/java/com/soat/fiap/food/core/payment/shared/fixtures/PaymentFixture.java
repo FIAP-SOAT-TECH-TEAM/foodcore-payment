@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.soat.fiap.food.core.payment.core.application.inputs.AcquirerNotificationInput;
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
@@ -82,8 +82,8 @@ public class PaymentFixture {
 	}
 
 	// Input DTOs para testes
-	public static OrderCreatedInput createValidOrderCreatedInput() {
-		return new OrderCreatedInput(1L, // orderId
+	public static StockDebitInput createValidOrderCreatedInput() {
+		return new StockDebitInput(1L, // orderId
 				"ORD-001", // orderNumber
 				"as23as3", // userId
 				new BigDecimal("50.00"), // totalAmount
@@ -91,8 +91,8 @@ public class PaymentFixture {
 		);
 	}
 
-	public static OrderCreatedInput createOrderCreatedInputWithCustomAmount(BigDecimal amount) {
-		return new OrderCreatedInput(1L, "ORD-002", "as23as3", amount, List.of());
+	public static StockDebitInput createOrderCreatedInputWithCustomAmount(BigDecimal amount) {
+		return new StockDebitInput(1L, "ORD-002", "as23as3", amount, List.of());
 	}
 
 	public static AcquirerNotificationInput createValidAcquirerNotificationInput() {

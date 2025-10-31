@@ -66,10 +66,7 @@ public class PaymentGateway {
 	 * @return Lista de pagamentos do pedido
 	 */
 	public List<Payment> findByOrderId(Long orderId) {
-		return paymentDataSource.findByOrderId(orderId)
-				.stream()
-				.map(PaymentDTOMapper::toDomain)
-				.toList();
+		return paymentDataSource.findByOrderId(orderId).stream().map(PaymentDTOMapper::toDomain).toList();
 	}
 
 }

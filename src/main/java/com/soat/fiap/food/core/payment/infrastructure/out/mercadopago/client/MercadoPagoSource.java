@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Component;
 
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.payment.infrastructure.out.mercadopago.config.MercadoPagoProperties;
@@ -48,7 +48,7 @@ public class MercadoPagoSource implements AcquirerSource {
 	}
 
 	@Override
-	public String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn) {
+	public String generateQrCode(StockDebitInput input, LocalDateTime expireIn) {
 		try {
 			var request = generateQrCodeRequestMapper.toRequest(input);
 

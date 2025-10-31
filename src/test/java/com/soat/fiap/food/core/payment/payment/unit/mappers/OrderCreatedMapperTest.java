@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
-import com.soat.fiap.food.core.payment.core.application.inputs.mappers.OrderCreatedMapper;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.mappers.StockDebitMapper;
 import com.soat.fiap.food.core.payment.order.core.domain.events.OrderCreatedEvent;
 import com.soat.fiap.food.core.payment.order.core.domain.events.OrderItemCreatedEvent;
 
@@ -36,7 +36,7 @@ class OrderCreatedMapperTest {
 		event.setItems(List.of(item));
 
 		// Act
-		OrderCreatedInput result = OrderCreatedMapper.toInput(event);
+		StockDebitInput result = StockDebitMapper.toInput(event);
 
 		// Assert
 		assertNotNull(result);
@@ -46,7 +46,7 @@ class OrderCreatedMapperTest {
 		assertEquals(new BigDecimal("31.00"), result.totalAmount());
 		assertEquals(1, result.items().size());
 
-		OrderCreatedInput.OrderCreatedItemInput mappedItem = result.items().get(0);
+		StockDebitInput.OrderCreatedItemInput mappedItem = result.items().get(0);
 		assertEquals(1L, mappedItem.productId());
 		assertEquals("Lanche Teste", mappedItem.name());
 		assertEquals(2, mappedItem.quantity());
@@ -66,7 +66,7 @@ class OrderCreatedMapperTest {
 		event.setItems(List.of());
 
 		// Act
-		OrderCreatedInput result = OrderCreatedMapper.toInput(event);
+		StockDebitInput result = StockDebitMapper.toInput(event);
 
 		// Assert
 		assertNotNull(result);
@@ -106,19 +106,19 @@ class OrderCreatedMapperTest {
 		event.setItems(List.of(item1, item2));
 
 		// Act
-		OrderCreatedInput result = OrderCreatedMapper.toInput(event);
+		StockDebitInput result = StockDebitMapper.toInput(event);
 
 		// Assert
 		assertNotNull(result);
 		assertEquals(3L, result.orderId());
 		assertEquals(2, result.items().size());
 
-		OrderCreatedInput.OrderCreatedItemInput mappedItem1 = result.items().get(0);
+		StockDebitInput.OrderCreatedItemInput mappedItem1 = result.items().get(0);
 		assertEquals(1L, mappedItem1.productId());
 		assertEquals("Lanche", mappedItem1.name());
 		assertNull(mappedItem1.observations());
 
-		OrderCreatedInput.OrderCreatedItemInput mappedItem2 = result.items().get(1);
+		StockDebitInput.OrderCreatedItemInput mappedItem2 = result.items().get(1);
 		assertEquals(2L, mappedItem2.productId());
 		assertEquals("Bebida", mappedItem2.name());
 		assertEquals("Gelada", mappedItem2.observations());

@@ -2,7 +2,7 @@ package com.soat.fiap.food.core.payment.infrastructure.common.source;
 
 import java.time.LocalDateTime;
 
-import com.soat.fiap.food.core.payment.core.application.inputs.OrderCreatedInput;
+import com.soat.fiap.food.core.payment.core.application.inputs.StockDebitInput;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.AcquirerPaymentDTO;
 
 /**
@@ -17,7 +17,7 @@ public interface AcquirerSource {
 	 * @param expireIn
 	 *            Data de expiração do qrCode.
 	 */
-	String generateQrCode(OrderCreatedInput input, LocalDateTime expireIn);
+	String generateQrCode(StockDebitInput input, LocalDateTime expireIn);
 
 	/**
 	 * Consulta os pagamentos do adquirente pelo ID informado.
