@@ -40,7 +40,7 @@ public class CosmosDbPaymentDataSource implements PaymentDataSource {
 
 	@Override @Transactional(readOnly = true)
 	public List<PaymentDTO> findExpiredPaymentsWithoutApprovedOrCancelled(LocalDateTime now) {
-		var paymentEntities = repository.getExpiredPaymentsWithoutApprovedOrCancelled(now);
+		var paymentEntities = repository.getExpiredPaymentsWithoutApprovedOrCancelled(now.toString());
 		return paymentEntities.stream().map(mapper::toDTO).toList();
 	}
 

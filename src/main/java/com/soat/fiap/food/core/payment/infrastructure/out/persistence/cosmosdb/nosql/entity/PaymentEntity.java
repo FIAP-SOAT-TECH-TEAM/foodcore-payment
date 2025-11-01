@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 
 import com.azure.spring.data.cosmos.core.mapping.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
@@ -30,10 +31,12 @@ public class PaymentEntity {
 
 	private PaymentMethod type;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private LocalDateTime expiresIn;
 
 	private PaymentStatus status;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private LocalDateTime paidAt;
 
 	private String tid;
@@ -44,5 +47,6 @@ public class PaymentEntity {
 
 	private String observations;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private AuditInfo auditInfo = new AuditInfo();
 }

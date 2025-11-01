@@ -1,6 +1,5 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ public interface CosmosDbPaymentRepository extends CosmosRepository<PaymentEntit
 	@Query("""
 			SELECT * FROM c
 			WHERE c.expiresIn < @now
-			AND NOT (c.status IN ('APPROVED', 'CANCELLED'))
+			AND c.status NOT IN ('APPROVED', 'CANCELLED')
 			""")
-	List<PaymentEntity> getExpiredPaymentsWithoutApprovedOrCancelled(@Param("now") LocalDateTime now);
+	List<PaymentEntity> getExpiredPaymentsWithoutApprovedOrCancelled(@Param("now") String now);
 }
