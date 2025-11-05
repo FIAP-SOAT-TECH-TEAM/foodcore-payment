@@ -9,7 +9,7 @@ services:
     image: foodcore-payment-ms:latest
     container_name: foodcore-payment-ms
     ports:
-      - "80:${SERVER_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     env_file:
       - .env
     healthcheck:
