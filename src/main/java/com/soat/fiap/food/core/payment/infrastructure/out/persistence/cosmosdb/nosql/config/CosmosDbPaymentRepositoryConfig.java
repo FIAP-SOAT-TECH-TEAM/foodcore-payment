@@ -1,10 +1,8 @@
 package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.config;
 
-import com.azure.cosmos.models.CosmosPatchItemRequestOptions;
-import com.azure.cosmos.models.CosmosPatchOperations;
-import com.azure.cosmos.models.PartitionKey;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.repository.CosmosDbPaymentRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
-import java.util.Optional;
+import com.azure.cosmos.models.CosmosPatchItemRequestOptions;
+import com.azure.cosmos.models.CosmosPatchOperations;
+import com.azure.cosmos.models.PartitionKey;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.repository.CosmosDbPaymentRepository;
 
 /**
  * Configuração do repositório CosmosDbPaymentRepository.
@@ -26,13 +27,13 @@ public class CosmosDbPaymentRepositoryConfig {
 	/**
 	 * Bean de fallback para {@link CosmosDbPaymentRepository}.
 	 * <p>
-	 * É registrado apenas se não houver outro bean do tipo CosmosDbPaymentRepository
-	 * disponível no contexto Spring.
+	 * É registrado apenas se não houver outro bean do tipo
+	 * CosmosDbPaymentRepository disponível no contexto Spring.
 	 *
-	 * @return uma implementação vazia de CosmosDbPaymentRepository, para fins de teste ou tasks especificas
+	 * @return uma implementação vazia de CosmosDbPaymentRepository, para fins de
+	 *         teste ou tasks especificas
 	 */
-	@Bean
-	@ConditionalOnMissingBean(CosmosDbPaymentRepository.class)
+	@Bean @ConditionalOnMissingBean(CosmosDbPaymentRepository.class)
 	public CosmosDbPaymentRepository CosmosDbPaymentRepository() {
 		return new CosmosDbPaymentRepository() {
 
@@ -57,15 +58,18 @@ public class CosmosDbPaymentRepositoryConfig {
 			}
 
 			@Override
-			public void deleteById(String s, PartitionKey partitionKey) {}
+			public void deleteById(String s, PartitionKey partitionKey) {
+			}
 
 			@Override
-			public <S extends PaymentEntity> S save(String s, PartitionKey partitionKey, Class<S> domainType, CosmosPatchOperations patchOperations) {
+			public <S extends PaymentEntity> S save(String s, PartitionKey partitionKey, Class<S> domainType,
+					CosmosPatchOperations patchOperations) {
 				return null;
 			}
 
 			@Override
-			public <S extends PaymentEntity> S save(String s, PartitionKey partitionKey, Class<S> domainType, CosmosPatchOperations patchOperations, CosmosPatchItemRequestOptions options) {
+			public <S extends PaymentEntity> S save(String s, PartitionKey partitionKey, Class<S> domainType,
+					CosmosPatchOperations patchOperations, CosmosPatchItemRequestOptions options) {
 				return null;
 			}
 
@@ -110,19 +114,24 @@ public class CosmosDbPaymentRepositoryConfig {
 			}
 
 			@Override
-			public void deleteById(String s) {}
+			public void deleteById(String s) {
+			}
 
 			@Override
-			public void delete(PaymentEntity entity) {}
+			public void delete(PaymentEntity entity) {
+			}
 
 			@Override
-			public void deleteAllById(Iterable<? extends String> strings) {}
+			public void deleteAllById(Iterable<? extends String> strings) {
+			}
 
 			@Override
-			public void deleteAll(Iterable<? extends PaymentEntity> entities) {}
+			public void deleteAll(Iterable<? extends PaymentEntity> entities) {
+			}
 
 			@Override
-			public void deleteAll() {}
+			public void deleteAll() {
+			}
 
 			@Override
 			public Iterable<PaymentEntity> findAll(Sort sort) {

@@ -3,6 +3,7 @@ package com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.n
 /**
  * Repositório Cosmos DB para a entidade PaymentEntity
  */
-@Repository
+@Repository @Primary
 public interface CosmosDbPaymentRepository extends CosmosRepository<PaymentEntity, String> {
 
 	/**

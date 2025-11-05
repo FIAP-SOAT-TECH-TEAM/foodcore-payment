@@ -124,7 +124,7 @@ openApi {
 	customBootRun {
 		args.set([
 			"--spring.profiles.active=test",
-            "--spring.cloud.azure.cosmos.enabled=false"
+			"--spring.cloud.azure.cosmos.enabled=false"
 		])
 	}
 }

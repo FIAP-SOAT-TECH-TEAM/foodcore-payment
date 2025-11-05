@@ -1,0 +1,58 @@
+[
+  {
+    "userId": "asdas2332",
+    "orderId": 1,
+    "type": "CREDIT_CARD",
+    "expiresIn": "2025-12-05T16:48:00",
+    "status": "APPROVED",
+    "paidAt": "2025-11-05T16:48:00",
+    "tid": "112673020299",
+    "amount": 32.80,
+    "qrCode": {
+      "value": "00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B"
+    },
+    "observations": "Pagamento aprovado via cartão"
+  },
+  {
+    "userId": "asd34515232",
+    "orderId": 2,
+    "type": "DEBIT_CARD",
+    "expiresIn": "2025-11-05T16:48:00",
+    "status": "APPROVED",
+    "paidAt": "2025-11-05T16:48:00",
+    "tid": "872379520298",
+    "amount": 79.70,
+    "qrCode": {
+      "value": "000201010asdasd43650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***63AS04A13B"
+    },
+    "observations": "Pagamento via débito automático"
+  },
+  {
+    "userId": "asd34515232",
+    "orderId": 3,
+    "type": null,
+    "expiresIn": "2025-11-05T17:48:00",
+    "status": "PENDING",
+    "paidAt": null,
+    "tid": "622433528299",
+    "amount": 19.90,
+    "qrCode": {
+      "value": "00020101021243650016COM.MERCADOLIBRE02013063682409123-aaaa-bbbb-cccc-1234567890ab5204000053039865802BR5908Joao Test6009CURITIBA62070503***6304A13B"
+    },
+    "observations": "QR Code gerado para pagamento"
+  },
+  {
+    "userId": "asd34515232",
+    "orderId": 4,
+    "type": null,
+    "expiresIn": "2025-11-05T17:48:00",
+    "status": "PENDING",
+    "paidAt": null,
+    "tid": "2126735727299",
+    "amount": 4.90,
+    "qrCode": {
+      "value": "00020101021243650016COM.MERCADOLIBRE02013063682409cafe-9876-abcd-1234-1234567890cd5204000053039865802BR5912Maria Silva6009RIO BRANCO62070503***6304C7D2"
+    },
+    "observations": "QR Code gerado para pagamento"
+  }
+]
