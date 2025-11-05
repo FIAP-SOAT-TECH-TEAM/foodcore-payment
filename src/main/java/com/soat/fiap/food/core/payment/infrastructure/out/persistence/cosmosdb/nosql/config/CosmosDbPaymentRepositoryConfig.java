@@ -5,7 +5,6 @@ import com.azure.cosmos.models.CosmosPatchOperations;
 import com.azure.cosmos.models.PartitionKey;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
 import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.repository.CosmosDbPaymentRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +15,25 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Configuração do repositório CosmosDbPaymentRepository.
+ * <p>
+ **
+ */
 @Configuration
-public class CosmosDbPaymentFallbackConfig {
+public class CosmosDbPaymentRepositoryConfig {
 
+	/**
+	 * Bean de fallback para {@link CosmosDbPaymentRepository}.
+	 * <p>
+	 * É registrado apenas se não houver outro bean do tipo CosmosDbPaymentRepository
+	 * disponível no contexto Spring.
+	 *
+	 * @return uma implementação vazia de CosmosDbPaymentRepository, para fins de teste ou tasks especificas
+	 */
 	@Bean
 	@ConditionalOnMissingBean(CosmosDbPaymentRepository.class)
-	public CosmosDbPaymentRepository cosmosDbPaymentRepositoryFallback() {
+	public CosmosDbPaymentRepository CosmosDbPaymentRepository() {
 		return new CosmosDbPaymentRepository() {
 
 			@Override
@@ -62,9 +74,8 @@ public class CosmosDbPaymentFallbackConfig {
 				return List.of();
 			}
 
-			@NotNull
 			@Override
-			public <S extends PaymentEntity> S save(@NotNull S entity) {
+			public <S extends PaymentEntity> S save(S entity) {
 				return null;
 			}
 

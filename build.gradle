@@ -123,7 +123,8 @@ openApi {
 	outputFileName.set("swagger.json")
 	customBootRun {
 		args.set([
-			"--spring.profiles.active=test"
+			"--spring.profiles.active=test",
+            "--spring.cloud.azure.cosmos.enabled=false"
 		])
 	}
 }

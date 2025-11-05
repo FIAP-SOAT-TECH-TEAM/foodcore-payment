@@ -10,9 +10,9 @@ spring:
   cloud:
     azure:
       cosmos:
-        endpoint: ${SPRING_AZURE_COSMOS_URI}
-        database: ${SPRING_AZURE_COSMOS_DATABASE}
-        key: ${SPRING_AZURE_COSMOS_KEY}
+        endpoint: ${SPRING_AZURE_COSMOS_URI:}
+        database: ${SPRING_AZURE_COSMOS_DATABASE:}
+        key: ${SPRING_AZURE_COSMOS_KEY:}
         connection-mode: direct
         populate-query-metrics: true
 
@@ -33,7 +33,7 @@ spring:
       max-request-size: 15MB
 
 azsvcbus:
-  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING}
+  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING:}
 
 management:
   # Tracing Distribuído
@@ -56,10 +56,10 @@ logging:
     org.springdoc: DEBUG
 
 server:
-  address: ${SERVER_ADDRESS}
-  port: ${SERVER_PORT}
+  address: ${SERVER_ADDRESS:}
+  port: ${SERVER_PORT:}
   servlet:
-    context-path: ${SERVER_CONTEXT_PATH}
+    context-path: ${SERVER_CONTEXT_PATH:}
   compression:
     enabled: true
   error:
@@ -68,8 +68,8 @@ server:
 
 # Mercado Pago Configuration
 mercado-pago:
-  base-url: ${MERCADO_PAGO_BASE_URL}
-  token: ${MERCADO_PAGO_TOKEN}
-  user-id: ${MERCADO_PAGO_USER_ID}
-  pos-id: ${MERCADO_PAGO_POS_ID}
-  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL}
+  base-url: ${MERCADO_PAGO_BASE_URL:}
+  token: ${MERCADO_PAGO_TOKEN:}
+  user-id: ${MERCADO_PAGO_USER_ID:}
+  pos-id: ${MERCADO_PAGO_POS_ID:}
+  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL:}
