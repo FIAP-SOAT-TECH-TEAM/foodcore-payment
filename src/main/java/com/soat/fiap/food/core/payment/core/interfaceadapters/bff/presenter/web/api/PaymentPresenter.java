@@ -22,6 +22,10 @@ public class PaymentPresenter {
 	 *         pagamento.
 	 */
 	public static PaymentStatusResponse toPaymentStatusResponse(Payment payment) {
+		if (payment == null) {
+			return null;
+		}
+
 		return PaymentStatusResponse.builder().orderId(payment.getOrderId()).status(payment.getStatus()).build();
 	}
 
@@ -36,6 +40,10 @@ public class PaymentPresenter {
 	 *         HTTP.
 	 */
 	public static QrCodeResponse toQrCodeResponse(Payment payment) {
+		if (payment == null) {
+			return null;
+		}
+
 		return QrCodeResponse.builder()
 				.orderId(String.valueOf(payment.getOrderId()))
 				.expiresIn(payment.getExpiresIn())

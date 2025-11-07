@@ -31,13 +31,17 @@ repositories {
 }
 
 ext {
-	set('mapstructVersion', "1.5.5.Final")
-	set('springdocVersion', "2.8.4")
-	set('springCloudVersion', "2024.0.0")
-	set('retrofit', "3.0.0")
-	set('converterGson', "3.0.0")
-	set('foodcoreShared', "0.0.1")
-	set('azureSpringCloudVersion', "6.0.0")
+    set('springCloudBom', "2024.0.0")
+	set('azureSpringCloudBom', "6.0.0")
+	set('testContainersBom', "2.0.1")
+	set('cucumberBom', "7.31.0")
+	set('junitBom', "6.0.1")
+
+    set('mapstructVersion', "1.5.5.Final")
+    set('springdocVersion', "2.8.4")
+    set('retrofit', "3.0.0")
+    set('converterGson', "3.0.0")
+    set('foodcoreShared', "0.0.1")
 }
 
 dependencies {
@@ -73,7 +77,13 @@ dependencies {
 
 	// Testes
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation ("io.cucumber:cucumber-java")
+    testImplementation ("io.cucumber:cucumber-spring")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation "org.testcontainers:azure"
+    testImplementation "com.azure.spring:spring-cloud-azure-testcontainers"
+    testImplementation "io.rest-assured:rest-assured"
 
 	// Retrofit
 	implementation "com.squareup.retrofit2:retrofit:${retrofit}"
@@ -82,22 +92,154 @@ dependencies {
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${azureSpringCloudVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudBom}"
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${azureSpringCloudBom}"
+		mavenBom "org.testcontainers:testcontainers-bom:${testContainersBom}"
+		mavenBom "io.cucumber:cucumber-bom:${cucumberBom}"
+		mavenBom "org.junit:junit-bom:${junitBom}"
 	}
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
+    useJUnitPlatform()
 }
 
+tasks.register('cucumber') {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:target/cucumber-reports/cucumber.html',
+                    '--plugin', 'junit:target/cucumber-reports/cucumber.xml',
+                    '--plugin', 'json:target/cucumber-reports/cucumber.json',
+                    'src/test/java/integration/bdd'
+            ]
+        }
+    }
+}
+
+
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = true
-		html.required = true
-	}
+    dependsOn test
+    //dependsOn cucumber
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    // Application main class
+                    '**/FoodCoreApiApplication.java',
+                    // Configuration classes
+                    '**/config/**',
+                    '**/*Config.java',
+                    '**/*Configuration.java',
+                    '**/*Properties.java',
+                    // Exceptions
+                    "**/exceptions/**",
+                    // DTOs and Request/Response classes
+                    '**/dto/**',
+                    '**/request/**',
+                    '**/response/**',
+                    // MapStruct generated mappers
+                    '**/mapper/**/*Impl.java',
+                    '**/mapper/**/*MapperImpl*.java',
+                    // Infrastructure adapters (controllers, repositories, etc.)
+                    '**/infrastructure/in/web/api/controller/**',
+                    '**/infrastructure/in/event/listener/**',
+                    '**/infrastructure/in/schedulers/**',
+                    '**/infrastructure/out/persistence/**/*Repository*.java',
+                    '**/infrastructure/out/persistence/**/*DataSource*.java',
+                    '**/infrastructure/out/persistence/**/*Entity*.java',
+                    '**/infrastructure/out/persistence/**/*Converter*.java',
+                    '**/infrastructure/out/persistence/**/*Populator*.java',
+                    '**/infrastructure/out/persistence/**/*Mapper*.java',
+                    '**/infrastructure/out/common/**/*Seeder*.java',
+                    '**/infrastructure/out/mercadopago/client/**',
+                    '**/infrastructure/out/mercadopago/entity/**',
+                    '**/infrastructure/out/mercadopago/config/**',
+                    '**/infrastructure/out/mercadopago/deserializers/**',
+                    '**/infrastructure/out/mercadopago/mapper/**',
+                    '**/infrastructure/out/event/publisher/**',
+                    '**/infrastructure/out/persistence/azureblobstorage/**',
+                    // Common infrastructure
+                    '**/infrastructure/common/source/**',
+                    '**/infrastructure/common/mapper/**',
+                    '**/infrastructure/common/event/**',
+                    // Package info files
+                    '**/package-info.java'
+            ])
+        }))
+    }
+}
+
+sonar {
+    properties {
+        property 'sonar.projectKey', 'FIAP-SOAT-TECH-TEAM_foodcore-payment'
+        property "sonar.organization", "fiap-soat-tech-team"
+        property 'sonar.projectName', 'foodcore-payment'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.token', System.getenv("SONAR_CLOUD_TOKEN") ?: env.SONAR_CLOUD_TOKEN.value
+        property 'sonar.sources', 'src/main/java'
+        property 'sonar.tests', 'src/test/java'
+        property 'sonar.java.binaries', 'build/classes/java/main'
+        property 'sonar.java.test.binaries', 'build/classes/java/test'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.exclusions', [
+                // Application main class
+                '**/FoodCoreApiApplication.java',
+                // Configuration classes
+                '**/config/**',
+                '**/*Config.java',
+                '**/*Configuration.java',
+                '**/*Properties.java',
+                // Exceptions
+                "**/exceptions/**",
+                // DTOs and Request/Response classes
+                '**/dto/**',
+                '**/request/**',
+                '**/response/**',
+                // MapStruct generated mappers
+                '**/mapper/**/*Impl.java',
+                '**/mapper/**/*MapperImpl*.java',
+                // Infrastructure adapters (controllers, repositories, etc.)
+                '**/infrastructure/in/web/api/controller/**',
+                '**/infrastructure/in/event/listener/**',
+                '**/infrastructure/in/schedulers/**',
+                '**/infrastructure/out/persistence/**/*Repository*.java',
+                '**/infrastructure/out/persistence/**/*DataSource*.java',
+                '**/infrastructure/out/persistence/**/*Entity*.java',
+                '**/infrastructure/out/persistence/**/*Converter*.java',
+                '**/infrastructure/out/persistence/**/*Populator*.java',
+                '**/infrastructure/out/persistence/**/*Mapper*.java',
+                '**/infrastructure/out/common/**/*Seeder*.java',
+                '**/infrastructure/out/mercadopago/client/**',
+                '**/infrastructure/out/mercadopago/entity/**',
+                '**/infrastructure/out/mercadopago/config/**',
+                '**/infrastructure/out/mercadopago/deserializers/**',
+                '**/infrastructure/out/mercadopago/mapper/**',
+                '**/infrastructure/out/event/publisher/**',
+                '**/infrastructure/out/persistence/azureblobstorage/**',
+                // Common infrastructure
+                '**/infrastructure/common/source/**',
+                '**/infrastructure/common/mapper/**',
+                '**/infrastructure/common/event/**',
+                // Package info files
+                '**/package-info.java'
+        ].join(',')
+        property 'sonar.test.exclusions', '**/fixtures/**'
+    }
 }
 
 spotless {
