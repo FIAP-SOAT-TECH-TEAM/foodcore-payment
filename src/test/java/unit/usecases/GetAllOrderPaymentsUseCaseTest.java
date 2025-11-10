@@ -14,17 +14,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetAllOrderPaymentsUseCase;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
+
 import unit.fixtures.PaymentFixture;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("GetAllOrderPaymentsUseCase - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("GetAllOrderPaymentsUseCase - Testes Unitários")
 class GetAllOrderPaymentsUseCaseTest {
 
 	@Mock
 	private PaymentGateway paymentGateway;
 
-	@Test
-	@DisplayName("Deve retornar lista de pagamentos quando encontrados")
+	@Test @DisplayName("Deve retornar lista de pagamentos quando encontrados")
 	void shouldReturnPaymentListWhenFound() {
 		// Arrange
 		var orderId = 10L;
@@ -44,8 +43,7 @@ class GetAllOrderPaymentsUseCaseTest {
 		verify(paymentGateway).findByOrderId(orderId);
 	}
 
-	@Test
-	@DisplayName("Deve retornar lista vazia quando nenhum pagamento encontrado")
+	@Test @DisplayName("Deve retornar lista vazia quando nenhum pagamento encontrado")
 	void shouldReturnEmptyListWhenNoPaymentsFound() {
 		// Arrange
 		var orderId = 999L;
@@ -61,8 +59,7 @@ class GetAllOrderPaymentsUseCaseTest {
 		verify(paymentGateway).findByOrderId(orderId);
 	}
 
-	@Test
-	@DisplayName("Deve chamar o gateway com o ID correto do pedido")
+	@Test @DisplayName("Deve chamar o gateway com o ID correto do pedido")
 	void shouldCallGatewayWithCorrectOrderId() {
 		// Arrange
 		var orderId = 55L;

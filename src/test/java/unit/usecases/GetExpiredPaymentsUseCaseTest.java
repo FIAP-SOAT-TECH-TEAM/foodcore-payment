@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetExpiredPaymentsUseCase;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
+
 import unit.fixtures.PaymentFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetExpiredPaymentsUseCase - Testes Unitários")

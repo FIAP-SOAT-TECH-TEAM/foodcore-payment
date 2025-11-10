@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
-import com.soat.fiap.food.core.payment.core.domain.exceptions.AcquirerOrderNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetAcquirerOrderUseCase;
+import com.soat.fiap.food.core.payment.core.domain.exceptions.AcquirerOrderNotFoundException;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.AcquirerGateway;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetAcquirerOrderUseCase - Testes Unitários")

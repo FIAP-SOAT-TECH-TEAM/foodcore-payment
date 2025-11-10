@@ -1,15 +1,18 @@
 package integration.bdd.common.hooks;
 
-import com.azure.spring.data.cosmos.repository.CosmosRepository;
-import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
-import integration.bdd.common.config.CucumberSpringConfiguration;
-import io.cucumber.java.After;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.azure.spring.data.cosmos.repository.CosmosRepository;
+import com.soat.fiap.food.core.payment.infrastructure.out.persistence.cosmosdb.nosql.entity.PaymentEntity;
+
+import integration.bdd.common.config.CucumberSpringConfiguration;
+import io.cucumber.java.After;
+
 /**
- * Classe responsável por definir Hooks comuns relacionados a Seed de banco de dados
+ * Classe responsável por definir Hooks comuns relacionados a Seed de banco de
+ * dados
  */
 public class SeedHooks extends CucumberSpringConfiguration {
 
@@ -19,9 +22,8 @@ public class SeedHooks extends CucumberSpringConfiguration {
 	protected CosmosRepository<PaymentEntity, String> cosmosRepository;
 
 	/**
-	 * Hook executado antes de cada cenário Cucumber.
-	 * Remove todos os documentos da coleção para garantir
-	 * um estado limpo de banco.
+	 * Hook executado antes de cada cenário Cucumber. Remove todos os documentos da
+	 * coleção para garantir um estado limpo de banco.
 	 */
 	@After
 	public void limparBanco() {

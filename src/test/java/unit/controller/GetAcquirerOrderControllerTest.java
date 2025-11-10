@@ -8,13 +8,13 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.soat.fiap.food.core.payment.core.domain.exceptions.AcquirerOrderNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.soat.fiap.food.core.payment.core.domain.exceptions.AcquirerOrderNotFoundException;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.GetAcquirerOrderController;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 
@@ -49,8 +49,7 @@ class GetAcquirerOrderControllerTest {
 		// Arrange
 		var orderId = 999L;
 
-		when(acquirerSource.getAcquirerOrder(orderId))
-				.thenReturn(null);
+		when(acquirerSource.getAcquirerOrder(orderId)).thenReturn(null);
 
 		// Act & Assert
 		assertThatThrownBy(() -> GetAcquirerOrderController.getAcquirerOrder(orderId, acquirerSource))

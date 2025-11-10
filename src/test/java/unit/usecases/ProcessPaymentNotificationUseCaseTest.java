@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentAlreadyProcessedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +13,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.ProcessPaymentNotificationUseCase;
+import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentAlreadyProcessedException;
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.AcquirerGateway;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
+
 import unit.fixtures.PaymentFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("ProcessPaymentNotificationUseCase - Testes Unitários")
@@ -63,8 +64,8 @@ class ProcessPaymentNotificationUseCaseTest {
 				.thenReturn(Optional.of(approvedPayment));
 
 		// Act & Assert
-		assertThatThrownBy(() -> ProcessPaymentNotificationUseCase.processPaymentNotification(notificationInput, acquirerGateway,
-				paymentGateway)).isInstanceOf(PaymentAlreadyProcessedException.class)
+		assertThatThrownBy(() -> ProcessPaymentNotificationUseCase.processPaymentNotification(notificationInput,
+				acquirerGateway, paymentGateway)).isInstanceOf(PaymentAlreadyProcessedException.class)
 				.hasMessage("Pagamento já processado");
 	}
 

@@ -2,8 +2,6 @@ package unit.presenter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +16,7 @@ import unit.fixtures.PaymentFixture;
 @DisplayName("PaymentPresenter - Testes de Apresentação (DTOs)")
 class PaymentPresenterTest {
 
-	@Test
-	@DisplayName("Deve converter Payment em PaymentStatusResponse corretamente")
+	@Test @DisplayName("Deve converter Payment em PaymentStatusResponse corretamente")
 	void shouldConvertPaymentToPaymentStatusResponse() {
 		Payment payment = PaymentFixture.createApprovedPayment();
 
@@ -30,8 +27,7 @@ class PaymentPresenterTest {
 		assertEquals(payment.getStatus(), response.getStatus());
 	}
 
-	@Test
-	@DisplayName("Deve converter Payment em QrCodeResponse corretamente")
+	@Test @DisplayName("Deve converter Payment em QrCodeResponse corretamente")
 	void shouldConvertPaymentToQrCodeResponse() {
 		Payment payment = PaymentFixture.createPendingPayment();
 
@@ -43,8 +39,7 @@ class PaymentPresenterTest {
 		assertEquals(payment.getExpiresIn(), response.getExpiresIn());
 	}
 
-	@Test
-	@DisplayName("Deve converter Payment completo em PaymentResponse corretamente")
+	@Test @DisplayName("Deve converter Payment completo em PaymentResponse corretamente")
 	void shouldConvertPaymentToPaymentResponse() {
 		Payment payment = PaymentFixture.createApprovedPayment();
 
@@ -68,8 +63,7 @@ class PaymentPresenterTest {
 		assertEquals(payment.getAuditInfo().getUpdatedAt(), response.getUpdatedAt());
 	}
 
-	@Test
-	@DisplayName("Deve retornar null ao converter Payment nulo")
+	@Test @DisplayName("Deve retornar null ao converter Payment nulo")
 	void shouldReturnNullWhenPaymentIsNull() {
 		assertNull(PaymentPresenter.toPaymentResponse(null));
 	}

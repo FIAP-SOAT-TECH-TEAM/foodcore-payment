@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentApprovedEventUseCase;
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentApprovedEvent;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
+
 import unit.fixtures.PaymentFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("PublishPaymentApprovedEventUseCase - Testes Unitários")

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AccessManagerGateway;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.soat.fiap.food.core.payment.core.application.usecases.GetLatestPaymentByOrderIdUseCase;
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentNotFoundException;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
+import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AccessManagerGateway;
+
 import unit.fixtures.PaymentFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("GetLatestPaymentByOrderIdUseCase - Testes Unitários")

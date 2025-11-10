@@ -3,7 +3,8 @@ package unit.usecases;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentExpiredEventUseCase;
 import com.soat.fiap.food.core.payment.core.domain.events.PaymentExpiredEvent;
-import unit.fixtures.PaymentFixture;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.EventPublisherGateway;
 
-import java.util.UUID;
+import unit.fixtures.PaymentFixture;
 
 @ExtendWith(MockitoExtension.class) @DisplayName("PublishPaymentExpiredEventUseCase - Testes Unitários")
 class PublishPaymentExpiredEventUseCaseTest {

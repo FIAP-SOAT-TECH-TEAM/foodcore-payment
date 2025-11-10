@@ -26,12 +26,11 @@ import com.soat.fiap.food.core.payment.infrastructure.out.event.publisher.azsvcb
 /**
  * Testes unitários para {@link AzSvcBusEventPublisher}.
  * <p>
- * Valida a publicação de eventos de pagamento aprovado e expirado
- * no Azure Service Bus sem lançar exceções.
+ * Valida a publicação de eventos de pagamento aprovado e expirado no Azure
+ * Service Bus sem lançar exceções.
  * </p>
  */
-@ExtendWith(MockitoExtension.class)
-@DisplayName("AzSvcBusEventPublisher - Testes Unitários")
+@ExtendWith(MockitoExtension.class) @DisplayName("AzSvcBusEventPublisher - Testes Unitários")
 class AzSvcBusEventPublisherTest {
 
 	@Mock
@@ -50,45 +49,38 @@ class AzSvcBusEventPublisherTest {
 		eventPublisher = new AzSvcBusEventPublisher(paymentApprovedSender, paymentExpiredSender, gson);
 	}
 
-	@Test
-	@DisplayName("Deve publicar evento de pagamento aprovado com sucesso")
+	@Test @DisplayName("Deve publicar evento de pagamento aprovado com sucesso")
 	void shouldPublishPaymentApprovedEventSuccessfully() {
 		// Arrange
 		var event = new PaymentApprovedEventDto();
 		event.setPaymentId(UUID.randomUUID());
 		event.setAmount(new BigDecimal("100.0"));
 
-		when(gson.toJson(event))
-				.thenReturn("{\"paymentId\":\"" + event.getPaymentId() + "\",\"amount\":100.0}");
+		when(gson.toJson(event)).thenReturn("{\"paymentId\":\"" + event.getPaymentId() + "\",\"amount\":100.0}");
 
 		// Act & Assert
-		assertThatNoException()
-				.isThrownBy(() -> eventPublisher.publishPaymentApprovedEvent(event));
+		assertThatNoException().isThrownBy(() -> eventPublisher.publishPaymentApprovedEvent(event));
 
 		// Assert
 		verify(paymentApprovedSender).sendMessage(any(ServiceBusMessage.class));
 	}
 
-	@Test
-	@DisplayName("Deve publicar evento de pagamento expirado com sucesso")
+	@Test @DisplayName("Deve publicar evento de pagamento expirado com sucesso")
 	void shouldPublishPaymentExpiredEventSuccessfully() {
 		// Arrange
 		var event = new PaymentExpiredEventDto();
 		event.setPaymentId(UUID.randomUUID());
 
-		when(gson.toJson(event))
-				.thenReturn("{\"paymentId\":\"" + event.getPaymentId() + "\"}");
+		when(gson.toJson(event)).thenReturn("{\"paymentId\":\"" + event.getPaymentId() + "\"}");
 
 		// Act & Assert
-		assertThatNoException()
-				.isThrownBy(() -> eventPublisher.publishPaymentExpiredEvent(event));
+		assertThatNoException().isThrownBy(() -> eventPublisher.publishPaymentExpiredEvent(event));
 
 		// Assert
 		verify(paymentExpiredSender).sendMessage(any(ServiceBusMessage.class));
 	}
 
-	@Test
-	@DisplayName("Deve publicar múltiplos eventos com sucesso")
+	@Test @DisplayName("Deve publicar múltiplos eventos com sucesso")
 	void shouldPublishMultipleEventsSuccessfully() {
 		// Arrange
 		var approvedEvent1 = new PaymentApprovedEventDto();
@@ -106,21 +98,17 @@ class AzSvcBusEventPublisherTest {
 				.thenReturn("{\"paymentId\":\"" + approvedEvent1.getPaymentId() + "\",\"amount\":50.0}");
 		when(gson.toJson(approvedEvent2))
 				.thenReturn("{\"paymentId\":\"" + approvedEvent2.getPaymentId() + "\",\"amount\":75.0}");
-		when(gson.toJson(expiredEvent))
-				.thenReturn("{\"paymentId\":\"" + expiredEvent.getPaymentId() + "\"}");
+		when(gson.toJson(expiredEvent)).thenReturn("{\"paymentId\":\"" + expiredEvent.getPaymentId() + "\"}");
 
 		// Act & Assert
-		assertThatNoException()
-				.isThrownBy(() -> {
-					eventPublisher.publishPaymentApprovedEvent(approvedEvent1);
-					eventPublisher.publishPaymentApprovedEvent(approvedEvent2);
-					eventPublisher.publishPaymentExpiredEvent(expiredEvent);
-				});
+		assertThatNoException().isThrownBy(() -> {
+			eventPublisher.publishPaymentApprovedEvent(approvedEvent1);
+			eventPublisher.publishPaymentApprovedEvent(approvedEvent2);
+			eventPublisher.publishPaymentExpiredEvent(expiredEvent);
+		});
 
 		// Assert
-		verify(paymentApprovedSender, times(2))
-				.sendMessage(any(ServiceBusMessage.class));
-		verify(paymentExpiredSender)
-				.sendMessage(any(ServiceBusMessage.class));
+		verify(paymentApprovedSender, times(2)).sendMessage(any(ServiceBusMessage.class));
+		verify(paymentExpiredSender).sendMessage(any(ServiceBusMessage.class));
 	}
 }

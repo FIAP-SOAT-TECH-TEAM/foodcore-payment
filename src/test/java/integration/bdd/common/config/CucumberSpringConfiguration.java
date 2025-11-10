@@ -1,28 +1,34 @@
 package integration.bdd.common.config;
 
-import com.soat.fiap.food.core.payment.FoodCoreApiApplication;
-import io.cucumber.spring.CucumberContextConfiguration;
-import io.restassured.RestAssured;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.soat.fiap.food.core.payment.FoodCoreApiApplication;
+
+import io.cucumber.spring.CucumberContextConfiguration;
+import io.restassured.RestAssured;
+import jakarta.annotation.PostConstruct;
+
 /**
- * Configuração de integração entre o Cucumber e o contexto do Spring Boot
- * para execução de testes BDD.
+ * Configuração de integração entre o Cucumber e o contexto do Spring Boot para
+ * execução de testes BDD.
  * <p>
  * Esta classe inicializa o contexto da aplicação {@link FoodCoreApiApplication}
  * com o perfil de testes ativo e integra o suporte ao {@code Testcontainers}
  * por meio da herança de {@link TestContainersConfiguration}.
  * </p>
  *
- * <p><b>Uso:</b></p>
+ * <p>
+ * <b>Uso:</b>
+ * </p>
  * <ul>
- *   <li>Permite executar cenários BDD que utilizam o contexto real do Spring Boot.</li>
- *   <li>Fornece integração com o Cosmos DB Emulator configurado via Testcontainers.</li>
- *   <li>Carrega o perfil {@code test} para isolamento de ambiente.</li>
+ * <li>Permite executar cenários BDD que utilizam o contexto real do Spring
+ * Boot.</li>
+ * <li>Fornece integração com o Cosmos DB Emulator configurado via
+ * Testcontainers.</li>
+ * <li>Carrega o perfil {@code test} para isolamento de ambiente.</li>
  * </ul>
  *
  * @see TestContainersConfiguration
@@ -30,8 +36,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @see org.springframework.boot.test.context.SpringBootTest
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodCoreApiApplication.class)
-@ActiveProfiles("test")
-@CucumberContextConfiguration
+@ActiveProfiles("test") @CucumberContextConfiguration
 public class CucumberSpringConfiguration extends TestContainersConfiguration {
 	@LocalServerPort
 	protected int localServerPort;

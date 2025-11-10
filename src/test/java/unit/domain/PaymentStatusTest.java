@@ -10,8 +10,7 @@ import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
 @DisplayName("PaymentStatus - Testes de Domínio")
 class PaymentStatusTest {
 
-	@Test
-	@DisplayName("Deve retornar descrição correta para cada status de pagamento")
+	@Test @DisplayName("Deve retornar descrição correta para cada status de pagamento")
 	void shouldReturnCorrectDescription() {
 		assertEquals("Pendente", PaymentStatus.PENDING.getDescription());
 		assertEquals("Aprovado", PaymentStatus.APPROVED.getDescription());
@@ -19,8 +18,7 @@ class PaymentStatusTest {
 		assertEquals("Cancelado", PaymentStatus.CANCELLED.getDescription());
 	}
 
-	@Test
-	@DisplayName("Deve converter string válida para PaymentStatus correspondente")
+	@Test @DisplayName("Deve converter string válida para PaymentStatus correspondente")
 	void shouldConvertValidStringToPaymentStatus() {
 		assertEquals(PaymentStatus.PENDING, PaymentStatus.fromValue("pending"));
 		assertEquals(PaymentStatus.APPROVED, PaymentStatus.fromValue("APPROVED"));
@@ -28,8 +26,7 @@ class PaymentStatusTest {
 		assertEquals(PaymentStatus.CANCELLED, PaymentStatus.fromValue("CANCELLED"));
 	}
 
-	@Test
-	@DisplayName("Deve lançar exceção se o status for desconhecido")
+	@Test @DisplayName("Deve lançar exceção se o status for desconhecido")
 	void shouldThrowExceptionForUnknownStatus() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
 			PaymentStatus.fromValue("EXPIRED");

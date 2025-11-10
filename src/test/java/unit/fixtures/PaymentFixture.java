@@ -28,10 +28,7 @@ public class PaymentFixture {
 	 * @return instância de {@link Payment} com valores padrão
 	 */
 	public static Payment createValidPayment() {
-		return new Payment("as23as3",
-				1L,
-				new BigDecimal("50.00")
-		);
+		return new Payment("as23as3", 1L, new BigDecimal("50.00"));
 	}
 
 	/**
@@ -51,7 +48,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento aprovado.
 	 *
-	 * @return instância de {@link Payment} com status {@link PaymentStatus#APPROVED}
+	 * @return instância de {@link Payment} com status
+	 *         {@link PaymentStatus#APPROVED}
 	 */
 	public static Payment createApprovedPayment() {
 		var payment = new Payment("as23as3", 1L, new BigDecimal("35.50"));
@@ -67,7 +65,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento cancelado.
 	 *
-	 * @return instância de {@link Payment} com status {@link PaymentStatus#CANCELLED}
+	 * @return instância de {@link Payment} com status
+	 *         {@link PaymentStatus#CANCELLED}
 	 */
 	public static Payment createCancelledPayment() {
 		var payment = new Payment("as23as3", 2L, new BigDecimal("18.90"));
@@ -81,7 +80,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento rejeitado.
 	 *
-	 * @return instância de {@link Payment} com status {@link PaymentStatus#REJECTED}
+	 * @return instância de {@link Payment} com status
+	 *         {@link PaymentStatus#REJECTED}
 	 */
 	public static Payment createRejectedPayment() {
 		var payment = new Payment("as23as3", 3L, new BigDecimal("42.00"));
@@ -97,7 +97,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento expirado.
 	 *
-	 * @return instância de {@link Payment} com status {@link PaymentStatus#PENDING} e expiração passada
+	 * @return instância de {@link Payment} com status {@link PaymentStatus#PENDING}
+	 *         e expiração passada
 	 */
 	public static Payment createExpiredPayment() {
 		var payment = new Payment("as23as3", 4L, new BigDecimal("29.90"));
@@ -112,7 +113,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento com valor customizado.
 	 *
-	 * @param amount valor do pagamento
+	 * @param amount
+	 *            valor do pagamento
 	 * @return instância de {@link Payment} com o valor especificado
 	 */
 	public static Payment createPaymentWithCustomAmount(BigDecimal amount) {
@@ -122,7 +124,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento para um usuário específico.
 	 *
-	 * @param userId ID do usuário
+	 * @param userId
+	 *            ID do usuário
 	 * @return instância de {@link Payment} para o usuário especificado
 	 */
 	public static Payment createPaymentForUser(String userId) {
@@ -132,7 +135,8 @@ public class PaymentFixture {
 	/**
 	 * Cria um pagamento para um pedido específico.
 	 *
-	 * @param orderId ID do pedido
+	 * @param orderId
+	 *            ID do pedido
 	 * @return instância de {@link Payment} para o pedido especificado
 	 */
 	public static Payment createPaymentForOrder(Long orderId) {
@@ -145,18 +149,14 @@ public class PaymentFixture {
 	 * @return instância de {@link StockDebitInput} com valores padrão
 	 */
 	public static StockDebitInput createValidOrderCreatedInput() {
-		return new StockDebitInput(1L,
-				"ORD-001",
-				"as23as3",
-				new BigDecimal("50.00"),
-				List.of()
-		);
+		return new StockDebitInput(1L, "ORD-001", "as23as3", new BigDecimal("50.00"), List.of());
 	}
 
 	/**
 	 * Cria um input para débito de estoque com valor customizado.
 	 *
-	 * @param amount valor total do pedido
+	 * @param amount
+	 *            valor total do pedido
 	 * @return instância de {@link StockDebitInput} com valor especificado
 	 */
 	public static StockDebitInput createOrderCreatedInputWithCustomAmount(BigDecimal amount) {
@@ -169,15 +169,8 @@ public class PaymentFixture {
 	 * @return instância de {@link AcquirerNotificationInput} com valores padrão
 	 */
 	public static AcquirerNotificationInput createValidAcquirerNotificationInput() {
-		return new AcquirerNotificationInput(1L,
-				false,
-				"payment",
-				java.time.ZonedDateTime.now(),
-				1L,
-				"v1",
-				"payment_notification",
-				"12345678"
-		);
+		return new AcquirerNotificationInput(1L, false, "payment", java.time.ZonedDateTime.now(), 1L, "v1",
+				"payment_notification", "12345678");
 	}
 
 	/**
@@ -202,23 +195,21 @@ public class PaymentFixture {
 		return request;
 	}
 
-
-
 	/**
 	 * Cria uma saída de pagamento do adquirente com status aprovado.
 	 *
-	 * @return instância de {@link AcquirerPaymentDTO} com status {@link PaymentStatus#APPROVED}
+	 * @return instância de {@link AcquirerPaymentDTO} com status
+	 *         {@link PaymentStatus#APPROVED}
 	 */
 	public static AcquirerPaymentDTO createValidAcquirerPaymentOutput() {
-		return new AcquirerPaymentDTO("12345678",
-				PaymentStatus.APPROVED, 1L,
-				PaymentMethod.PIX);
+		return new AcquirerPaymentDTO("12345678", PaymentStatus.APPROVED, 1L, PaymentMethod.PIX);
 	}
 
 	/**
 	 * Cria uma saída de pagamento do adquirente com status rejeitado.
 	 *
-	 * @return instância de {@link AcquirerPaymentDTO} com status {@link PaymentStatus#REJECTED}
+	 * @return instância de {@link AcquirerPaymentDTO} com status
+	 *         {@link PaymentStatus#REJECTED}
 	 */
 	public static AcquirerPaymentDTO createRejectedAcquirerPaymentOutput() {
 		return new AcquirerPaymentDTO("87654321", PaymentStatus.REJECTED, 1L, PaymentMethod.PIX);
@@ -227,7 +218,8 @@ public class PaymentFixture {
 	/**
 	 * Cria uma saída de pagamento do adquirente com status cancelado.
 	 *
-	 * @return instância de {@link AcquirerPaymentDTO} com status {@link PaymentStatus#CANCELLED}
+	 * @return instância de {@link AcquirerPaymentDTO} com status
+	 *         {@link PaymentStatus#CANCELLED}
 	 */
 	public static AcquirerPaymentDTO createCancelledAcquirerPaymentOutput() {
 		return new AcquirerPaymentDTO("11223344", PaymentStatus.CANCELLED, 1L, PaymentMethod.PIX);

@@ -10,8 +10,7 @@ import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
 @DisplayName("QrCode - Testes de Domínio")
 class QrCodeTest {
 
-	@Test
-	@DisplayName("Deve criar QrCode válido")
+	@Test @DisplayName("Deve criar QrCode válido")
 	void shouldCreateValidQrCode() {
 		String qrValue = "QR123456789";
 		QrCode qrCode = new QrCode(qrValue);
@@ -20,8 +19,7 @@ class QrCodeTest {
 		assertEquals(qrValue, qrCode.value());
 	}
 
-	@Test
-	@DisplayName("Deve lançar exceção se valor for nulo")
+	@Test @DisplayName("Deve lançar exceção se valor for nulo")
 	void shouldThrowExceptionIfValueIsNull() {
 		NullPointerException exception = assertThrows(NullPointerException.class, () -> {
 			new QrCode(null);
@@ -30,8 +28,7 @@ class QrCodeTest {
 		assertEquals("QrCode não pode ser nulo", exception.getMessage());
 	}
 
-	@Test
-	@DisplayName("Deve lançar exceção se valor exceder 255 caracteres")
+	@Test @DisplayName("Deve lançar exceção se valor exceder 255 caracteres")
 	void shouldThrowExceptionIfValueExceeds255Characters() {
 		String longValue = "Q".repeat(256);
 
@@ -42,8 +39,7 @@ class QrCodeTest {
 		assertEquals("O conteúdo do QrCode não pode ultrapassar 255 caracteres", exception.getMessage());
 	}
 
-	@Test
-	@DisplayName("Deve permitir valor exatamente com 255 caracteres")
+	@Test @DisplayName("Deve permitir valor exatamente com 255 caracteres")
 	void shouldAllowValueWith255Characters() {
 		String maxLengthValue = "Q".repeat(255);
 

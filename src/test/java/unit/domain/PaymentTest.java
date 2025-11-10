@@ -11,6 +11,7 @@ import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentException;
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentMethod;
 import com.soat.fiap.food.core.payment.core.domain.vo.PaymentStatus;
+
 import unit.fixtures.PaymentFixture;
 
 @DisplayName("Payment - Testes de Domínio")
@@ -140,8 +141,7 @@ class PaymentTest {
 		assertEquals("PIX", payment.getTypeName());
 	}
 
-	@Test
-	@DisplayName("Deve lançar exceção se o método for desconhecido")
+	@Test @DisplayName("Deve lançar exceção se o método for desconhecido")
 	void shouldThrowExceptionForUnknownMethod() {
 		var exception = assertThrows(PaymentException.class, () -> {
 			PaymentFixture.createPaymentForUser(null);
