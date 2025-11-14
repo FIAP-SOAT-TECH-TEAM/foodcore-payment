@@ -19,7 +19,7 @@ import io.restassured.response.Response;
  * </pre>
  * </p>
  */
-public class QrCodeSteps extends CucumberSpringConfiguration {
+public class ObterQrCodeSteps extends CucumberSpringConfiguration {
 
 	private Response response;
 	private String clientId;

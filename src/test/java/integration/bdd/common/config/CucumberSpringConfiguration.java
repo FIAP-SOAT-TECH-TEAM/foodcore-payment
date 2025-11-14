@@ -26,8 +26,6 @@ import jakarta.annotation.PostConstruct;
  * <ul>
  * <li>Permite executar cenários BDD que utilizam o contexto real do Spring
  * Boot.</li>
- * <li>Fornece integração com o Cosmos DB Emulator configurado via
- * Testcontainers.</li>
  * <li>Carrega o perfil {@code test} para isolamento de ambiente.</li>
  * </ul>
  *

@@ -53,11 +53,11 @@ public abstract class TestContainersConfiguration {
 
 	/** Diretório temporário usado para armazenar o arquivo de keystore. */
 	@TempDir
-	protected static File tempFolder;
+	private static File tempFolder;
 
 	/** Contêiner do Azure Cosmos DB Emulator configurado para uso em testes. */
 	@Container @ServiceConnection
-	static CosmosDBEmulatorContainer cosmos = new CosmosDBEmulatorContainer(
+	private static final CosmosDBEmulatorContainer cosmosContainer = new CosmosDBEmulatorContainer(
 			DockerImageName.parse("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest"))
 			.withEnv(Map.of("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE", "127.0.0.1",
 					"AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "1", "AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE",
@@ -66,19 +66,19 @@ public abstract class TestContainersConfiguration {
 			.withStartupTimeout(Duration.ofMinutes(3));
 
 	static {
-		cosmos.start();
+		cosmosContainer.start();
 
 		Path keyStoreFile = new File(tempFolder, "azure-cosmos-emulator.keystore").toPath();
-		KeyStore keyStore = cosmos.buildNewKeyStore();
+		KeyStore keyStore = cosmosContainer.buildNewKeyStore();
 		try {
 			keyStore.store(Files.newOutputStream(keyStoreFile.toFile().toPath()),
-					cosmos.getEmulatorKey().toCharArray());
+					cosmosContainer.getEmulatorKey().toCharArray());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
 		System.setProperty("javax.net.ssl.trustStore", keyStoreFile.toString());
-		System.setProperty("javax.net.ssl.trustStorePassword", cosmos.getEmulatorKey());
+		System.setProperty("javax.net.ssl.trustStorePassword", cosmosContainer.getEmulatorKey());
 		System.setProperty("javax.net.ssl.trustStoreType", "PKCS12");
 	}
 }
