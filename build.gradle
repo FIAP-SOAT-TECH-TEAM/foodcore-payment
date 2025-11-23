@@ -140,8 +140,6 @@ tasks.register('cucumber') {
 }
 
 jacocoTestReport {
-	dependsOn test
-	dependsOn cucumber
 	reports {
 		xml.required = true
 		html.required = true
