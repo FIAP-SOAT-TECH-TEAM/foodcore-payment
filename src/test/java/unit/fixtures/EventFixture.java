@@ -12,29 +12,34 @@ import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.StockDe
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.StockDebitItemEventDto;
 
 /**
- * Fixture para criação de eventos do módulo Payment para testes unitários
+ * Fixture utilitária para criação de eventos do módulo Payment, utilizada
+ * exclusivamente em testes unitários.
+ * <p>
+ * Fornece métodos para gerar eventos de pagamento e eventos de débito de
+ * estoque, facilitando a construção de cenários de testes complexos.
  */
 public class EventFixture {
 
 	/**
-	 * Cria um PaymentApprovedEvent válido
+	 * Cria um {@link PaymentApprovedEvent} válido com valores padrão.
 	 *
-	 * @return instância de PaymentApprovedEvent
+	 * @return instância configurada de {@link PaymentApprovedEvent}
 	 */
 	public static PaymentApprovedEvent createPaymentApprovedEvent() {
 		return new PaymentApprovedEvent(UUID.randomUUID(), 1L, BigDecimal.valueOf(100.00), "PIX", LocalDateTime.now());
 	}
 
 	/**
-	 * Cria um PaymentApprovedEvent com valores customizados
+	 * Cria um {@link PaymentApprovedEvent} personalizado, permitindo configurar ID
+	 * do pedido, valor e método de pagamento.
 	 *
 	 * @param orderId
-	 *            ID do pedido
+	 *            ID do pedido associado ao pagamento
 	 * @param amount
-	 *            Valor do pagamento
+	 *            valor total aprovado
 	 * @param paymentMethod
-	 *            Método de pagamento
-	 * @return instância de PaymentApprovedEvent
+	 *            método utilizado para pagamento (ex: "PIX", "CREDIT_CARD")
+	 * @return instância de {@link PaymentApprovedEvent}
 	 */
 	public static PaymentApprovedEvent createPaymentApprovedEvent(Long orderId, BigDecimal amount,
 			String paymentMethod) {
@@ -42,43 +47,47 @@ public class EventFixture {
 	}
 
 	/**
-	 * Cria um PaymentExpiredEvent válido
+	 * Cria um {@link PaymentExpiredEvent} válido utilizando valores padrão.
 	 *
-	 * @return instância de PaymentExpiredEvent
+	 * @return instância configurada de {@link PaymentExpiredEvent}
 	 */
 	public static PaymentExpiredEvent createPaymentExpiredEvent() {
 		return new PaymentExpiredEvent(UUID.randomUUID(), 1L, LocalDateTime.now().minusMinutes(15));
 	}
 
 	/**
-	 * Cria um PaymentExpiredEvent com valores customizados
+	 * Cria um {@link PaymentExpiredEvent} personalizado, permitindo configurar o ID
+	 * do pedido e o instante da expiração.
 	 *
 	 * @param orderId
-	 *            ID do pedido
+	 *            ID do pedido associado ao pagamento
 	 * @param expiredIn
-	 *            Data de expiração do pagamento
-	 * @return instância de PaymentExpiredEvent
+	 *            instante em que o pagamento foi expirado
+	 * @return instância de {@link PaymentExpiredEvent}
 	 */
 	public static PaymentExpiredEvent createPaymentExpiredEvent(Long orderId, LocalDateTime expiredIn) {
 		return new PaymentExpiredEvent(UUID.randomUUID(), orderId, expiredIn);
 	}
 
 	/**
-	 * Cria um StockDebitEventDto com um item padrão para testes de débito de
+	 * Cria um {@link StockDebitEventDto} contendo um único item padrão.
+	 * <p>
+	 * Utilizado em testes que validam o comportamento de débitos simples de
 	 * estoque.
 	 *
 	 * @param orderId
 	 *            ID do pedido
 	 * @param orderNumber
-	 *            Número do pedido
+	 *            número do pedido
 	 * @param userId
-	 *            ID do usuário (pode ser null)
+	 *            ID do usuário responsável (pode ser {@code null})
 	 * @param totalAmount
-	 *            Valor total do pedido
-	 * @return instância de StockDebitEventDto
+	 *            valor total do pedido
+	 * @return instância de {@link StockDebitEventDto}
 	 */
 	public static StockDebitEventDto createStockDebitEvent(Long orderId, String orderNumber, String userId,
 			BigDecimal totalAmount) {
+
 		StockDebitItemEventDto item = new StockDebitItemEventDto();
 		item.setProductId(1L);
 		item.setName("Produto Teste");
@@ -93,25 +102,30 @@ public class EventFixture {
 		event.setUserId(userId);
 		event.setTotalAmount(totalAmount);
 		event.setItems(List.of(item));
+
 		return event;
 	}
 
 	/**
-	 * Cria um StockDebitEventDto com múltiplos itens para testes de débito de
+	 * Cria um {@link StockDebitEventDto} contendo múltiplos itens, distribuindo o
+	 * valor total proporcionalmente entre eles.
+	 * <p>
+	 * Utilizado para cenários onde diversos produtos precisam ser debitados do
 	 * estoque.
 	 *
 	 * @param orderId
 	 *            ID do pedido
 	 * @param orderNumber
-	 *            Número do pedido
+	 *            número do pedido
 	 * @param userId
-	 *            ID do usuário (pode ser null)
+	 *            ID do usuário responsável (pode ser {@code null})
 	 * @param totalAmount
-	 *            Valor total do pedido
-	 * @return instância de StockDebitEventDto
+	 *            valor total do pedido
+	 * @return instância de {@link StockDebitEventDto} com múltiplos itens
 	 */
 	public static StockDebitEventDto createStockDebitEventWithMultipleItems(Long orderId, String orderNumber,
 			String userId, BigDecimal totalAmount) {
+
 		int quantity1 = 1;
 		int quantity2 = 3;
 		int quantity3 = 7;
@@ -119,8 +133,10 @@ public class EventFixture {
 
 		BigDecimal unitPrice1 = totalAmount.multiply(BigDecimal.valueOf(quantity1))
 				.divide(BigDecimal.valueOf(totalQuantity), 2, RoundingMode.HALF_UP);
+
 		BigDecimal unitPrice2 = totalAmount.multiply(BigDecimal.valueOf(quantity2))
 				.divide(BigDecimal.valueOf(totalQuantity), 2, RoundingMode.HALF_UP);
+
 		BigDecimal unitPrice3 = totalAmount.multiply(BigDecimal.valueOf(quantity3))
 				.divide(BigDecimal.valueOf(totalQuantity), 2, RoundingMode.HALF_UP);
 

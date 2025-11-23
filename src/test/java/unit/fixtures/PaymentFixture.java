@@ -14,25 +14,27 @@ import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.AcquirerPaymen
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.request.AcquirerNotificationRequest;
 
 /**
- * Fixture para criação de objetos do módulo Payment para testes unitários.
+ * Fixture para criação de objetos relacionados ao módulo de pagamentos,
+ * facilitando a geração de cenários para testes unitários.
  * <p>
- * Fornece métodos para criar pagamentos, inputs de estoque e notificações,
- * facilitando a construção de cenários de teste.
+ * Inclui métodos utilitários para criar instâncias de {@link Payment},
+ * {@link StockDebitInput}, {@link AcquirerNotificationInput},
+ * {@link AcquirerNotificationRequest} e {@link AcquirerPaymentDTO}.
  * </p>
  */
 public class PaymentFixture {
 
 	/**
-	 * Cria um pagamento válido padrão.
+	 * Cria um pagamento válido com valores padrão.
 	 *
-	 * @return instância de {@link Payment} com valores padrão
+	 * @return instância válida de {@link Payment}
 	 */
 	public static Payment createValidPayment() {
 		return new Payment("as23as3", 1L, new BigDecimal("50.00"));
 	}
 
 	/**
-	 * Cria um pagamento pendente.
+	 * Cria um pagamento com status pendente.
 	 *
 	 * @return instância de {@link Payment} com status {@link PaymentStatus#PENDING}
 	 */
@@ -95,10 +97,10 @@ public class PaymentFixture {
 	}
 
 	/**
-	 * Cria um pagamento expirado.
+	 * Cria um pagamento expirado (tempo de expiração já passado).
 	 *
 	 * @return instância de {@link Payment} com status {@link PaymentStatus#PENDING}
-	 *         e expiração passada
+	 *         e expiração vencida
 	 */
 	public static Payment createExpiredPayment() {
 		var payment = new Payment("as23as3", 4L, new BigDecimal("29.90"));
@@ -115,29 +117,29 @@ public class PaymentFixture {
 	 *
 	 * @param amount
 	 *            valor do pagamento
-	 * @return instância de {@link Payment} com o valor especificado
+	 * @return instância personalizada de {@link Payment}
 	 */
 	public static Payment createPaymentWithCustomAmount(BigDecimal amount) {
 		return new Payment("as23as3", 1L, amount);
 	}
 
 	/**
-	 * Cria um pagamento para um usuário específico.
+	 * Cria um pagamento associado a um usuário específico.
 	 *
 	 * @param userId
-	 *            ID do usuário
-	 * @return instância de {@link Payment} para o usuário especificado
+	 *            identificador do usuário
+	 * @return instância de {@link Payment} associada ao usuário informado
 	 */
 	public static Payment createPaymentForUser(String userId) {
 		return new Payment(userId, 1L, new BigDecimal("25.00"));
 	}
 
 	/**
-	 * Cria um pagamento para um pedido específico.
+	 * Cria um pagamento associado a um pedido específico.
 	 *
 	 * @param orderId
-	 *            ID do pedido
-	 * @return instância de {@link Payment} para o pedido especificado
+	 *            identificador do pedido
+	 * @return instância de {@link Payment} associada ao pedido informado
 	 */
 	public static Payment createPaymentForOrder(Long orderId) {
 		return new Payment("as23as3", orderId, new BigDecimal("30.00"));
@@ -153,18 +155,18 @@ public class PaymentFixture {
 	}
 
 	/**
-	 * Cria um input para débito de estoque com valor customizado.
+	 * Cria um input de débito de estoque com valor total customizado.
 	 *
 	 * @param amount
 	 *            valor total do pedido
-	 * @return instância de {@link StockDebitInput} com valor especificado
+	 * @return instância de {@link StockDebitInput} com o valor especificado
 	 */
 	public static StockDebitInput createOrderCreatedInputWithCustomAmount(BigDecimal amount) {
 		return new StockDebitInput(1L, "ORD-002", "as23as3", amount, List.of());
 	}
 
 	/**
-	 * Cria um input de notificação de adquirente válido.
+	 * Cria um input válido de notificação de adquirente.
 	 *
 	 * @return instância de {@link AcquirerNotificationInput} com valores padrão
 	 */
@@ -176,7 +178,7 @@ public class PaymentFixture {
 	/**
 	 * Cria uma requisição válida de notificação de adquirente.
 	 *
-	 * @return instância de {@link AcquirerNotificationRequest} com valores padrão
+	 * @return instância de {@link AcquirerNotificationRequest} preenchida
 	 */
 	public static AcquirerNotificationRequest createValidAcquirerNotificationRequest() {
 		var data = new AcquirerNotificationRequest.Data();
