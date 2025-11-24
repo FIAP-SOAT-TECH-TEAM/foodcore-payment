@@ -30,8 +30,8 @@ import jakarta.annotation.PostConstruct;
  * </ul>
  *
  * @see TestContainersConfiguration
- * @see io.cucumber.spring.CucumberContextConfiguration
- * @see org.springframework.boot.test.context.SpringBootTest
+ * @see CucumberContextConfiguration
+ * @see SpringBootTest
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodCoreApiApplication.class)
 @ActiveProfiles("test") @CucumberContextConfiguration
