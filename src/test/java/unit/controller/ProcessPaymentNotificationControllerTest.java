@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.soat.fiap.food.core.payment.core.application.usecases.ProcessPaymentNotificationUseCase;
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentApprovedEventUseCase;
 import com.soat.fiap.food.core.payment.core.domain.exceptions.PaymentAlreadyProcessedException;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.ProcessPaymentNotificationController;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.ProcessPaymentNotificationController;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;

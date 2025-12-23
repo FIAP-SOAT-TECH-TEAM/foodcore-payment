@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.presenter.web.api.PaymentPresenter;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.presenter.PaymentPresenter;
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response.PaymentResponse;
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response.PaymentStatusResponse;
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response.QrCodeResponse;

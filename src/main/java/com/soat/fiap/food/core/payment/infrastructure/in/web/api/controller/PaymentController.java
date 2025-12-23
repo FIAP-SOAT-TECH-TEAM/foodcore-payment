@@ -1,10 +1,10 @@
 package com.soat.fiap.food.core.payment.infrastructure.in.web.api.controller;
 
+import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.*;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.EventPublisherSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.InitializePaymentController;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.InitializePaymentController;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.PaymentDTO;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.StockDebitEventDto;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.mappers.PaymentDTOMapper;

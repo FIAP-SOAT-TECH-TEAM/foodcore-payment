@@ -3,7 +3,7 @@ package com.soat.fiap.food.core.payment.infrastructure.in.event.listener.azsvcbu
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.InitializePaymentController;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.InitializePaymentController;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.dto.events.StockDebitEventDto;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.AcquirerSource;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;

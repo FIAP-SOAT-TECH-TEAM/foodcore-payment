@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api;
+package com.soat.fiap.food.core.payment.core.interfaceadapters.controller;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetExpiredPaymentsUseCase;
 import com.soat.fiap.food.core.payment.core.application.usecases.PublishPaymentExpiredEventUseCase;

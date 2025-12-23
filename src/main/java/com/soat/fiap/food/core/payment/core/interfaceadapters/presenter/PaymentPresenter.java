@@ -1,4 +1,4 @@
-package com.soat.fiap.food.core.payment.core.interfaceadapters.bff.presenter.web.api;
+package com.soat.fiap.food.core.payment.core.interfaceadapters.presenter;
 
 import com.soat.fiap.food.core.payment.core.domain.model.Payment;
 import com.soat.fiap.food.core.payment.infrastructure.in.web.api.dto.response.PaymentResponse;

@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetLatestPaymentByOrderIdUseCase;
 import com.soat.fiap.food.core.payment.core.domain.vo.QrCode;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.bff.controller.web.api.GetOrderPaymentQrCodeController;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.GetOrderPaymentQrCodeController;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
 import com.soat.fiap.food.core.shared.core.interfaceadapters.gateways.AccessManagerGateway;
