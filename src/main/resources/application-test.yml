@@ -23,7 +23,7 @@ server:
   address: ${SERVER_ADDRESS:0.0.0.0}
   port: ${SERVER_PORT:8085}
   servlet:
-    context-path: ${SERVER_CONTEXT_PATH:/api}
+    context-path: /
 
 # Mercado Pago Configuration
 mercado-pago:

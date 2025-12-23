@@ -1,0 +1,8 @@
+🍔 Food Core Payment - Helm Chart Deployment
+🎯 Implementado com Clean Architecture e DDD
+
+
+🚀 Microsserviço de pagamentos foi implantado com sucesso! 
+🌐 Consulte FQDN público do APIM
+
+📖 Documentação completa: https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-payment

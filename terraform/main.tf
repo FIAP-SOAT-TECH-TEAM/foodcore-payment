@@ -1,9 +1,23 @@
+module "akv" {
+  source = "./modules/azure_key_vault"
+
+  foodcore-backend-container        = var.foodcore-backend-container
+  foodcore-backend-infra-key        = var.foodcore-backend-infra-key
+  foodcore-backend-resource-group   = var.foodcore-backend-resource-group
+  foodcore-backend-storage-account  = var.foodcore-backend-storage-account
+  akv_id                            = data.terraform_remote_state.infra.outputs.akv_id
+  mercadopago_pos_id                = var.mercadopago_pos_id
+  mercadopago_token                 = var.mercadopago_token
+  mercadopago_user_id               = var.mercadopago_user_id
+  
+}
+
+
 module "helm" {
   source = "./modules/helm"
 
   foodcore-backend-container        = var.foodcore-backend-container
   foodcore-backend-infra-key        = var.foodcore-backend-infra-key
-  foodcore-backend-db-key           = var.foodcore-backend-db-key
   foodcore-backend-resource-group   = var.foodcore-backend-resource-group
   foodcore-backend-storage-account  = var.foodcore-backend-storage-account
   release_name                      = var.release_name
@@ -13,13 +27,10 @@ module "helm" {
   release_namespace                 = var.release_namespace
   docker_image_uri                  = var.docker_image_uri
   docker_image_tag                  = var.docker_image_tag
-  jwt_secret                        = var.jwt_secret
-  jwt_expires_time                  = var.jwt_expires_time
-  mercadopago_base_url              = var.mercadopago_base_url
-  mercadopago_token                 = var.mercadopago_token
-  mercadopago_user_id               = var.mercadopago_user_id
-  mercadopago_pos_id                = var.mercadopago_pos_id
   api_ingress_path                  = var.api_ingress_path
+  mercado_pago_base_url             = var.mercado_pago_base_url
+
+  depends_on = [module.akv]
 }
 
 module "apim" {

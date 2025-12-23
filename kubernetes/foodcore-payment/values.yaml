@@ -1,0 +1,70 @@
+namespace:
+  api:
+    name: replaced
+
+ingress:
+  hosts:
+    - host: "replaced"
+  tls: []
+
+api:
+  name: payment
+  replicaCount: 1
+
+  image:
+    repository: "replaced"
+    tag: "replaced"
+
+  ports:
+    port: 9090
+    name: http
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 900m
+      memory: 1024Mi
+
+  ingress:
+    path: "replaced"
+    pathType: Prefix
+
+  probe:
+    path:
+      startup: /actuator/health
+      liveness: /actuator/health/liveness
+      readiness: /actuator/health/readiness
+
+  server:
+    address: 0.0.0.0
+    port: 9090
+    profilesActive: "prod"
+
+  mercadoPago:
+    baseUrl: "replaced"
+    notificationUrl: "replaced"
+
+  hpa:
+    minReplicas: 1
+    maxReplicas: 3
+    cpu:
+      utilization:
+        averageUtilization: 70
+
+storageClass:
+  name: azure-disk
+  skuName: Standard_LRS
+  kind: Managed
+  cachingMode: ReadOnly
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+  allowVolumeExpansion: true
+  fsType: ext4
+
+secrets:
+  azureKeyVault:
+    keyVaultName: "replaced"
+    tenantId: "replaced"
+    clientID: "replaced"

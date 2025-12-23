@@ -25,11 +25,6 @@
     description = "Chave do arquivo tfstate do foodcore-infra"
   }
 
-  variable "foodcore-backend-db-key" {
-    type        = string
-    description = "Chave do arquivo tfstate do foodcore-db"
-  }
-
   variable "foodcore-backend-auth-key" {
     type        = string
     description = "Chave do arquivo tfstate do foodcore-auth"
@@ -40,7 +35,7 @@
   variable "release_name" {
     type        = string
     description = "Nome do release do Helm."
-    default = "foodcoreapi"
+    default = "foodcore-payment"
   }
 
   variable "release_namespace" {
@@ -69,47 +64,17 @@
     description = "Tag da imagem Docker a ser utilizada."
   }
 
-  variable "jwt_secret" {
-    type        = string
-    description = "Segredo para assinatura de tokens JWT."
-  }
-
-  variable "jwt_expires_time" {
-    type        = number
-    description = "Tempo de expiração do token JWT em minutos."
-    default     = 10
-  }
-
-  variable "mercadopago_base_url" {
-    type        = string
-    description = "URL base da API do MercadoPago."
-  }
-
-  variable "mercadopago_token" {
-    type        = string
-    description = "Token da API do MercadoPago."
-  }
-
-  variable "mercadopago_user_id" {
-    type        = string
-    description = "User ID da API do MercadoPago."
-  }
-
-  variable "mercadopago_pos_id" {
-    type        = string
-    description = "POS ID da API do MercadoPago."
-  }
-
   variable "api_ingress_path" {
     type        = string
     description = "Caminho de ingress da API."
+    default = "/api/payment"
   }
 
 # APIM
   variable "apim_api_name" {
     description = "Nome da API no API Management"
     type        = string
-    default = "foodcore-api"
+    default = "foodcore-payment"
   }
 
   variable "apim_api_version" {
@@ -121,10 +86,33 @@
   variable "apim_display_name" {
     description = "Nome exibido da API no API Management"
     type        = string
-    default     = "Foodcore API"
+    default     = "Foodcore Payment Microsservice"
   }
 
   variable "swagger_path" {
     description = "Caminho do arquivo swagger.json"
     type        = string
   }
+
+variable "mercadopago_token" {
+  type = string
+  description = "Token de autenticação da API do MercadoPago"
+  sensitive = true
+}
+
+variable "mercadopago_user_id" {
+  type = string
+  description =  "ID do usuário do MercadoPago"
+  sensitive = true
+}
+
+variable "mercadopago_pos_id" {
+  type = string
+  description = "ID do ponto de venda (POS) do MercadoPago"
+  sensitive = true
+}
+
+variable "mercado_pago_base_url" {
+  type        = string
+  description = "URL base da API do MercadoPago"
+}

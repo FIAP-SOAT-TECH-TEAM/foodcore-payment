@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Controlador REST para pagamentos
  */
-@RestController @RequestMapping("/payments") @Slf4j
+@RestController @RequestMapping("/") @Slf4j
 public class PaymentController {
 
 	private final PaymentDataSource paymentDataSource;
