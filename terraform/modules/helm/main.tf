@@ -41,7 +41,7 @@ resource "helm_release" "foodcoreapi" {
 
   set {
     name  = "api.mercadoPago.notificationUrl"
-    value = locals.mp_notification_url
+    value = local.mp_notification_url
   }
 
 
