@@ -1,0 +1,28 @@
+flowchart TD
+%% Eventos de Domínio
+    E1[CustomerIdentified] --> E2[OrderCreated]
+    E2 --> E3[ItemAdded]
+    E3 --> E4[OrderConfirmed]
+    E4 --> E5[PaymentRequested]
+    E5 --> E6[QRCodeGenerated]
+    E6 --> E7[PaymentReceived]
+    E7 --> E8[OrderReceived]
+
+%% Comandos
+    C1[IdentifyCustomer] --> E1
+    C2[CreateOrder] --> E2
+    C3[AddItem] --> E3
+    C4[ConfirmOrder] --> E4
+    C5[RequestPayment] --> E5
+    C6[GenerateQRCode] --> E6
+    C7[ConfirmPayment] --> E7
+    C8[ReceiveOrder] --> E8
+
+%% Atores
+    A1[Customer] --> C1
+    A1 --> C2
+    A1 --> C3
+    A1 --> C4
+    A1 --> C5
+    A2[PaymentSystem] --> C7
+    A3[Attendant] --> C8

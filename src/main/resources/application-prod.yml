@@ -1,0 +1,42 @@
+spring:
+
+  # Configurações de banco de dados
+  cloud:
+    azure:
+      cosmos:
+        populate-query-metrics: false
+
+  # SpringDoc
+  springdoc:
+    api-docs:
+      enabled: true
+    swagger-ui:
+      enabled: true
+
+  # Configurações do servidor
+  server:
+    tomcat:
+      max-threads: 200
+      min-spare-threads: 20
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/plain
+      min-response-size: 2048
+
+management:
+  # Actuator (endpoints restritos)
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        show-details: when_authorized
+
+# Logging (níveis reduzidos)
+logging:
+  level:
+    root: WARN
+    com.fastfood: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN

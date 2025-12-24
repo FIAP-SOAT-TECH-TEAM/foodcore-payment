@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: foodcore-payment
+
+  threads:
+    virtual:
+      enabled: true
+
+  # Perfil padrão (development)
+  profiles:
+    active: local
+
+  # Configurações de banco de dados
+  cloud:
+    azure:
+      cosmos:
+        endpoint: ${SPRING_AZURE_COSMOS_URI:}
+        database: ${SPRING_AZURE_COSMOS_DATABASE:}
+        key: ${SPRING_AZURE_COSMOS_KEY:}
+        connection-mode: direct
+        populate-query-metrics: true
+
+  # SpringDoc
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+      operations-sorter: alpha
+      tags-sorter: alpha
+      disable-swagger-default-url: true
+      doc-expansion: none
+      show-actuator: true
+
+  # Upload de arquivos
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+azsvcbus:
+  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING:}
+
+management:
+  # Tracing Distribuído
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL}/api/v2/spans
+
+# Configurações de logging
+logging:
+  level:
+    root: INFO
+    com.soat.fiap.food.core.api: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.springdoc: DEBUG
+
+server:
+  address: ${SERVER_ADDRESS:}
+  port: ${SERVER_PORT:}
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Mercado Pago Configuration
+mercado-pago:
+  base-url: ${MERCADO_PAGO_BASE_URL:}
+  token: ${MERCADO_PAGO_TOKEN:}
+  user-id: ${MERCADO_PAGO_USER_ID:}
+  pos-id: ${MERCADO_PAGO_POS_ID:}
+  notification-url: ${MERCADO_PAGO_NOTIFICATION_URL:}

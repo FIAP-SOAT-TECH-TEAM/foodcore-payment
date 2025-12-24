@@ -1,0 +1,30 @@
+spring:
+
+azsvcbus:
+  connection-string: ${AZ_SVC_BUS_CONNECTION_STRING:Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;}
+
+# Tracing Distribuído
+management:
+  tracing:
+    enabled: false
+  zipkin:
+    tracing:
+      endpoint:
+
+# Configurações de log para testes
+logging:
+  level:
+    root: WARN
+    integration.bdd: DEBUG
+    org.springframework.test: INFO
+    org.hibernate.SQL: DEBUG
+
+server:
+  address: ${SERVER_ADDRESS:0.0.0.0}
+  port: ${SERVER_PORT:8085}
+  servlet:
+    context-path: /
+
+# Mercado Pago Configuration
+mercado-pago:
+  base-url: ${MERCADO_PAGO_BASE_URL:https://mercadopago.com.br}

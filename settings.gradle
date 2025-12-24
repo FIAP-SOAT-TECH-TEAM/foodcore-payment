@@ -1,0 +1,2 @@
+rootProject.name = 'foodcore-payment'
+System.setProperty("sonar.gradle.skipCompile", "true")

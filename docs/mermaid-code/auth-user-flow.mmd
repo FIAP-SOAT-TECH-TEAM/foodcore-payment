@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant User as Cliente/Admin
+    participant APIM as Azure APIM (API Gateway)
+    participant Lambda as Azure Function .NET 9 (Auth Function)
+    participant Cognito as AWS Cognito
+    participant API as FoodCore API
+
+    User->>APIM: POST /orders ou /admin (com CPF, e-mail ou token)
+    APIM->>Lambda: Encaminha requisição de autenticação
+    Lambda->>Cognito: Valida credenciais e obtém Role
+    Cognito-->>Lambda: Retorna JWT + dados do usuário
+    Lambda-->>APIM: Retorna JWT e atributos (role, cpf, email)
+    APIM->>API: Encaminha requisição com JWT válido e headers de contexto
+    API-->>User: Retorna resposta do pedido ou painel

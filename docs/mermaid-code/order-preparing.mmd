@@ -1,0 +1,21 @@
+flowchart TD
+%% Eventos de Domínio
+    E1[OrderReceived] --> E2[PreparationStarted]
+    E2 --> E3[OrderReady]
+    E3 --> E4[CustomerNotified]
+    E4 --> E5[OrderDelivered]
+    E5 --> E6[OrderFinished]
+
+%% Comandos
+    C1[StartPreparation] --> E2
+    C2[MarkAsReady] --> E3
+    C3[NotifyCustomer] --> E4
+    C4[DeliverOrder] --> E5
+    C5[FinishOrder] --> E6
+
+%% Atores
+    A1[Cook] --> C1
+    A1 --> C2
+    A2[System] --> C3
+    A3[Attendant] --> C4
+    A3 --> C5
