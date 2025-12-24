@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.soat.fiap.food.core.payment.core.application.usecases.GetLatestPaymentByOrderIdUseCase;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.controller.GetLatestOrderPaymentByOrderIdController;
-import com.soat.fiap.food.core.payment.core.interfaceadapters.presenter.PaymentPresenter;
 import com.soat.fiap.food.core.payment.core.interfaceadapters.gateways.PaymentGateway;
+import com.soat.fiap.food.core.payment.core.interfaceadapters.presenter.PaymentPresenter;
 import com.soat.fiap.food.core.payment.infrastructure.common.source.PaymentDataSource;
 
 import unit.fixtures.PaymentFixture;

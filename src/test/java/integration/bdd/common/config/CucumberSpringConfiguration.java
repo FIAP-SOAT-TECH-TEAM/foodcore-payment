@@ -44,7 +44,7 @@ public class CucumberSpringConfiguration extends TestContainersConfiguration {
 
 	@PostConstruct
 	public void initRestAssured() {
-		RestAssured.basePath = String.format("%s/payments", contextPath);
+		RestAssured.basePath = contextPath;
 		RestAssured.port = localServerPort;
 	}
 }
