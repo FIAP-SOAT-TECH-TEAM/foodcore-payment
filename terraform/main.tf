@@ -1,14 +1,15 @@
 module "akv" {
   source = "./modules/azure_key_vault"
 
+  subscription_id                   = var.subscription_id
   foodcore-backend-container        = var.foodcore-backend-container
   foodcore-backend-infra-key        = var.foodcore-backend-infra-key
   foodcore-backend-resource-group   = var.foodcore-backend-resource-group
   foodcore-backend-storage-account  = var.foodcore-backend-storage-account
   akv_id                            = data.terraform_remote_state.infra.outputs.akv_id
-  mercado_pago_pos_id                = var.mercado_pago_pos_id
-  mercado_pago_token                 = var.mercado_pago_token
-  mercado_pago_user_id               = var.mercado_pago_user_id
+  mercado_pago_pos_id               = var.mercado_pago_pos_id
+  mercado_pago_token                = var.mercado_pago_token
+  mercado_pago_user_id              = var.mercado_pago_user_id
   
 }
 
@@ -16,6 +17,7 @@ module "akv" {
 module "helm" {
   source = "./modules/helm"
 
+  subscription_id                   = var.subscription_id
   foodcore-backend-container        = var.foodcore-backend-container
   foodcore-backend-infra-key        = var.foodcore-backend-infra-key
   foodcore-backend-resource-group   = var.foodcore-backend-resource-group
@@ -36,6 +38,7 @@ module "helm" {
 module "apim" {
   source = "./modules/apim"
 
+  subscription_id                   = var.subscription_id
   foodcore-backend-container        = var.foodcore-backend-container
   foodcore-backend-infra-key        = var.foodcore-backend-infra-key
   foodcore-backend-auth-key         = var.foodcore-backend-auth-key

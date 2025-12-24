@@ -1,3 +1,8 @@
+# Commn
+  variable "subscription_id" {
+    type        = string
+    description = "Azure Subscription ID"
+  }
 # remote states
   variable "foodcore-backend-resource-group" {
     type        = string
