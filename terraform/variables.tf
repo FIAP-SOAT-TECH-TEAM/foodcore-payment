@@ -94,19 +94,19 @@
     type        = string
   }
 
-variable "mercadopago_token" {
+variable "mercado_pago_token" {
   type = string
   description = "Token de autenticação da API do MercadoPago"
   sensitive = true
 }
 
-variable "mercadopago_user_id" {
+variable "mercado_pago_user_id" {
   type = string
   description =  "ID do usuário do MercadoPago"
   sensitive = true
 }
 
-variable "mercadopago_pos_id" {
+variable "mercado_pago_pos_id" {
   type = string
   description = "ID do ponto de venda (POS) do MercadoPago"
   sensitive = true

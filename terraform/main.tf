@@ -6,9 +6,9 @@ module "akv" {
   foodcore-backend-resource-group   = var.foodcore-backend-resource-group
   foodcore-backend-storage-account  = var.foodcore-backend-storage-account
   akv_id                            = data.terraform_remote_state.infra.outputs.akv_id
-  mercadopago_pos_id                = var.mercadopago_pos_id
-  mercadopago_token                 = var.mercadopago_token
-  mercadopago_user_id               = var.mercadopago_user_id
+  mercado_pago_pos_id                = var.mercado_pago_pos_id
+  mercado_pago_token                 = var.mercado_pago_token
+  mercado_pago_user_id               = var.mercado_pago_user_id
   
 }
 

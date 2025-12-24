@@ -1,6 +1,6 @@
 resource "azurerm_key_vault_secret" "mp_token" {
   name         = "mp-token"
-  value        = var.mercadopago_token
+  value        = var.mercado_pago_token
   key_vault_id = var.akv_id
 
   tags = {
@@ -12,7 +12,7 @@ resource "azurerm_key_vault_secret" "mp_token" {
 
 resource "azurerm_key_vault_secret" "mp_user_id" {
   name         = "mp-user-id"
-  value        = var.mercadopago_user_id
+  value        = var.mercado_pago_user_id
   key_vault_id = var.akv_id
 
   tags = {
@@ -24,7 +24,7 @@ resource "azurerm_key_vault_secret" "mp_user_id" {
 
 resource "azurerm_key_vault_secret" "mp_pos_id" {
   name         = "mp-pos-id"
-  value        = var.mercadopago_pos_id
+  value        = var.mercado_pago_pos_id
   key_vault_id = var.akv_id
 
   tags = {

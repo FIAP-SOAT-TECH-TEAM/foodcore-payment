@@ -25,10 +25,10 @@ env:
   TF_VAR_docker_image_tag: "${{ github.run_number }}"
   TF_VAR_swagger_path: "../build/openapi/swagger.json"
 
-  TF_VAR_mercadopago_token: ${{secrets.MERCADO_PAGO_TOKEN}}
-  TF_VAR_mercadopago_user_id: ${{secrets.MERCADO_PAGO_USER_ID}}
-  TF_VAR_mercadopago_pos_id: ${{secrets.MERCADO_PAGO_POS_ID}}
-  TF_VAR_mercadopago_base_url: ${{vars.MERCADO_PAGO_BASE_URL}}
+  TF_VAR_mercado_pago_token: ${{secrets.MERCADO_PAGO_TOKEN}}
+  TF_VAR_mercado_pago_user_id: ${{secrets.MERCADO_PAGO_USER_ID}}
+  TF_VAR_mercado_pago_pos_id: ${{secrets.MERCADO_PAGO_POS_ID}}
+  TF_VAR_mercado_pago_base_url: ${{vars.MERCADO_PAGO_BASE_URL}}
 
 jobs:
   infra-info:
