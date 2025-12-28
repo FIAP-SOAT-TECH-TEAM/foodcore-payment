@@ -47,7 +47,7 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: ${ZIPKIN_URL}/api/v2/spans
+      endpoint: ${ZIPKIN_URL:}/api/v2/spans
 
 # Configurações de logging
 logging:
