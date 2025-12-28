@@ -44,7 +44,6 @@ resource "helm_release" "foodcoreapi" {
     value = local.mp_notification_url
   }
 
-
   set {
     name  = "secrets.azureKeyVault.keyVaultName"
     value = data.terraform_remote_state.infra.outputs.akv_name
