@@ -24,7 +24,7 @@ spec:
 
           startupProbe:
             httpGet:
-              path: {{ .Values.api.ingress.path }}/actuator/health
+              path: {{ .Values.api.probe.path.startup }}
               port: {{ .Values.api.ports.port }}
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -33,7 +33,7 @@ spec:
 
           livenessProbe:
             httpGet:
-              path: {{ .Values.api.ingress.path }}/actuator/health/liveness
+              path: {{ .Values.api.probe.path.liveness }}
               port: {{ .Values.api.ports.port }}
             periodSeconds: 10
             timeoutSeconds: 5
@@ -41,7 +41,7 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: {{ .Values.api.ingress.path }}/actuator/health/readiness
+              path: {{ .Values.api.probe.path.readiness }}
               port: {{ .Values.api.ports.port }}
             periodSeconds: 10
             timeoutSeconds: 5
