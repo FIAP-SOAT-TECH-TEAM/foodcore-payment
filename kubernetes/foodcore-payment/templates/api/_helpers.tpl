@@ -3,5 +3,5 @@
 {{- end }}
 
 {{- define "api.fullname" -}}
-{{- printf "%s-%s" .Chart.Name .Values.api.name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s" .Chart.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
