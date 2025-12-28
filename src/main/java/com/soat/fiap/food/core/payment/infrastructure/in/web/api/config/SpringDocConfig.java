@@ -45,7 +45,7 @@ public class SpringDocConfig {
 	public GroupedOpenApi paymentApi() {
 		return GroupedOpenApi.builder()
 				.group("pagamentos")
-				.packagesToScan("com.soat.fiap.food.core.api.payment")
+				.packagesToScan("com.soat.fiap.food.core.payment")
 				.pathsToMatch("/**")
 				.build();
 	}
