@@ -56,9 +56,6 @@ dependencies {
 	implementation 'com.azure.spring:spring-cloud-azure-starter-data-cosmos'
 	implementation 'com.azure.spring:spring-cloud-azure-starter-servicebus'
 
-	// Spring Cloud
-	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-discoveryclient'
-
 	// Micrometer
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
