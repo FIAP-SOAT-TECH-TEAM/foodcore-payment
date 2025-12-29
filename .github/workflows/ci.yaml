@@ -106,7 +106,7 @@ jobs:
         run: ./gradlew spotlessApply
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Unit Test with Gradle
         run: ./gradlew test

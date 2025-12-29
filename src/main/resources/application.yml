@@ -53,7 +53,7 @@ management:
 logging:
   level:
     root: INFO
-    com.soat.fiap.food.core.api: INFO
+    com.soat.fiap.food.core.payment: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: INFO
