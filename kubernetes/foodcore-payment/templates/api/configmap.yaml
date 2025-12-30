@@ -12,4 +12,5 @@ data:
   
   MERCADO_PAGO_BASE_URL: {{ .Values.api.mercadoPago.baseUrl | quote }}
   MERCADO_PAGO_NOTIFICATION_URL: {{ .Values.api.mercadoPago.notificationUrl | quote }}
-  # ZIPKIN_URL:
+  
+  ZIPKIN_URL: foodcore-monitor-zipkin-service
