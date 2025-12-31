@@ -1,6 +1,8 @@
 namespace:
   api:
     name: replaced
+  monitor:
+    name: replaced
 
 ingress:
   hosts:
@@ -52,16 +54,6 @@ api:
     cpu:
       utilization:
         averageUtilization: 70
-
-storageClass:
-  name: azure-disk
-  skuName: Standard_LRS
-  kind: Managed
-  cachingMode: ReadOnly
-  reclaimPolicy: Delete
-  volumeBindingMode: WaitForFirstConsumer
-  allowVolumeExpansion: true
-  fsType: ext4
 
 secrets:
   azureKeyVault:
