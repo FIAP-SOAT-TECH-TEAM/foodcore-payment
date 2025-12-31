@@ -1,36 +1,5 @@
 services:
-  # Aplicação principal
-  payment-ms:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-      args:
-        APP_PORT: ${SERVER_PORT}
-    image: foodcore-payment-ms:latest
-    container_name: foodcore-payment-ms
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
-    env_file:
-      - .env
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:${SERVER_PORT}/api/actuator/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    depends_on:
-      payment-ms-db:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - fastfood-network
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 1G
-
-  # Banco de dados PostgreSQL
+  # Banco de dados Azure Cosmos DB Emulator
   payment-ms-db:
     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
     container_name: foodcore-payment-ms-db
