@@ -50,6 +50,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
         echo "-> Importe o certificado para o Truststore da JVM;"
         echo "-> Exclua o arquivo de certificado baixado."
         echo ""
+        echo "Exclua certificado antigo, se existir: keytool -delete -alias FoodcorePaymentCosmosEmulator -cacerts -storepass changeit"
         echo "Comando: curl --insecure https://localhost:8079/_explorer/emulator.pem > ~/foodcore_payment_az_cosmos_emulator.crt && keytool -importcert -file foodcore_payment_az_cosmos_emulator.crt -alias FoodcorePaymentCosmosEmulator -cacerts -storepass changeit --noprompt && rm foodcore_payment_az_cosmos_emulator.crt"
         echo "Observação: lembre-se de declarar a variável JAVA_HOME no seu ambiente, e acrescentar a pasta JAVA_HOME/bin ao PATH."
         echo ""
