@@ -1,7 +1,7 @@
 # 💳 FoodCore Payment
 
 <div align="center">
-    
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_foodcore-payment&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_foodcore-payment)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_foodcore-payment&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_foodcore-payment)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=FIAP-SOAT-TECH-TEAM_foodcore-payment&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=FIAP-SOAT-TECH-TEAM_foodcore-payment)
@@ -140,6 +140,7 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 <summary>Expandir para mais detalhes</summary>
 
 ### Backend
+
 - **Java 21**: Linguagem principal
 - **Spring Boot 3.4**: Framework base
 - **Spring Data JPA**: Persistência
@@ -147,12 +148,15 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 - **MapStruct / Lombok**: Produtividade
 
 ### Banco de Dados
+
 - **Azure CosmosDB**: Banco NoSQL para pagamentos
 
 ### Mensageria
+
 - **Azure Service Bus**: Eventos de pagamento
 
 ### Qualidade
+
 - **SonarCloud**: Análise estática
 - **JUnit 5 + Mockito**: Testes unitários
 - **Cucumber**: Testes BDD
@@ -165,7 +169,6 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 <details>
 <summary>Expandir para mais detalhes</summary>
-
 
 | Débito | Descrição | Impacto |
 |--------|-----------|---------|
@@ -189,6 +192,7 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 > Durante o deploy dos microsserviços, Pods podem ficar com status **Pending** e o seguinte erro pode aparecer:
 >
 > <img src=".github/images/error.jpeg" alt="Error" />
+> <img src=".github/images/erroDeploy.jpeg" alt="Error" />
 >
 > **Causa**: O cluster atingiu o limite máximo de VMs permitido pela quota e não há recursos computacionais (CPU/memória) disponíveis nos nós existentes.
 >
@@ -201,6 +205,7 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 <h2 id="instalacao-e-uso">🚀 Instalação e Uso</h2>
 
 ### Pré-requisitos
+
 - Java 21
 - Docker e Docker Compose
 - Gradle
@@ -241,6 +246,7 @@ cp env-example .env
 | `POST` | `/api/payments/webhook` | Receber notificação do Mercado Pago |
 
 ### Documentação
+
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`
 
 ---
@@ -259,7 +265,6 @@ cp env-example .env
 Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
-
 
 <div align="center">
   <strong>FIAP - Pós-graduação em Arquitetura de Software</strong><br>
