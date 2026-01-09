@@ -21,7 +21,8 @@ Microsserviço responsável pelo gerenciamento de pagamentos do sistema FoodCore
   <a href="#tecnologias">Tecnologias</a> •
   <a href="#limitacoes-quota">Limitações de quotas</a> •
   <a href="#dicionario">Dicionário de linguagem ubíqua</a> •
-  <a href="#diagramas">Diagramas</a> •
+  <a href="#diagramas-dominio">Diagramas de Domínio</a> •
+  <a href="#diagramas-arquitetura">Diagramas de Arquitetura</a> •
   <a href="#deploy">Fluxo de deploy</a> •
   <a href="#instalacao-e-uso">Instalação e Uso</a> •
   <a href="#debitos-tecnicos">Débitos Técnicos</a> •
@@ -44,13 +45,13 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### Principais Recursos
 
-| Recurso | Descrição |
-|---------|-----------|
-| **Geração de QR Code** | Criação via Mercado Pago API |
-| **Webhooks** | Processamento de notificações de pagamento |
-| **Consulta de Status** | Sincronização com adquirente |
-| **Expiração** | Scheduler para cancelar pagamentos expirados (30 min) |
-| **Eventos** | `PaymentApprovedEvent`, `PaymentRejectedEvent`, `PaymentExpiredEvent` |
+| Recurso                | Descrição                                                             |
+| ---------------------- | --------------------------------------------------------------------- |
+| **Geração de QR Code** | Criação via Mercado Pago API                                          |
+| **Webhooks**           | Processamento de notificações de pagamento                            |
+| **Consulta de Status** | Sincronização com adquirente                                          |
+| **Expiração**          | Scheduler para cancelar pagamentos expirados (30 min)                 |
+| **Eventos**            | `PaymentApprovedEvent`, `PaymentRejectedEvent`, `PaymentExpiredEvent` |
 
 ---
 
@@ -58,13 +59,13 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### Endpoints Principais
 
-| Método | Endpoint | Ingress Port | Descrição |
-|--------|----------|--------------|-----------|
-| `POST` | `/payment/qrcode` | 443 (Https) | Gerar QR Code de pagamento |
-| `GET` | `/payment/{orderId}` | 443 (Https) | Buscar pagamento por pedido |
-| `GET` | `/payment/{orderId}/status` | 443 (Https) | Consultar status do pagamento |
-| `GET` | `/payment/{orderId}/latest` | 443 (Https) | Consultar o último registro de pagamento de um pedido |
-| `POST` | `/payment/webhook` | 443 (Https) | Receber notificação do Mercado Pago |
+| Método | Endpoint                    | Ingress Port | Descrição                                             |
+| ------ | --------------------------- | ------------ | ----------------------------------------------------- |
+| `POST` | `/payment/qrcode`           | 443 (Https)  | Gerar QR Code de pagamento                            |
+| `GET`  | `/payment/{orderId}`        | 443 (Https)  | Buscar pagamento por pedido                           |
+| `GET`  | `/payment/{orderId}/status` | 443 (Https)  | Consultar status do pagamento                         |
+| `GET`  | `/payment/{orderId}/latest` | 443 (Https)  | Consultar o último registro de pagamento de um pedido |
+| `POST` | `/payment/webhook`          | 443 (Https)  | Receber notificação do Mercado Pago                   |
 
 > ⚠️ A URL Base pode ser obtida via output terraform `apim_gateway_url` (foodcore-infra).
 
@@ -99,11 +100,13 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 ### 🔄 Fluxo de Pagamento
 
 1. **Geração de QR Code**
+
    - Recebe dados do pedido
    - Cria ordem no Mercado Pago
    - Retorna QR Code para cliente
 
 2. **Processamento de Webhook**
+
    - Recebe notificação do Mercado Pago
    - Valida e atualiza status
    - Publica evento no Service Bus
@@ -116,23 +119,23 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### ⚙️ Camadas da Arquitetura
 
-| Camada | Componentes |
-|--------|-------------|
-| **Domínio** | `Payment`, `PaymentMethod`, `PaymentStatus`, `Money`, `OrderId` |
-| **Aplicação** | `CreatePaymentQrCodeUseCase`, `ProcessPaymentNotificationUseCase`, `ProcessExpiredPaymentsUseCase` |
-| **Interface** | Controllers REST, Presenters, Gateways |
-| **Infraestrutura** | CosmosDB, Retrofit (Mercado Pago), Azure Service Bus, Scheduler |
+| Camada             | Componentes                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| **Domínio**        | `Payment`, `PaymentMethod`, `PaymentStatus`, `Money`, `OrderId`                                    |
+| **Aplicação**      | `CreatePaymentQrCodeUseCase`, `ProcessPaymentNotificationUseCase`, `ProcessExpiredPaymentsUseCase` |
+| **Interface**      | Controllers REST, Presenters, Gateways                                                             |
+| **Infraestrutura** | CosmosDB, Retrofit (Mercado Pago), Azure Service Bus, Scheduler                                    |
 
 ---
 
 ### 🏗️ Microsserviços do Ecossistema
 
-| Microsserviço | Responsabilidade | Repositório |
-|---------------|------------------|-------------|
-| **foodcore-auth** | Autenticação (Azure Function + Cognito) | [foodcore-auth](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-auth) |
-| **foodcore-order** | Gerenciamento de pedidos | [foodcore-order](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-order) |
+| Microsserviço        | Responsabilidade                               | Repositório                                                                 |
+| -------------------- | ---------------------------------------------- | --------------------------------------------------------------------------- |
+| **foodcore-auth**    | Autenticação (Azure Function + Cognito)        | [foodcore-auth](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-auth)       |
+| **foodcore-order**   | Gerenciamento de pedidos                       | [foodcore-order](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-order)     |
 | **foodcore-payment** | Processamento de pagamentos (este repositório) | [foodcore-payment](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-payment) |
-| **foodcore-catalog** | Catálogo de produtos | [foodcore-catalog](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-catalog) |
+| **foodcore-catalog** | Catálogo de produtos                           | [foodcore-catalog](https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-catalog) |
 
 </details>
 
@@ -145,14 +148,14 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### Recursos Kubernetes
 
-| Recurso | Descrição |
-|---------|-----------|
-| **Deployment** | Pods com health probes, limites de recursos |
-| **Service** | Exposição interna no cluster |
-| **Ingress** | Roteamento via Azure Application Gateway (LB Layer 7) |
-| **ConfigMap** | Configurações não sensíveis |
-| **Secrets** | Credenciais (Mercado Pago, Service Bus, CosmosDB) |
-| **HPA** | Escalabilidade automática |
+| Recurso        | Descrição                                             |
+| -------------- | ----------------------------------------------------- |
+| **Deployment** | Pods com health probes, limites de recursos           |
+| **Service**    | Exposição interna no cluster                          |
+| **Ingress**    | Roteamento via Azure Application Gateway (LB Layer 7) |
+| **ConfigMap**  | Configurações não sensíveis                           |
+| **Secrets**    | Credenciais (Mercado Pago, Service Bus, CosmosDB)     |
+| **HPA**        | Escalabilidade automática                             |
 
 - O **Application Gateway** recebe tráfego em um **Frontend IP privado**
 - Roteamento direto para os IPs dos Pods (**Azure CNI + Overlay**)
@@ -162,11 +165,11 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### Integrações
 
-| Serviço | Tipo | Descrição |
-|---------|------|-----------|
-| **Mercado Pago** | HTTP | Geração de QR Code e consultas |
-| **Azure Service Bus** | Assíncrona | Publicação de eventos |
-| **Azure CosmosDB** | Síncrona | Persistência de dados |
+| Serviço               | Tipo       | Descrição                      |
+| --------------------- | ---------- | ------------------------------ |
+| **Mercado Pago**      | HTTP       | Geração de QR Code e consultas |
+| **Azure Service Bus** | Assíncrona | Publicação de eventos          |
+| **Azure CosmosDB**    | Síncrona   | Persistência de dados          |
 
 ### 🔐 Azure Key Vault Provider (CSI)
 
@@ -244,184 +247,31 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-| Termo | Descrição |
-|-------|-----------|
-| **Admin** | Usuário com privilégios elevados para gestão do sistema |
-| **Adquirente** | Instituição financeira que processa pagamentos (Mercado Pago) |
-| **Authentication** | Validação da identidade do usuário |
-| **Authorization** | Controle de acesso baseado em roles |
-| **Catalog** | Conjunto de produtos disponíveis |
-| **Category** | Classificação de produtos (lanches, bebidas, sobremesas) |
-| **Combo** | Conjunto personalizado: lanche + acompanhamento + bebida + sobremesa |
-| **Customer** | Cliente que realiza pedidos |
-| **Guest** | Cliente não identificado |
-| **Order** | Pedido com itens selecionados |
-| **Order Item** | Produto específico dentro de um pedido |
-| **Payment** | Processamento de pagamento via Mercado Pago |
-| **Product** | Item disponível para venda |
-| **Role** | Papel do usuário (ADMIN, ATENDENTE, GUEST) |
+| Termo              | Descrição                                                            |
+| ------------------ | -------------------------------------------------------------------- |
+| **Admin**          | Usuário com privilégios elevados para gestão do sistema              |
+| **Adquirente**     | Instituição financeira que processa pagamentos (Mercado Pago)        |
+| **Authentication** | Validação da identidade do usuário                                   |
+| **Authorization**  | Controle de acesso baseado em roles                                  |
+| **Catalog**        | Conjunto de produtos disponíveis                                     |
+| **Category**       | Classificação de produtos (lanches, bebidas, sobremesas)             |
+| **Combo**          | Conjunto personalizado: lanche + acompanhamento + bebida + sobremesa |
+| **Customer**       | Cliente que realiza pedidos                                          |
+| **Guest**          | Cliente não identificado                                             |
+| **Order**          | Pedido com itens selecionados                                        |
+| **Order Item**     | Produto específico dentro de um pedido                               |
+| **Payment**        | Processamento de pagamento via Mercado Pago                          |
+| **Product**        | Item disponível para venda                                           |
+| **Role**           | Papel do usuário (ADMIN, ATENDENTE, GUEST)                           |
 
 </details>
 
 ---
 
-<h2 id="diagramas">📊 Diagramas</h2>
+<h2 id="diagramas-dominio">📊 Diagramas de Domínio</h2>
 
 <details>
 <summary>Expandir para mais detalhes</summary>
-
-### 🎭 Saga Coreografada (Comunicação Assíncrona)
-
-Diagrama de sequência demonstrando o padrão **Choreographed Saga** implementado para transações distribuídas via Azure Service Bus.
-
-**Características:**
-- Sem orquestrador central - cada serviço reage a eventos
-- Fluxo principal (Happy Path): Order → Catalog → Payment → Order
-- Fluxo compensatório: Rollback paralelo em caso de cancelamento
-- Timeout: Expiração automática de pagamentos
-
-```mermaid
-sequenceDiagram
-    autonumber
-    
-    participant Client as 🖥️ Cliente
-    participant Order as 📦 Order Service
-    participant SB as 🔄 Azure Service Bus
-    participant Catalog as 📚 Catalog Service
-    participant Payment as 💳 Payment Service
-
-    Note over Client,Payment: 🎭 SAGA COREOGRAFADA - Sem Orquestrador Central
-
-    rect rgb(34, 197, 94, 0.1)
-        Note over Client,Payment: ✅ FLUXO PRINCIPAL - Happy Path
-        
-        Client->>+Order: POST /orders (Criar Pedido)
-        Order->>Order: Validar e persistir pedido
-        Order-->>-Client: 201 Created (orderId)
-        
-        Order--)SB: 📤 Publish: order.created.topic
-        
-        SB--)Catalog: 📥 Subscribe: catalog.order.created.topic.subscription
-        activate Catalog
-        Catalog->>Catalog: Reservar estoque (stock.debit)
-        Catalog--)SB: 📤 Publish: stock.debit.queue
-        deactivate Catalog
-        
-        SB--)Payment: 📥 Consume: stock.debit.queue
-        activate Payment
-        Payment->>Payment: Gerar QR Code / Processar pagamento
-        Payment--)SB: 📤 Publish: payment.approved.queue
-        deactivate Payment
-        
-        SB--)Order: 📥 Consume: payment.approved.queue
-        activate Order
-        Order->>Order: Atualizar status → PAID
-        Order--)SB: 📤 Publish: order.ready.queue
-        deactivate Order
-    end
-
-    rect rgb(239, 68, 68, 0.1)
-        Note over Client,Payment: ❌ FLUXO COMPENSATÓRIO - Saga Rollback
-        
-        Client->>+Order: DELETE /orders/{id} (Cancelar)
-        Order->>Order: Marcar como CANCELED
-        Order-->>-Client: 200 OK
-        
-        Order--)SB: 📤 Publish: order.canceled.topic
-        
-        par Compensação Paralela
-            SB--)Catalog: 📥 Subscribe: catalog.order.canceled.topic.subscription
-            activate Catalog
-            Catalog->>Catalog: Reverter estoque
-            Catalog--)SB: 📤 Publish: stock.reversal.queue
-            deactivate Catalog
-        and
-            SB--)Payment: 📥 Subscribe: payment.order.canceled.topic.subscription
-            activate Payment
-            Payment->>Payment: Cancelar/Estornar pagamento
-            deactivate Payment
-        end
-    end
-
-    rect rgb(251, 191, 36, 0.1)
-        Note over Payment,SB: ⏰ TIMEOUT - Pagamento Expirado
-        
-        Payment->>Payment: Scheduler detecta expiração
-        Payment--)SB: 📤 Publish: payment.expired.queue
-        
-        SB--)Order: 📥 Consume: payment.expired.queue
-        activate Order
-        Order->>Order: Atualizar status → EXPIRED
-        Order--)SB: 📤 Publish: order.canceled.topic
-        deactivate Order
-    end
-```
-
----
-
-### 🔄 Comunicação HTTP (Síncrona)
-
-Diagrama de fluxo mapeando as requisições HTTP diretas entre microsserviços.
-
-**Fluxos:**
-- Clientes → API Gateway → Microsserviços
-- Order ↔ Catalog: Validação de produtos
-- Order ↔ Payment: Gestão de pagamentos
-- Payment ↔ Mercado Pago: Integração externa
-
-```mermaid
-flowchart TB
-    subgraph EXTERNAL["☁️ SERVIÇOS EXTERNOS"]
-        direction TB
-        MP[("🏦 Mercado Pago API")]
-    end
-
-    subgraph GATEWAY["🚪 API GATEWAY"]
-        direction TB
-        APIM[["🔐 Azure API Management"]]
-    end
-
-    subgraph INTERNAL["🏠 MICROSSERVIÇOS INTERNOS"]
-        direction TB
-        
-        subgraph ORDER_SVC["📦 Order Service"]
-            ORDER_API["/api/v1/orders"]
-        end
-        
-        subgraph CATALOG_SVC["📚 Catalog Service"]
-            CATALOG_API["/api/v1/products"]
-        end
-        
-        subgraph PAYMENT_SVC["💳 Payment Service"]
-            PAYMENT_API["/api/v1/payments"]
-        end
-        
-        subgraph AUTH_SVC["🔑 Auth Service"]
-            AUTH_API["Azure Function"]
-        end
-    end
-
-    subgraph CLIENT["👤 CONSUMIDORES"]
-        direction TB
-        WEB["🌐 Web App"]
-        MOBILE["📱 Mobile App"]
-        TOTEM["🖥️ Totem"]
-    end
-
-    WEB & MOBILE & TOTEM -->|"HTTPS"| APIM
-    
-    APIM -->|"JWT Validation"| AUTH_API
-    APIM -->|"HTTP/REST"| ORDER_API
-    APIM -->|"HTTP/REST"| CATALOG_API
-    APIM -->|"HTTP/REST"| PAYMENT_API
-
-    ORDER_API <-->|"GET /products/{id}"| CATALOG_API
-    ORDER_API <-->|"POST /payments"| PAYMENT_API
-
-    PAYMENT_API <-->|"HTTPS/mTLS"| MP
-```
-
----
 
 ### Fluxo de Criação de Pedido
 
@@ -435,6 +285,72 @@ flowchart TB
 
 ---
 
+<h2 id="diagramas-arquitetura">📊 Diagramas de Arquitetura</h2>
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### 🎭 Saga Coreografada (Comunicação Assíncrona)
+
+Diagrama de sequência demonstrando o padrão **Choreographed Saga** implementado para transações distribuídas via Azure Service Bus.
+
+**Características:**
+
+- Sem orquestrador central - cada serviço reage a eventos
+- Fluxo principal (Happy Path): Order → Catalog → Payment → Order
+- Fluxo compensatório: Rollback paralelo em caso de cancelamento
+- Timeout: Expiração automática de pagamentos
+
+<img src="docs/diagrams/sequence-diagram.png" alt="Arch Sequencial Diagram" />
+
+---
+
+### 🔄 Comunicação HTTP (Síncrona)
+
+Diagrama de fluxo mapeando as requisições HTTP diretas entre microsserviços.
+
+**Fluxos:**
+
+- Clientes → API Gateway → Microsserviços
+- Order ↔ Catalog: Validação de produtos
+- Order ↔ Payment: Gestão de pagamentos
+- Payment ↔ Mercado Pago: Integração externa
+
+```mermaid
+flowchart TB
+    subgraph EXTERNAL["☁️ SERVIÇOS EXTERNOS"]
+        direction TB
+        MP[("🏦 Mercado Pago API")]
+    end
+
+    subgraph INTERNAL["🏠 MICROSSERVIÇOS INTERNOS"]
+        direction TB
+
+        subgraph ORDER_SVC["📦 Order Service"]
+            ORDER_API["/api/v1/orders"]
+        end
+
+        subgraph CATALOG_SVC["📚 Catalog Service"]
+            CATALOG_API["/api/v1/products"]
+        end
+
+        subgraph PAYMENT_SVC["💳 Payment Service"]
+            PAYMENT_API["/api/v1/payments"]
+        end
+    end
+
+    %% FLUXO SAGA COREOGRAFADA (Assíncrono)
+    %% Order inicia o processo disparando eventos
+    ORDER_API -..->|"Evento / Async"| CATALOG_API
+    ORDER_API -..->|"Evento / Async"| PAYMENT_API
+
+    %% INTEGRAÇÃO EXTERNA (Síncrona)
+    PAYMENT_API -->|"HTTPS/mTLS"| MP
+```
+
+</details>
+
+---
+
 <h2 id="deploy">⚙️ Fluxo de Deploy</h2>
 
 <details>
@@ -443,9 +359,11 @@ flowchart TB
 ### Pipeline
 
 1. **Pull Request**
+
    - Preencher template de pull request adequadamente
 
 2. **Revisão e Aprovação**
+
    - Mínimo 1 aprovação de CODEOWNER
 
 3. **Merge para Main**
@@ -513,15 +431,15 @@ cp env-example .env
 <details>
 <summary>Expandir para mais detalhes</summary>
 
-| Débito | Descrição | Impacto |
-|--------|-----------|---------|
-| **Circuit Breaker Mercado Pago** | Implementar Circuit Breaker com OpenFeign + Resilience4j (atual: Retrofit) | Resiliência na comunicação com adquirente |
-| **Job Kubernetes de Expiração** | Migrar @Scheduler para Kubernetes CronJob/Azure Function | Desacopla responsabilidade e melhora escalabilidade |
-| **Microsserviço de Webhooks** | Criar MS dedicado para webhooks publicando na fila do pagamento | Separação de responsabilidades |
-| **Transactional Outbox Pattern** | Implementar padrão para evitar escrita duplicada na SAGA coreografada | Garate síncronia entre atualização do DB e publicação de eventos |
-| **Workload Identity** | Usar Workload Identity para Pods acessarem recursos Azure (atual: Azure Key Vault Provider) | Melhora segurança e gestão de credenciais |
-| **OpenTelemetry** | Migrar de Micrometer para OpenTelemetry | Padronização de observabilidade |
-| **WAF Layer** | Implementar camada WAF antes do API Gateway para proteção OWASP TOP 10 | Segurança adicional |
+| Débito                           | Descrição                                                                                   | Impacto                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Circuit Breaker Mercado Pago** | Implementar Circuit Breaker com OpenFeign + Resilience4j (atual: Retrofit)                  | Resiliência na comunicação com adquirente                        |
+| **Job Kubernetes de Expiração**  | Migrar @Scheduler para Kubernetes CronJob/Azure Function                                    | Desacopla responsabilidade e melhora escalabilidade              |
+| **Microsserviço de Webhooks**    | Criar MS dedicado para webhooks publicando na fila do pagamento                             | Separação de responsabilidades                                   |
+| **Transactional Outbox Pattern** | Implementar padrão para evitar escrita duplicada na SAGA coreografada                       | Garate síncronia entre atualização do DB e publicação de eventos |
+| **Workload Identity**            | Usar Workload Identity para Pods acessarem recursos Azure (atual: Azure Key Vault Provider) | Melhora segurança e gestão de credenciais                        |
+| **OpenTelemetry**                | Migrar de Micrometer para OpenTelemetry                                                     | Padronização de observabilidade                                  |
+| **WAF Layer**                    | Implementar camada WAF antes do API Gateway para proteção OWASP TOP 10                      | Segurança adicional                                              |
 
 </details>
 
