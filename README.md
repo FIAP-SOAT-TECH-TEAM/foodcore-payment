@@ -50,6 +50,29 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ---
 
+<h2 id="apis">📡 APIs</h2>
+
+### Endpoints Principais
+
+| Método | Endpoint | Ingress Port | Descrição |
+|--------|----------|--------------|-----------|
+| `POST` | `/payment/qrcode` | 443 (Https) | Gerar QR Code de pagamento |
+| `GET` | `/payment/{orderId}` | 443 (Https) | Buscar pagamento por pedido |
+| `GET` | `/payment/{orderId}/status` | 443 (Https) | Consultar status do pagamento |
+| `GET` | `/payment/{orderId}/latest` | 443 (Https) | Consultar o último registro de pagamento de um pedido |
+| `POST` | `/payment/webhook` | 443 (Https) | Receber notificação do Mercado Pago |
+
+> ⚠️ A URL Base pode ser obtida via output terraform `apim_gateway_url` (foodcore-infra).
+
+### Documentação
+
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI**: `http://localhost:8080/v3/api-docs`
+
+> ⚠️ A porta pode mudar em decorrência da variável de ambiente: `SERVER_PORT`.
+
+---
+
 <h2 id="arquitetura">🧱 Arquitetura</h2>
 
 <details>
@@ -122,10 +145,16 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 |---------|-----------|
 | **Deployment** | Pods com health probes, limites de recursos |
 | **Service** | Exposição interna no cluster |
-| **Ingress** | Roteamento: `/api/payments/*` |
+| **Ingress** | Roteamento via Azure Application Gateway (LB Layer 7) |
 | **ConfigMap** | Configurações não sensíveis |
 | **Secrets** | Credenciais (Mercado Pago, Service Bus, CosmosDB) |
 | **HPA** | Escalabilidade automática |
+
+- O **Application Gateway** recebe tráfego em um **Frontend IP privado**
+- Roteamento direto para os IPs dos Pods (**Azure CNI + Overlay**)
+- Path exposto: `/payment`
+
+> ⚠️ Após o deploy (CD), aguarde cerca de **5 minutos** para que o **AGIC** finalize a configuração do Application Gateway.
 
 ### Integrações
 
@@ -134,6 +163,16 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 | **Mercado Pago** | HTTP | Geração de QR Code e consultas |
 | **Azure Service Bus** | Assíncrona | Publicação de eventos |
 | **Azure CosmosDB** | Síncrona | Persistência de dados |
+
+### 🔐 Azure Key Vault Provider (CSI)
+
+- Sincroniza secrets do Azure Key Vault com Secrets do Kubernetes
+- Monta volumes CSI com `tmpfs` dentro dos Pods
+- Utiliza o CRD **SecretProviderClass**
+
+> ⚠️ Caso o valor de uma secret seja alterado no Key Vault, é necessário **reiniciar os Pods**, pois variáveis de ambiente são injetadas apenas na inicialização.
+>
+> Referência: <https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-configuration-options>
 
 </details>
 
@@ -179,10 +218,11 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 |--------|-----------|---------|
 | **Circuit Breaker Mercado Pago** | Implementar Circuit Breaker com OpenFeign + Resilience4j (atual: Retrofit) | Resiliência na comunicação com adquirente |
 | **Job Kubernetes de Expiração** | Migrar @Scheduler para Kubernetes CronJob/Azure Function | Desacopla responsabilidade e melhora escalabilidade |
-| **Transactional Outbox Pattern** | Implementar padrão para evitar escrita duplicada na SAGA | Consistência eventual garantida |
 | **Microsserviço de Webhooks** | Criar MS dedicado para webhooks publicando na fila do pagamento | Separação de responsabilidades |
-| **Workload Identity** | Usar Workload Identity para Pods (atual: Azure Key Vault Provider) | Segurança e gestão de credenciais |
-| **OpenTelemetry** | Migrar de Zipkin/Micrometer para OpenTelemetry | Padronização de observabilidade |
+| **Transactional Outbox Pattern** | Implementar padrão para evitar escrita duplicada na SAGA coreografada | Garate síncronia entre atualização do DB e publicação de eventos |
+| **Workload Identity** | Usar Workload Identity para Pods acessarem recursos Azure (atual: Azure Key Vault Provider) | Melhora segurança e gestão de credenciais |
+| **OpenTelemetry** | Migrar de Micrometer para OpenTelemetry | Padronização de observabilidade |
+| **WAF Layer** | Implementar camada WAF antes do API Gateway para proteção OWASP TOP 10 | Segurança adicional |
 
 <h2 id="limitacoes-quota">Limitações de Quota (Azure for Students)</h2>
 
@@ -207,6 +247,86 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ---
 
+<h2 id="dicionario">📖 Dicionário de Linguagem Ubíqua</h2>
+
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+| Termo | Descrição |
+|-------|-----------|
+| **Admin** | Usuário com privilégios elevados para gestão do sistema |
+| **Adquirente** | Instituição financeira que processa pagamentos (Mercado Pago) |
+| **Authentication** | Validação da identidade do usuário |
+| **Authorization** | Controle de acesso baseado em roles |
+| **Catalog** | Conjunto de produtos disponíveis |
+| **Category** | Classificação de produtos (lanches, bebidas, sobremesas) |
+| **Combo** | Conjunto personalizado: lanche + acompanhamento + bebida + sobremesa |
+| **Customer** | Cliente que realiza pedidos |
+| **Guest** | Cliente não identificado |
+| **Order** | Pedido com itens selecionados |
+| **Order Item** | Produto específico dentro de um pedido |
+| **Payment** | Processamento de pagamento via Mercado Pago |
+| **Product** | Item disponível para venda |
+| **Role** | Papel do usuário (ADMIN, ATENDENTE, GUEST) |
+
+</details>
+
+---
+
+<h2 id="diagramas">📊 Diagramas</h2>
+
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Fluxo de Criação de Pedido
+
+![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
+
+### Fluxo de Preparação e Entrega
+
+![Eventos de domínio - Preparação e Entrega](docs/diagrams/order-preparing.svg)
+
+</details>
+
+---
+
+<h2 id="deploy">⚙️ Fluxo de Deploy</h2>
+
+<details>
+<summary>Expandir para mais detalhes</summary>
+
+### Pipeline
+
+1. **Pull Request**
+   - Preencher template de pull request adequadamente
+
+2. **Revisão e Aprovação**
+   - Mínimo 1 aprovação de CODEOWNER
+
+3. **Merge para Main**
+
+### Proteções
+
+- Branch `main` protegida
+- Nenhum push direto permitido
+- Todos os checks devem passar
+
+### Ordem de Provisionamento
+
+```
+1. foodcore-infra        (AKS, VNET)
+2. foodcore-db           (Bancos de dados)
+3. foodcore-auth           (Azure Function Authorizer)
+4. foodcore-observability (Serviços de Observabilidade)
+5. foodcore-order            (Microsserviço de pedido)
+6. foodcore-payment            (Microsserviço de pagamento)
+7. foodcore-catalog            (Microsserviço de catálogo)
+```
+
+> ⚠️ Opcionalmente, as pipelines do repositório `foodcore-shared` podem ser executadas para publicação de um novo package. Atualizar os microsserviços para utilazarem a nova versão do pacote.
+
+</details>
+
 <h2 id="instalacao-e-uso">🚀 Instalação e Uso</h2>
 
 ### Pré-requisitos
@@ -223,53 +343,34 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 git clone https://github.com/FIAP-SOAT-TECH-TEAM/foodcore-payment.git
 cd foodcore-payment
 
-# Subir dependências
-docker-compose -f docker/docker-compose.yml up -d
+# Configurar variáveis de ambiente (Docker)
+cp docker/env-example docker/.env
 
-# Configurar variáveis de ambiente
+# Subir dependências
+./food start:infra
+
+# Configurar variáveis de ambiente (Aplicação)
 cp env-example .env
-# Editar .env com credenciais do Mercado Pago
 
 # Executar aplicação
 ./gradlew bootRun --args='--spring.profiles.active=local'
-
-# Executar testes
-./gradlew test
 ```
 
----
-
-<h2 id="apis">📡 APIs</h2>
-
-### Endpoints Principais
-
-| Método | Endpoint | Ingress Port | Descrição |
-|--------|----------|-----------|
-| `POST` | `/payment/qrcode` | 443 (Https) | Gerar QR Code de pagamento |
-| `GET` | `/payment/{orderId}` | 443 (Https) | Buscar pagamento por pedido |
-| `GET` | `/payment/{orderId}/status` | 443 (Https) | Consultar status do pagamento |
-| `GET` | `/payment/{orderId}/latest` | 443 (Https) | Consultar o último registro de pagamento de um pedido |
-| `POST` | `/payment/webhook` | 443 (Https) | Receber notificação do Mercado Pago |
-
-> ⚠️ A URL Base pode ser obtida via output terraform `apim_gateway_url` (foodcore-infra).
-
-### Documentação
-
-- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **OpenAPI**: `http://localhost:8080/v3/api-docs`
-
-> ⚠️ A porta pode mudar em decorrência da variável de ambiente: `SERVER_PORT`.
+> ⚠️ Use o utilitário de linha de comandos `dos2unix` para corrigir problemas de CLRF e LF.
+> Ajuste os arquivos .env conforme necessário.
 
 ---
 
 <h2 id="contribuicao">🤝 Contribuição</h2>
 
-### Fluxo de Deploy
+### Fluxo de Contribuição
 
-1. Abra um Pull Request
-2. Pipeline CI executa testes e análise
-3. Após aprovação, merge para `main`
-4. Pipeline CD faz deploy no AKS
+1. Crie uma branch a partir de `main`
+2. Implemente suas alterações
+3. Execute os testes unitários: `./gradlew test`
+4. Execute os testes de integração (BDD): `./gradlew cucumber`
+5. Abra um Pull Request
+6. Aguarde aprovação de um CODEOWNER
 
 ### Licença
 
@@ -279,5 +380,5 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 <div align="center">
   <strong>FIAP - Pós-graduação em Arquitetura de Software</strong><br>
-  Tech Challenge
+  Tech Challenge 4
 </div>
