@@ -270,6 +270,159 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 <details>
 <summary>Expandir para mais detalhes</summary>
 
+### 🎭 Saga Coreografada (Comunicação Assíncrona)
+
+Diagrama de sequência demonstrando o padrão **Choreographed Saga** implementado para transações distribuídas via Azure Service Bus.
+
+**Características:**
+- Sem orquestrador central - cada serviço reage a eventos
+- Fluxo principal (Happy Path): Order → Catalog → Payment → Order
+- Fluxo compensatório: Rollback paralelo em caso de cancelamento
+- Timeout: Expiração automática de pagamentos
+
+```mermaid
+sequenceDiagram
+    autonumber
+    
+    participant Client as 🖥️ Cliente
+    participant Order as 📦 Order Service
+    participant SB as 🔄 Azure Service Bus
+    participant Catalog as 📚 Catalog Service
+    participant Payment as 💳 Payment Service
+
+    Note over Client,Payment: 🎭 SAGA COREOGRAFADA - Sem Orquestrador Central
+
+    rect rgb(34, 197, 94, 0.1)
+        Note over Client,Payment: ✅ FLUXO PRINCIPAL - Happy Path
+        
+        Client->>+Order: POST /orders (Criar Pedido)
+        Order->>Order: Validar e persistir pedido
+        Order-->>-Client: 201 Created (orderId)
+        
+        Order--)SB: 📤 Publish: order.created.topic
+        
+        SB--)Catalog: 📥 Subscribe: catalog.order.created.topic.subscription
+        activate Catalog
+        Catalog->>Catalog: Reservar estoque (stock.debit)
+        Catalog--)SB: 📤 Publish: stock.debit.queue
+        deactivate Catalog
+        
+        SB--)Payment: 📥 Consume: stock.debit.queue
+        activate Payment
+        Payment->>Payment: Gerar QR Code / Processar pagamento
+        Payment--)SB: 📤 Publish: payment.approved.queue
+        deactivate Payment
+        
+        SB--)Order: 📥 Consume: payment.approved.queue
+        activate Order
+        Order->>Order: Atualizar status → PAID
+        Order--)SB: 📤 Publish: order.ready.queue
+        deactivate Order
+    end
+
+    rect rgb(239, 68, 68, 0.1)
+        Note over Client,Payment: ❌ FLUXO COMPENSATÓRIO - Saga Rollback
+        
+        Client->>+Order: DELETE /orders/{id} (Cancelar)
+        Order->>Order: Marcar como CANCELED
+        Order-->>-Client: 200 OK
+        
+        Order--)SB: 📤 Publish: order.canceled.topic
+        
+        par Compensação Paralela
+            SB--)Catalog: 📥 Subscribe: catalog.order.canceled.topic.subscription
+            activate Catalog
+            Catalog->>Catalog: Reverter estoque
+            Catalog--)SB: 📤 Publish: stock.reversal.queue
+            deactivate Catalog
+        and
+            SB--)Payment: 📥 Subscribe: payment.order.canceled.topic.subscription
+            activate Payment
+            Payment->>Payment: Cancelar/Estornar pagamento
+            deactivate Payment
+        end
+    end
+
+    rect rgb(251, 191, 36, 0.1)
+        Note over Payment,SB: ⏰ TIMEOUT - Pagamento Expirado
+        
+        Payment->>Payment: Scheduler detecta expiração
+        Payment--)SB: 📤 Publish: payment.expired.queue
+        
+        SB--)Order: 📥 Consume: payment.expired.queue
+        activate Order
+        Order->>Order: Atualizar status → EXPIRED
+        Order--)SB: 📤 Publish: order.canceled.topic
+        deactivate Order
+    end
+```
+
+---
+
+### 🔄 Comunicação HTTP (Síncrona)
+
+Diagrama de fluxo mapeando as requisições HTTP diretas entre microsserviços.
+
+**Fluxos:**
+- Clientes → API Gateway → Microsserviços
+- Order ↔ Catalog: Validação de produtos
+- Order ↔ Payment: Gestão de pagamentos
+- Payment ↔ Mercado Pago: Integração externa
+
+```mermaid
+flowchart TB
+    subgraph EXTERNAL["☁️ SERVIÇOS EXTERNOS"]
+        direction TB
+        MP[("🏦 Mercado Pago API")]
+    end
+
+    subgraph GATEWAY["🚪 API GATEWAY"]
+        direction TB
+        APIM[["🔐 Azure API Management"]]
+    end
+
+    subgraph INTERNAL["🏠 MICROSSERVIÇOS INTERNOS"]
+        direction TB
+        
+        subgraph ORDER_SVC["📦 Order Service"]
+            ORDER_API["/api/v1/orders"]
+        end
+        
+        subgraph CATALOG_SVC["📚 Catalog Service"]
+            CATALOG_API["/api/v1/products"]
+        end
+        
+        subgraph PAYMENT_SVC["💳 Payment Service"]
+            PAYMENT_API["/api/v1/payments"]
+        end
+        
+        subgraph AUTH_SVC["🔑 Auth Service"]
+            AUTH_API["Azure Function"]
+        end
+    end
+
+    subgraph CLIENT["👤 CONSUMIDORES"]
+        direction TB
+        WEB["🌐 Web App"]
+        MOBILE["📱 Mobile App"]
+        TOTEM["🖥️ Totem"]
+    end
+
+    WEB & MOBILE & TOTEM -->|"HTTPS"| APIM
+    
+    APIM -->|"JWT Validation"| AUTH_API
+    APIM -->|"HTTP/REST"| ORDER_API
+    APIM -->|"HTTP/REST"| CATALOG_API
+    APIM -->|"HTTP/REST"| PAYMENT_API
+
+    ORDER_API <-->|"GET /products/{id}"| CATALOG_API
+    ORDER_API <-->|"POST /payments"| PAYMENT_API
+
+    PAYMENT_API <-->|"HTTPS/mTLS"| MP
+```
+
+---
+
 ### Fluxo de Criação de Pedido
 
 ![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
