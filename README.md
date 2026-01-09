@@ -57,9 +57,14 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ### 🎯 Princípios Adotados
 
+- **DDD**: Bounded context de pagamento isolado
 - **Clean Architecture**: Domínio independente de frameworks
-- **DDD**: Bounded context de pagamentos isolado
-- **SAGA Coreografada**: Comunicação via eventos assíncronos
+- **Separação de responsabilidades**: Cada camada tem responsabilidade bem definida
+- **Independência de frameworks**: Domínio não depende de Spring ou outras bibliotecas
+- **Testabilidade**: Lógica de negócio isolada facilita testes unitários
+- **Inversão de Dependência**: Classes utilizam abstrações, nunca implementações concretas diretamente
+- **Injeção de Dependência**: Classes recebem via construtor os objetos que necessitam utilizar
+- **SAGA Coreografada**: Comunicação assíncrona via eventos
 - **Webhooks**: Integração com Mercado Pago
 
 ---
@@ -238,16 +243,22 @@ cp env-example .env
 
 ### Endpoints Principais
 
-| Método | Endpoint | Descrição |
+| Método | Endpoint | Ingress Port | Descrição |
 |--------|----------|-----------|
-| `POST` | `/api/payments/qrcode` | Gerar QR Code de pagamento |
-| `GET` | `/api/payments/{orderId}` | Buscar pagamento por pedido |
-| `GET` | `/api/payments/{orderId}/status` | Consultar status do pagamento |
-| `POST` | `/api/payments/webhook` | Receber notificação do Mercado Pago |
+| `POST` | `/payment/qrcode` | 443 (Https) | Gerar QR Code de pagamento |
+| `GET` | `/payment/{orderId}` | 443 (Https) | Buscar pagamento por pedido |
+| `GET` | `/payment/{orderId}/status` | 443 (Https) | Consultar status do pagamento |
+| `GET` | `/payment/{orderId}/latest` | 443 (Https) | Consultar o último registro de pagamento de um pedido |
+| `POST` | `/payment/webhook` | 443 (Https) | Receber notificação do Mercado Pago |
+
+> ⚠️ A URL Base pode ser obtida via output terraform `apim_gateway_url` (foodcore-infra).
 
 ### Documentação
 
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI**: `http://localhost:8080/v3/api-docs`
+
+> ⚠️ A porta pode mudar em decorrência da variável de ambiente: `SERVER_PORT`.
 
 ---
 
