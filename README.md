@@ -273,6 +273,10 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 <details>
 <summary>Expandir para mais detalhes</summary>
 
+### Event Storming
+
+<iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVIAFD_zg=/?embedMode=view_only_without_ui&moveToViewport=-8395,-2899,44758,21997&embedId=477328890030" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+
 ### Fluxo de Criação de Pedido
 
 ![Eventos de domínio - Criação de Pedido](docs/diagrams/order-created.svg)
