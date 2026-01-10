@@ -268,9 +268,9 @@ O **FoodCore Payment** é o microsserviço responsável por todo o fluxo de paga
 
 ---
 
-> ℹ️ Link do Event Strorming no Miro: https://miro.com/app/board/uXjVIAFD_zg=/
-
 <h2 id="diagramas-dominio">📊 Diagramas de Domínio</h2>
+
+> ℹ️ Link do Event Strorming no Miro: https://miro.com/app/board/uXjVIAFD_zg=/
 
 <details>
 <summary>Expandir para mais detalhes</summary>
